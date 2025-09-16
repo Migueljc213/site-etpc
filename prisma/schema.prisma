@@ -1,0 +1,259 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuários do sistema (administradores)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("admin")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Categorias de notícias
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?  // Cor da categoria (hex)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  news        News[]
+
+  @@map("categories")
+}
+
+// Tags para notícias
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String?  // Cor da tag (hex)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  news      NewsTag[]
+
+  @@map("tags")
+}
+
+// Notícias
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String   // HTML content
+  image       String?  // URL da imagem
+  author      String
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  tags        NewsTag[]
+  comments    Comment[]
+
+  @@map("news")
+}
+
+// Relacionamento many-to-many entre News e Tags
+model NewsTag {
+  id     String @id @default(cuid())
+  newsId String
+  tagId  String
+
+  news   News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, tagId])
+  @@map("news_tags")
+}
+
+// Comentários nas notícias (opcional)
+model Comment {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  content   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  newsId    String
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+// Banners
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String   // URL da imagem
+  link        String?  // Link de destino
+  position    String   // homepage-top, homepage-middle, etc.
+  order       Int      @default(0) // Ordem de exibição
+  active      Boolean  @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  clicks      Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("banners")
+}
+
+// Cursos técnicos
+model Course {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  description     String
+  icon            String   // Emoji ou ícone
+  duration        String   // Ex: "18 meses"
+  period          String   // Ex: "Matutino, Vespertino ou Noturno"
+  employability   String   // Ex: "96%"
+  salary          String   // Ex: "R$ 3.500 - R$ 8.500"
+  monthlyValue    String   // Ex: "R$ 504,00"
+  prerequisites   String
+  targetAudience  String
+  color           String   // Ex: "from-blue-500 to-cyan-600"
+  bgColor         String   // Ex: "from-blue-50 to-cyan-50"
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relacionamentos
+  modules         CourseModule[]
+  opportunities   CourseOpportunity[]
+  labs            CourseLab[]
+
+  @@map("courses")
+}
+
+// Módulos dos cursos
+model CourseModule {
+  id        String   @id @default(cuid())
+  title     String   // Ex: "Módulo 1"
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  courseId  String
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subjects  CourseSubject[]
+
+  @@map("course_modules")
+}
+
+// Disciplinas dos módulos
+model CourseSubject {
+  id        String   @id @default(cuid())
+  name      String   // Ex: "Circuitos Hidropneumáticos"
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  moduleId  String
+  module    CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@map("course_subjects")
+}
+
+// Oportunidades de carreira
+model CourseOpportunity {
+  id        String   @id @default(cuid())
+  title     String   // Ex: "Técnico em Automação Industrial"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  courseId  String
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("course_opportunities")
+}
+
+// Laboratórios dos cursos
+model CourseLab {
+  id        String   @id @default(cuid())
+  name      String   // Ex: "Laboratório de Automação Industrial"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  courseId  String
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("course_labs")
+}
+
+// Configurações do site
+model SiteConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  type        String   @default("string") // string, number, boolean, json
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_configs")
+}
+
+// Newsletter
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("newsletter")
+}
+
+// Contatos/Leads
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String?
+  type      String   @default("general") // general, course, company, etc.
+  status    String   @default("new") // new, contacted, closed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contacts")
+}
