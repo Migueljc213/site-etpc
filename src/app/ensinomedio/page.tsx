@@ -224,7 +224,7 @@ export default function EnsinoMedio() {
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-12">
             <div className="text-6xl mb-6">💼</div>
             <blockquote className="text-2xl text-white font-medium mb-8 leading-relaxed italic">
-              "Fiz Ensino Médio com técnico em Eletromecânica na ETPC e tenho o privilégio de dizer que por causa do meu curso consegui um estágio, uma promoção e uma carreira. Hoje sou técnico de manutenção em uma multinacional na área de gás e estou muito satisfeito com a minha carreira. O aprendizado da escola, eu levo para a minha vida até hoje"
+              &ldquo;Fiz Ensino Médio com técnico em Eletromecânica na ETPC e tenho o privilégio de dizer que por causa do meu curso consegui um estágio, uma promoção e uma carreira. Hoje sou técnico de manutenção em uma multinacional na área de gás e estou muito satisfeito com a minha carreira. O aprendizado da escola, eu levo para a minha vida até hoje&rdquo;
             </blockquote>
             <div className="flex items-center justify-center">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl mr-4">

@@ -34,7 +34,7 @@ export default function Configuracoes() {
       // Simular salvamento
       await new Promise(resolve => setTimeout(resolve, 1000));
       setMessage('Configurações salvas com sucesso!');
-    } catch (error) {
+    } catch {
       setMessage('Erro ao salvar configurações');
     } finally {
       setLoading(false);

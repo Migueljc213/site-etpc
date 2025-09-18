@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Listar banners
@@ -10,7 +10,12 @@ export async function GET(request: NextRequest) {
     const position = searchParams.get('position')
     const active = searchParams.get('active')
 
-    const where: any = {}
+    const where: {
+      position?: string;
+      active?: boolean;
+      OR?: Array<{ startDate: null } | { startDate: { lte: Date } }>;
+      AND?: Array<{ OR: Array<{ endDate: null } | { endDate: { gte: Date } }> }>;
+    } = {}
 
     if (position) {
       where.position = position

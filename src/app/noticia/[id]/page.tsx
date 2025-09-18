@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -27,12 +27,7 @@ export default function NoticiaDetalhes() {
   const [loading, setLoading] = useState(true);
   const [relatedNews, setRelatedNews] = useState<Noticia[]>([]);
 
-  useEffect(() => {
-    fetchNoticia();
-    fetchRelatedNews();
-  }, [params.id]);
-
-  const fetchNoticia = async () => {
+  const fetchNoticia = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/news/${params.id}`);
@@ -50,9 +45,9 @@ export default function NoticiaDetalhes() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
 
-  const fetchRelatedNews = async () => {
+  const fetchRelatedNews = useCallback(async () => {
     try {
       const response = await fetch('/api/news?limit=3&published=true');
       const data = await response.json();
@@ -63,7 +58,12 @@ export default function NoticiaDetalhes() {
     } catch (error) {
       console.error('Error fetching related news:', error);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchNoticia();
+    fetchRelatedNews();
+  }, [fetchNoticia, fetchRelatedNews]);
 
   if (loading) {
     return (

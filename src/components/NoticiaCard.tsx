@@ -5,8 +5,9 @@ interface NoticiaCardProps {
     id: string;
     title: string;
     excerpt: string;
-    date: string;
-    category: string;
+    date?: string;
+    createdAt?: string;
+    category: string | { name: string; slug: string };
     author: string;
     featured?: boolean;
   };
@@ -14,6 +15,8 @@ interface NoticiaCardProps {
 }
 
 export default function NoticiaCard({ article, featured = false }: NoticiaCardProps) {
+  const displayDate = article.date || article.createdAt || '';
+  const categoryName = typeof article.category === 'string' ? article.category : article.category.name;
   if (featured) {
     return (
       <div className="mb-8 sm:mb-12">
@@ -30,10 +33,10 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
             <div className="md:w-1/2 p-8">
               <div className="flex items-center mb-4">
                 <div className="bg-teal-500 text-white rounded-full w-16 h-16 flex items-center justify-center font-bold text-sm">
-                  {article.date}
+                  {displayDate}
                 </div>
                 <div className="ml-4">
-                  <span className="text-gray-500 text-sm">{article.category}</span>
+                  <span className="text-gray-500 text-sm">{categoryName}</span>
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
@@ -66,10 +69,10 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
         <div className="md:w-2/3 p-6">
           <div className="flex items-center mb-3">
             <div className="bg-teal-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xs">
-              {article.date}
+              {displayDate}
             </div>
             <div className="ml-3">
-              <span className="text-gray-500 text-sm">{article.category}</span>
+              <span className="text-gray-500 text-sm">{categoryName}</span>
             </div>
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">

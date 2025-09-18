@@ -329,7 +329,7 @@ export default function CursosTecnicos() {
             </div>
             
             <div className="divide-y divide-gray-200">
-              {courses.map((course, index) => (
+              {courses.map((course) => (
                 <div key={course.id} className="group hover:bg-blue-50 transition-colors">
                   <button
                     onClick={() => {
@@ -414,7 +414,7 @@ export default function CursosTecnicos() {
           </div>
 
           <div className="space-y-8 sm:space-y-12">
-            {courses.map((course, index) => (
+            {courses.map((course) => (
               <div key={course.id} className={`bg-gradient-to-r ${course.bgColor} rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 shadow-lg hover:shadow-2xl transition-all`}>
                 <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-center">
                   <div className="lg:col-span-2">
@@ -625,7 +625,7 @@ export default function CursosTecnicos() {
                     <div className="text-gray-600 text-sm">{story.company}</div>
                   </div>
                 </div>
-                <p className="text-gray-700 italic">"{story.story}"</p>
+                <p className="text-gray-700 italic">&ldquo;{story.story}&rdquo;</p>
               </div>
             ))}
           </div>

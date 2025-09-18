@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import NoticiaCard from '@/components/NoticiaCard';
 
@@ -44,11 +44,7 @@ export default function Noticias() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    fetchNews();
-  }, [currentPage, selectedCategory, searchTerm]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -76,7 +72,11 @@ export default function Noticias() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, selectedCategory, searchTerm]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Listar notícias
@@ -16,7 +16,12 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
-    const where: any = {}
+    const where: {
+      category?: { slug: string };
+      OR?: Array<{ title: { contains: string; mode: 'insensitive' } } | { excerpt: { contains: string; mode: 'insensitive' } } | { content: { contains: string; mode: 'insensitive' } }>;
+      featured?: boolean;
+      published?: boolean;
+    } = {}
 
     if (category && category !== 'todas') {
       where.category = {

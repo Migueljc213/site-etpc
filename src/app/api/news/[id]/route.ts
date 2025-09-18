@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Buscar notícia por ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const news = await prisma.news.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
         tags: {
@@ -30,7 +31,7 @@ export async function GET(
 
     // Incrementar visualizações
     await prisma.news.update({
-      where: { id: params.id },
+      where: { id },
       data: { views: { increment: 1 } }
     })
 
@@ -47,7 +48,7 @@ export async function GET(
 // PUT - Atualizar notícia
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -72,9 +73,10 @@ export async function PUT(
       tags
     } = body
 
+    const { id } = await params;
     // Criar slug único se o título mudou
     const existingNews = await prisma.news.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     let slug = existingNews?.slug
@@ -92,12 +94,12 @@ export async function PUT(
     // Atualizar tags
     if (tags) {
       await prisma.newsTag.deleteMany({
-        where: { newsId: params.id }
+        where: { newsId: id }
       })
     }
 
     const news = await prisma.news.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         slug,
@@ -140,7 +142,7 @@ export async function PUT(
 // DELETE - Excluir notícia
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -152,8 +154,9 @@ export async function DELETE(
       )
     }
 
+    const { id } = await params;
     await prisma.news.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ success: true })

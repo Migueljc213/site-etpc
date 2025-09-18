@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Buscar curso por ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const course = await prisma.course.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         modules: {
           include: {
@@ -45,7 +46,7 @@ export async function GET(
 // PUT - Atualizar curso
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -77,9 +78,10 @@ export async function PUT(
       labs
     } = body
 
+    const { id } = await params;
     // Criar slug único se o título mudou
     const existingCourse = await prisma.course.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     let slug = existingCourse?.slug
@@ -97,18 +99,18 @@ export async function PUT(
     // Deletar módulos, oportunidades e laboratórios existentes
     await Promise.all([
       prisma.courseModule.deleteMany({
-        where: { courseId: params.id }
+        where: { courseId: id }
       }),
       prisma.courseOpportunity.deleteMany({
-        where: { courseId: params.id }
+        where: { courseId: id }
       }),
       prisma.courseLab.deleteMany({
-        where: { courseId: params.id }
+        where: { courseId: id }
       })
     ])
 
     const course = await prisma.course.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         slug,
@@ -125,11 +127,11 @@ export async function PUT(
         bgColor,
         active: active || true,
         modules: {
-          create: modules?.map((module: any, index: number) => ({
+          create: modules?.map((module: { title: string; subjects?: Array<{ name: string }> }, index: number) => ({
             title: module.title,
             order: index,
             subjects: {
-              create: module.subjects?.map((subject: any, subjectIndex: number) => ({
+              create: module.subjects?.map((subject: { name: string }, subjectIndex: number) => ({
                 name: subject.name,
                 order: subjectIndex
               })) || []
@@ -174,7 +176,7 @@ export async function PUT(
 // DELETE - Excluir curso
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -186,8 +188,9 @@ export async function DELETE(
       )
     }
 
+    const { id } = await params;
     await prisma.course.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ success: true })

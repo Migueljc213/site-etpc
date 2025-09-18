@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -29,7 +29,7 @@ export default function AdminLogin() {
       } else {
         router.push('/admin');
       }
-    } catch (error) {
+    } catch {
       setError('Erro ao fazer login');
     } finally {
       setLoading(false);

@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Buscar banner por ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const banner = await prisma.banner.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!banner) {
@@ -33,7 +34,7 @@ export async function GET(
 // PUT - Atualizar banner
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -58,8 +59,9 @@ export async function PUT(
       endDate
     } = body
 
+    const { id } = await params;
     const banner = await prisma.banner.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         description,
@@ -86,7 +88,7 @@ export async function PUT(
 // DELETE - Excluir banner
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -98,8 +100,9 @@ export async function DELETE(
       )
     }
 
+    const { id } = await params;
     await prisma.banner.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ success: true })

@@ -6,6 +6,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
+interface UserWithRole {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
 export default function AdminLayout({
   children,
 }: {
@@ -17,7 +24,7 @@ export default function AdminLayout({
 
   useEffect(() => {
     if (status === 'loading') return;
-    if (!session || session.user.role !== 'admin') {
+    if (!session || !session.user || (session.user as UserWithRole).role !== 'admin') {
       router.push('/admin/login');
     }
   }, [session, status, router]);
@@ -33,7 +40,7 @@ export default function AdminLayout({
     );
   }
 
-  if (!session || session.user.role !== 'admin') {
+  if (!session || !session.user || (session.user as UserWithRole).role !== 'admin') {
     return null;
   }
 
@@ -84,13 +91,13 @@ export default function AdminLayout({
             <div className="flex-shrink-0">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">
-                  {session.user.name?.charAt(0)}
+                  {(session.user as UserWithRole).name?.charAt(0)}
                 </span>
               </div>
             </div>
             <div className="ml-3 flex-1">
-              <p className="text-sm font-medium text-gray-900">{session.user.name}</p>
-              <p className="text-xs text-gray-500">{session.user.email}</p>
+              <p className="text-sm font-medium text-gray-900">{(session.user as UserWithRole).name}</p>
+              <p className="text-xs text-gray-500">{(session.user as UserWithRole).email}</p>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: '/admin/login' })}

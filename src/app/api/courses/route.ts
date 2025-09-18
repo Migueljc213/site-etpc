@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
 // GET - Listar cursos
@@ -9,7 +9,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const active = searchParams.get('active')
 
-    const where: any = {}
+    const where: {
+      active?: boolean;
+    } = {}
 
     if (active !== null) {
       where.active = active === 'true'
@@ -101,11 +103,11 @@ export async function POST(request: NextRequest) {
         bgColor,
         active: active || true,
         modules: {
-          create: modules?.map((module: any, index: number) => ({
+          create: modules?.map((module: { title: string; subjects?: Array<{ name: string }> }, index: number) => ({
             title: module.title,
             order: index,
             subjects: {
-              create: module.subjects?.map((subject: any, subjectIndex: number) => ({
+              create: module.subjects?.map((subject: { name: string }, subjectIndex: number) => ({
                 name: subject.name,
                 order: subjectIndex
               })) || []

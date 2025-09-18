@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -457,7 +457,7 @@ export default function Home() {
                     <div className="text-sm text-gray-600">{testimonial.role}</div>
                   </div>
                 </div>
-                <p className="text-gray-700 italic">"{testimonial.text}"</p>
+                <p className="text-gray-700 italic">&ldquo;{testimonial.text}&rdquo;</p>
               </div>
             ))}
           </div>

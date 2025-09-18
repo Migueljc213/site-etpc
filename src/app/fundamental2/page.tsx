@@ -211,8 +211,8 @@ export default function Fundamental2() {
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-12">
             <div className="text-6xl mb-6">💬</div>
             <blockquote className="text-2xl text-white font-medium mb-8 leading-relaxed italic">
-              "Minha filha estudou o Fundamental 2 no ETPC e chegou ao ensino médio técnico muito mais preparada que os colegas.
-              A base sólida que ela recebeu fez toda a diferença no seu desenvolvimento acadêmico e pessoal."
+              &ldquo;Minha filha estudou o Fundamental 2 no ETPC e chegou ao ensino médio técnico muito mais preparada que os colegas.
+              A base sólida que ela recebeu fez toda a diferença no seu desenvolvimento acadêmico e pessoal.&rdquo;
             </blockquote>
             <div className="flex items-center justify-center">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl mr-4">
