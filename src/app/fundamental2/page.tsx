@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaUsers, FaGraduationCap, FaUserTie, FaBook, FaStar, FaChalkboardTeacher, FaBullseye, FaDesktop, FaTrophy, FaFlask } from 'react-icons/fa';
 
 export default function Fundamental2() {
   const [scrolled, setScrolled] = useState(false);
@@ -124,44 +125,46 @@ export default function Fundamental2() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: '🎯',
+                icon: FaBullseye,
                 title: 'Base Sólida para o Futuro',
                 description: 'Preparação completa para o ensino médio técnico com foco no desenvolvimento de competências essenciais.',
                 features: ['Matemática avançada', 'Ciências aplicadas', 'Língua portuguesa']
               },
               {
-                icon: '💻',
+                icon: FaDesktop,
                 title: 'Tecnologia na Educação',
                 description: 'Introdução à programação, robótica educacional e ferramentas digitais desde cedo.',
                 features: ['Programação básica', 'Robótica educacional', 'Informática aplicada']
               },
               {
-                icon: '🧪',
+                icon: FaFlask,
                 title: 'Laboratórios Modernos',
                 description: 'Aulas práticas em laboratórios equipados para experimentação e descoberta científica.',
                 features: ['Lab. de ciências', 'Lab. de informática', 'Projetos práticos']
               },
               {
-                icon: '👥',
+                icon: FaUsers,
                 title: 'Desenvolvimento Social',
                 description: 'Projetos colaborativos que desenvolvem trabalho em equipe e liderança.',
                 features: ['Projetos em grupo', 'Apresentações', 'Liderança jovem']
               },
               {
-                icon: '🌟',
+                icon: FaStar,
                 title: 'Metodologia Inovadora',
                 description: 'Aprendizagem baseada em projetos com metodologias ativas e personalizadas.',
                 features: ['Ensino personalizado', 'Projetos reais', 'Metodologia ativa']
               },
               {
-                icon: '🏆',
+                icon: FaTrophy,
                 title: 'Preparação Diferenciada',
                 description: 'Orientação vocacional e preparação para escolha consciente do curso técnico.',
                 features: ['Orientação vocacional', 'Visitas técnicas', 'Mentoria educacional']
               }
             ].map((advantage, index) => (
               <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer group border border-gray-100">
-                <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">{advantage.icon}</div>
+                <div className="text-5xl mb-4 group-hover:scale-110 transition-transform text-blue-600">
+                  <advantage.icon />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{advantage.title}</h3>
                 <p className="text-gray-600 mb-6">{advantage.description}</p>
                 <ul className="space-y-2">
@@ -190,13 +193,15 @@ export default function Fundamental2() {
 
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
-              { number: '96%', label: 'Aprovação no Ensino Médio', icon: '📚' },
-              { number: '89%', label: 'Escolhem cursos técnicos', icon: '🎓' },
-              { number: '15+', label: 'Anos de experiência', icon: '⭐' },
-              { number: '100%', label: 'Professores especializados', icon: '👨‍🏫' }
+              { number: '96%', label: 'Aprovação no Ensino Médio', icon: FaBook },
+              { number: '89%', label: 'Escolhem cursos técnicos', icon: FaGraduationCap },
+              { number: '15+', label: 'Anos de experiência', icon: FaStar },
+              { number: '100%', label: 'Professores especializados', icon: FaChalkboardTeacher }
             ].map((stat, index) => (
               <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer">
-                <div className="text-4xl mb-4">{stat.icon}</div>
+                <div className="text-4xl mb-4 text-blue-600">
+                  <stat.icon />
+                </div>
                 <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
                 <div className="text-gray-600">{stat.label}</div>
               </div>
@@ -216,7 +221,7 @@ export default function Fundamental2() {
             </blockquote>
             <div className="flex items-center justify-center">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl mr-4">
-                👩‍💼
+                <FaUserTie className="text-2xl" />
               </div>
               <div className="text-left">
                 <div className="text-white font-bold text-lg">Maria Santos</div>

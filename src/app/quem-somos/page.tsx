@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaBullseye, FaBuilding, FaChalkboardTeacher, FaHandshake, FaStar, FaLightbulb } from 'react-icons/fa';
 
 export default function QuemSomos() {
   const [scrolled, setScrolled] = useState(false);
@@ -17,22 +18,22 @@ export default function QuemSomos() {
 
   const values = [
     {
-      icon: '🎯',
+      icon: FaBullseye,
       title: 'Excelência Acadêmica',
       description: 'Compromisso com a qualidade do ensino e formação integral dos estudantes.'
     },
     {
-      icon: '🤝',
+      icon: FaHandshake,
       title: 'Inovação',
       description: 'Busca constante por metodologias modernas e tecnologias educacionais.'
     },
     {
-      icon: '🌟',
+      icon: FaStar,
       title: 'Responsabilidade Social',
       description: 'Contribuição para o desenvolvimento da comunidade através da educação.'
     },
     {
-      icon: '💡',
+      icon: FaLightbulb,
       title: 'Formação Integral',
       description: 'Desenvolvimento de competências técnicas e humanas para o mercado de trabalho.'
     }
@@ -157,7 +158,9 @@ export default function QuemSomos() {
             <div className="relative">
               <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
                 <div className="text-center">
-                  <div className="text-6xl mb-6">🏫</div>
+                  <div className="text-6xl mb-6 text-blue-600">
+                    <FaBuilding />
+                  </div>
                   <h3 className="text-2xl font-bold mb-4">Fundação CSN</h3>
                   <p className="text-blue-100 leading-relaxed">
                     A ETPC é mantida pela Fundação CSN, uma das principais fundações empresariais do Brasil, 
@@ -184,7 +187,9 @@ export default function QuemSomos() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-                <div className="text-4xl mb-4">{value.icon}</div>
+                <div className="text-4xl mb-4 text-blue-600">
+                  <value.icon />
+                </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{value.description}</p>
               </div>
@@ -209,7 +214,7 @@ export default function QuemSomos() {
               <div key={index} className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="text-center">
                   <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                    👨‍🏫
+                    <FaChalkboardTeacher className="text-2xl" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
                   <p className="text-blue-600 font-semibold mb-4">{member.role}</p>

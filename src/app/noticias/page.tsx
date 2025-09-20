@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import NoticiaCard from '@/components/NoticiaCard';
+import { FaNewspaper } from 'react-icons/fa';
 
 interface NewsArticle {
   id: string;
@@ -95,7 +96,7 @@ export default function Noticias() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+        scrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -105,44 +106,44 @@ export default function Noticias() {
             
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Home
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/quem-somos" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/quem-somos" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Quem Somos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/fundamental2" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/fundamental2" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Fundamental 2
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/ensinomedio" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/ensinomedio" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Ensino Médio + Técnico
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/cursos-tecnicos" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/cursos-tecnicos" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Cursos Técnicos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/in-company" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/in-company" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 In Company
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/matriculas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium relative group">
+              <Link href="/matriculas" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
                 Matrículas
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link href="/noticias" className="text-blue-600 font-medium relative">
+              <Link href="/noticias" className="text-gray-900 font-medium relative">
                 Notícias
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gray-600"></span>
               </Link>
             </nav>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700 hover:text-blue-600 transition-colors"
+              className="lg:hidden text-gray-600 hover:text-gray-900 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -152,29 +153,29 @@ export default function Noticias() {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`lg:hidden bg-white border-t transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className={`lg:hidden bg-white border-t border-gray-200 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Home</Link>
-            <Link href="/quem-somos" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Quem Somos</Link>
-            <Link href="/fundamental2" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Fundamental 2</Link>
-            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Ensino Médio + Técnico</Link>
-            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Cursos Técnicos</Link>
-            <Link href="/in-company" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">In Company</Link>
-            <Link href="/matriculas" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Matrículas</Link>
-            <Link href="/noticias" className="block px-3 py-2 text-blue-600 bg-blue-50 rounded-lg">Notícias</Link>
+            <Link href="/" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Home</Link>
+            <Link href="/quem-somos" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Quem Somos</Link>
+            <Link href="/fundamental2" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Fundamental 2</Link>
+            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Ensino Médio + Técnico</Link>
+            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Cursos Técnicos</Link>
+            <Link href="/in-company" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">In Company</Link>
+            <Link href="/matriculas" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Matrículas</Link>
+            <Link href="/noticias" className="block px-3 py-2 text-gray-900 bg-gray-100 rounded-lg">Notícias</Link>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 py-20 mt-16">
+      <section className="bg-gradient-to-r from-gray-700 to-gray-800 py-20 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
               Notícias ETPC
             </h1>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto mb-8"></div>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            <div className="w-24 h-1 bg-gray-400 mx-auto mb-8"></div>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Fique por dentro das últimas novidades, eventos e conquistas da ETPC
             </p>
           </div>
@@ -248,7 +249,7 @@ export default function Noticias() {
                   {/* No Results */}
                   {paginatedNews.length === 0 && !loading && (
                     <div className="text-center py-12">
-                      <div className="text-6xl mb-4">📰</div>
+                      <FaNewspaper className="text-6xl mb-4 text-gray-400 mx-auto" />
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhuma notícia encontrada</h3>
                       <p className="text-gray-600">Tente ajustar os filtros de busca.</p>
                     </div>
@@ -261,7 +262,7 @@ export default function Noticias() {
                         <button
                           onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                           disabled={currentPage === 1}
-                          className="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 border border-gray-600 text-gray-600 rounded-lg hover:bg-gray-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Anterior
                         </button>
@@ -272,8 +273,8 @@ export default function Noticias() {
                             onClick={() => setCurrentPage(page)}
                             className={`px-4 py-2 rounded-lg transition-colors ${
                               currentPage === page
-                                ? 'bg-red-600 text-white'
-                                : 'border border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
+                                ? 'bg-gray-600 text-white'
+                                : 'border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white'
                             }`}
                           >
                             {page}
@@ -283,7 +284,7 @@ export default function Noticias() {
                         <button
                           onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                           disabled={currentPage === totalPages}
-                          className="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 border border-gray-600 text-gray-600 rounded-lg hover:bg-gray-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Próxima
                         </button>

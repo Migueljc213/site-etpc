@@ -1,106 +1,68 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-// GET - Listar banners
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const position = searchParams.get('position')
-    const active = searchParams.get('active')
+    const { searchParams } = new URL(request.url);
+    const position = searchParams.get('position');
+    const active = searchParams.get('active');
 
     const where: {
       position?: string;
       active?: boolean;
-      OR?: Array<{ startDate: null } | { startDate: { lte: Date } }>;
-      AND?: Array<{ OR: Array<{ endDate: null } | { endDate: { gte: Date } }> }>;
-    } = {}
+    } = {};
 
     if (position) {
-      where.position = position
+      where.position = position;
     }
 
     if (active !== null) {
-      where.active = active === 'true'
+      where.active = active === 'true';
     }
-
-    // Adicionar filtro de data se necessário
-    const now = new Date()
-    where.OR = [
-      { startDate: null },
-      { startDate: { lte: now } }
-    ]
-
-    where.AND = [
-      {
-        OR: [
-          { endDate: null },
-          { endDate: { gte: now } }
-        ]
-      }
-    ]
 
     const banners = await prisma.banner.findMany({
       where,
-      orderBy: { order: 'asc' }
-    })
+      orderBy: [
+        { order: 'asc' },
+        { createdAt: 'desc' }
+      ]
+    });
 
-    return NextResponse.json(banners)
+    return NextResponse.json(banners);
   } catch (error) {
-    console.error('Error fetching banners:', error)
+    console.error('Error fetching banners:', error);
     return NextResponse.json(
       { error: 'Failed to fetch banners' },
       { status: 500 }
-    )
+    );
   }
 }
 
-// POST - Criar banner
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const body = await request.json();
     
-    if (!session || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
-    const {
-      title,
-      description,
-      image,
-      link,
-      position,
-      order,
-      active,
-      startDate,
-      endDate
-    } = body
-
     const banner = await prisma.banner.create({
       data: {
-        title,
-        description,
-        image,
-        link,
-        position,
-        order: order || 0,
-        active: active || true,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null
+        title: body.title,
+        subtitle: body.subtitle,
+        description: body.description,
+        image: body.image,
+        link: body.link,
+        position: body.position || 'homepage-carousel',
+        order: body.order || 0,
+        active: body.active !== undefined ? body.active : true,
+        startDate: body.startDate ? new Date(body.startDate) : null,
+        endDate: body.endDate ? new Date(body.endDate) : null,
       }
-    })
+    });
 
-    return NextResponse.json(banner, { status: 201 })
+    return NextResponse.json(banner, { status: 201 });
   } catch (error) {
-    console.error('Error creating banner:', error)
+    console.error('Error creating banner:', error);
     return NextResponse.json(
       { error: 'Failed to create banner' },
       { status: 500 }
-    )
+    );
   }
 }

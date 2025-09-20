@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaGraduationCap, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt } from 'react-icons/fa';
 
 export default function CursosTecnicos() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,7 +45,7 @@ export default function CursosTecnicos() {
     {
       id: 'automacao-industrial',
       title: 'Automação Industrial',
-      icon: '🏭',
+      icon: FaIndustry,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '96%',
@@ -75,7 +76,7 @@ export default function CursosTecnicos() {
     {
       id: 'eletromecanica',
       title: 'Eletromecânica',
-      icon: '⚡',
+      icon: FaBolt,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '94%',
@@ -111,7 +112,7 @@ export default function CursosTecnicos() {
     {
       id: 'informatica',
       title: 'Informática',
-      icon: '💻',
+      icon: FaDesktop,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '98%',
@@ -142,7 +143,7 @@ export default function CursosTecnicos() {
     {
       id: 'mecanica',
       title: 'Mecânica',
-      icon: '🔧',
+      icon: FaWrench,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '92%',
@@ -173,7 +174,7 @@ export default function CursosTecnicos() {
     {
       id: 'metalurgia',
       title: 'Metalurgia',
-      icon: '⚒️',
+      icon: FaTools,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '90%',
@@ -204,7 +205,7 @@ export default function CursosTecnicos() {
     {
       id: 'seguranca-trabalho',
       title: 'Segurança do Trabalho',
-      icon: '🛡️',
+      icon: FaShieldAlt,
       duration: '18 meses',
       period: 'Matutino, Vespertino ou Noturno',
       employability: '95%',
@@ -339,7 +340,9 @@ export default function CursosTecnicos() {
                     className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-blue-50 transition-all"
                   >
                     <div className="flex items-center space-x-4">
-                      <span className="text-2xl">{course.icon}</span>
+                      <span className="text-2xl text-blue-600">
+                        <course.icon />
+                      </span>
                       <div>
                         <h4 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                           {course.title}
@@ -376,26 +379,28 @@ export default function CursosTecnicos() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: '🎯',
+                icon: FaBullseye,
                 title: 'Foco no Mercado',
                 description: 'Cursos desenvolvidos com base nas demandas reais do mercado de trabalho',
                 stats: '95% empregabilidade média'
               },
               {
-                icon: '🏭',
+                icon: FaIndustry,
                 title: 'Parcerias Empresariais',
                 description: 'Convênios com mais de 200 empresas para estágios e efetivações',
                 stats: '200+ empresas parceiras'
               },
               {
-                icon: '👨‍🏫',
+                icon: FaChalkboardTeacher,
                 title: 'Professores Especialistas',
                 description: 'Corpo docente formado por profissionais atuantes no mercado',
                 stats: '100% professores especialistas'
               }
             ].map((item, index) => (
               <div key={index} className="text-center group">
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
+                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform text-indigo-600">
+                  <item.icon />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
                 <p className="text-gray-600 mb-4">{item.description}</p>
                 <div className="text-indigo-600 font-semibold">{item.stats}</div>
@@ -419,14 +424,16 @@ export default function CursosTecnicos() {
                 <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-center">
                   <div className="lg:col-span-2">
                     <div className="flex items-center mb-4 sm:mb-6">
-                      <div className="text-4xl sm:text-5xl lg:text-6xl mr-3 sm:mr-4">{course.icon}</div>
+                      <div className="text-4xl sm:text-5xl lg:text-6xl mr-3 sm:mr-4 text-blue-600">
+                        <course.icon />
+                      </div>
                       <div>
                         <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{course.title}</h3>
                         <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
-                          <span>⏱️ {course.duration}</span>
-                          <span>📅 {course.period}</span>
-                          <span>📈 {course.employability} empregabilidade</span>
-                          <span>💰 {course.salary}</span>
+                          <span className="flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
+                          <span className="flex items-center gap-1"><FaCalendarAlt className="text-xs" /> {course.period}</span>
+                          <span className="flex items-center gap-1"><FaChartLine className="text-xs" /> {course.employability} empregabilidade</span>
+                          <span className="flex items-center gap-1"><FaMoneyBillWave className="text-xs" /> {course.salary}</span>
                         </div>
                       </div>
                     </div>
@@ -435,7 +442,10 @@ export default function CursosTecnicos() {
 
                     {/* Módulos do Curso */}
                     <div className="mb-8">
-                      <h4 className="font-bold text-gray-900 mb-4 text-lg">📚 Módulos do Curso:</h4>
+                      <h4 className="font-bold text-gray-900 mb-4 text-lg flex items-center gap-2">
+                        <FaBook />
+                        Módulos do Curso:
+                      </h4>
                       <div className="grid md:grid-cols-3 gap-4">
                         {course.modules.map((module, idx) => (
                           <div key={idx} className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
@@ -466,7 +476,7 @@ export default function CursosTecnicos() {
                       </div>
                       <div className="bg-green-50 rounded-lg p-4">
                         <h4 className="font-bold text-gray-900 mb-2 flex items-center">
-                          <span className="text-green-600 mr-2">🎯</span>
+                          <FaBullseye className="text-green-600 mr-2" />
                           Público-Alvo:
                         </h4>
                         <p className="text-gray-700 text-sm">{course.targetAudience}</p>
@@ -477,7 +487,7 @@ export default function CursosTecnicos() {
                     {course.titulation && (
                       <div className="mb-6">
                         <h4 className="font-bold text-gray-900 mb-3 flex items-center">
-                          <span className="text-purple-600 mr-2">🏆</span>
+                          <FaTrophy className="text-purple-600 mr-2" />
                           Titulação por Módulo:
                         </h4>
                         <div className="bg-purple-50 rounded-lg p-4">
@@ -501,7 +511,7 @@ export default function CursosTecnicos() {
                     {/* Oportunidades */}
                     <div className="mb-6">
                       <h4 className="font-bold text-gray-900 mb-3 flex items-center">
-                        <span className="text-green-600 mr-2">💼</span>
+                        <FaBriefcase className="text-green-600 mr-2" />
                         Oportunidades de Carreira:
                       </h4>
                       <div className="grid md:grid-cols-2 gap-2">
@@ -520,33 +530,48 @@ export default function CursosTecnicos() {
                   <div className="bg-white rounded-2xl p-6 shadow-lg">
                     {/* Informações do Curso */}
                     <div className="mb-6">
-                      <h4 className="font-bold text-gray-900 mb-4 text-center text-lg">📊 Informações do Curso</h4>
+                      <h4 className="font-bold text-gray-900 mb-4 text-center text-lg flex items-center justify-center gap-2">
+                        <FaChartBar />
+                        Informações do Curso
+                      </h4>
                       
                       <div className="space-y-4">
                         <div className="bg-blue-50 rounded-lg p-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">⏱️ Duração:</span>
+                            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                              <FaClock className="text-xs" />
+                              Duração:
+                            </span>
                             <span className="font-bold text-blue-600">{course.duration}</span>
                           </div>
                         </div>
                         
                         <div className="bg-green-50 rounded-lg p-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">📅 Período:</span>
+                            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                              <FaCalendarAlt className="text-xs" />
+                              Período:
+                            </span>
                             <span className="font-bold text-green-600 text-xs">{course.period}</span>
                           </div>
                         </div>
                         
                         <div className="bg-purple-50 rounded-lg p-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">📈 Empregabilidade:</span>
+                            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                              <FaChartLine className="text-xs" />
+                              Empregabilidade:
+                            </span>
                             <span className="font-bold text-purple-600">{course.employability}</span>
                           </div>
                         </div>
                         
                         <div className="bg-yellow-50 rounded-lg p-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">💰 Salário:</span>
+                            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                              <FaMoneyBillWave className="text-xs" />
+                              Salário:
+                            </span>
                             <span className="font-bold text-yellow-600 text-sm">{course.salary}</span>
                           </div>
                         </div>
@@ -562,7 +587,10 @@ export default function CursosTecnicos() {
 
                     {/* Laboratórios */}
                     <div className="mb-6">
-                      <h4 className="font-bold text-gray-900 mb-4 text-center">🔬 Laboratórios</h4>
+                      <h4 className="font-bold text-gray-900 mb-4 text-center flex items-center justify-center gap-2">
+                        <FaFlask />
+                        Laboratórios
+                      </h4>
                       <div className="space-y-3">
                         {course.labs.map((lab, idx) => (
                           <div key={idx} className="bg-gray-50 rounded-lg p-3 text-center">
@@ -603,21 +631,21 @@ export default function CursosTecnicos() {
                 name: 'Roberto Silva',
                 course: 'Desenvolvimento de Software',
                 company: 'Google',
-                image: '👨‍💻',
+                image: FaDesktop,
                 story: 'Formei-me no ETPC em 2022 e hoje trabalho como Desenvolvedor Full-stack no Google. A base técnica que recebi foi fundamental para meu sucesso.'
               },
               {
                 name: 'Ana Costa',
                 course: 'Análise de Dados',
                 company: 'Netflix',
-                image: '👩‍💼',
+                image: FaUserTie,
                 story: 'O curso de Análise de Dados mudou minha vida. Hoje sou Data Scientist na Netflix e uso diariamente o que aprendi no ETPC.'
               }
             ].map((story, index) => (
               <div key={index} className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-center mb-6">
                   <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl mr-4">
-                    {story.image}
+                    <story.image className="text-2xl" />
                   </div>
                   <div>
                     <div className="font-bold text-lg text-gray-900">{story.name}</div>
@@ -655,7 +683,10 @@ export default function CursosTecnicos() {
                 {/* Seleção do Curso */}
                 <div className="bg-blue-50 rounded-lg p-6">
                   <label className="block text-lg font-semibold text-gray-900 mb-4">
-                    🎓 Escolha o curso de interesse *
+                    <div className="flex items-center gap-2">
+                      <FaGraduationCap />
+                      Escolha o curso de interesse *
+                    </div>
                   </label>
                   <select
                     name="curso"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaGraduationCap, FaCog, FaClock, FaRocket, FaBullseye, FaBook, FaFlask, FaIndustry, FaBuilding } from 'react-icons/fa';
 
 export default function Matriculas() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,35 +46,35 @@ export default function Matriculas() {
 
   const courses = [
     {
-      icon: '🎓',
+      icon: FaGraduationCap,
       title: 'Ensino Médio + Técnico',
       description: 'Formação completa que combina excelência acadêmica com preparação técnica profissional',
       duration: '3 anos',
       target: 'Estudantes do 1º ao 3º ano'
     },
     {
-      icon: '⚙️',
+      icon: FaCog,
       title: 'Cursos Técnicos Subsequentes',
       description: 'Para quem já concluiu o ensino médio e quer se especializar em uma área técnica',
       duration: '18 meses',
       target: 'Concluintes do Ensino Médio'
     },
     {
-      icon: '🚀',
+      icon: FaRocket,
       title: 'Cursos Técnicos Rápidos',
       description: 'Capacitação acelerada para profissionais que buscam atualização rápida',
       duration: '6-12 meses',
       target: 'Profissionais ativos'
     },
     {
-      icon: '📚',
+      icon: FaBook,
       title: 'Cursos Livres',
       description: 'Formações livres em diversas áreas para desenvolvimento pessoal e profissional',
       duration: 'Variável',
       target: 'Público em geral'
     },
     {
-      icon: '🏢',
+      icon: FaBuilding,
       title: 'Capacitação para Empresas',
       description: 'Treinamentos customizados para desenvolver e qualificar equipes corporativas',
       duration: 'Sob demanda',
@@ -175,7 +176,9 @@ export default function Matriculas() {
             <div className="relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
                 <div className="text-center">
-                  <div className="text-6xl mb-4">👨‍🔬👩‍🔬</div>
+                  <div className="text-6xl mb-4 text-blue-600">
+                    <FaFlask />
+                  </div>
                   <h3 className="text-2xl font-bold text-white mb-4">Conhecimento na Prática</h3>
                   <p className="text-orange-100 mb-6">
                     Laboratórios modernos e experiências reais
@@ -211,19 +214,19 @@ export default function Matriculas() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: '🧪',
+                icon: FaFlask,
                 title: 'Laboratórios Modernos',
                 description: 'Infraestrutura completa com equipamentos de última geração para aprendizado prático e experimental.',
                 color: 'from-blue-500 to-cyan-600'
               },
               {
-                icon: '🏭',
+                icon: FaIndustry,
                 title: 'Experiência em Empresas',
                 description: 'Parcerias com empresas para estágios e projetos reais que conectam teoria à prática profissional.',
                 color: 'from-green-500 to-emerald-600'
               },
               {
-                icon: '🎓',
+                icon: FaGraduationCap,
                 title: 'Preparação Universitária',
                 description: 'Formação que prepara tanto para o mercado de trabalho quanto para o ingresso na universidade.',
                 color: 'from-purple-500 to-indigo-600'
@@ -231,7 +234,9 @@ export default function Matriculas() {
             ].map((item, index) => (
               <div key={index} className="group">
                 <div className={`bg-gradient-to-br ${item.color} rounded-2xl p-8 h-full transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl`}>
-                  <div className="text-4xl mb-4">{item.icon}</div>
+                  <div className="text-4xl mb-4 text-white">
+                    <item.icon />
+                  </div>
                   <h3 className="text-xl font-bold text-white mb-4">{item.title}</h3>
                   <p className="text-blue-100 leading-relaxed">{item.description}</p>
                 </div>
@@ -256,11 +261,13 @@ export default function Matriculas() {
             {courses.map((course, index) => (
               <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group">
                 <div className="text-center mb-6">
-                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">{course.icon}</div>
+                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform text-orange-600">
+                    <course.icon />
+                  </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-600">
-                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full">⏱️ {course.duration}</span>
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">🎯 {course.target}</span>
+                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
+                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1"><FaBullseye className="text-xs" /> {course.target}</span>
                   </div>
                 </div>
                 <p className="text-gray-700 text-center leading-relaxed">{course.description}</p>

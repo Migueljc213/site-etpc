@@ -128,13 +128,7 @@ async function main() {
         title: 'Da ETPC para o PHD no Estados Unidos: conheça a história de Gabriela Cuconato',
         slug: 'da-etpc-para-o-phd-no-estados-unidos-conheca-a-historia-de-gabriela-cuconato',
         excerpt: 'Gabriela Cuconato foi aluna da ETPC, escola da Fundação CSN localizada em Volta Redonda (RJ), entre os anos de 2009 e 2011...',
-        content: `
-          <p>Gabriela Cuconato foi aluna da ETPC, escola da Fundação CSN localizada em Volta Redonda (RJ), entre os anos de 2009 e 2011. Durante esse período, ela cursou o Ensino Médio integrado ao Técnico em Informática, uma experiência que marcou profundamente sua trajetória acadêmica e profissional.</p>
-          
-          <p>Após concluir seus estudos na ETPC, Gabriela deu continuidade à sua formação acadêmica, ingressando em uma universidade renomada para cursar Administração. Sua dedicação e excelência acadêmica a levaram a conquistar uma bolsa de estudos para realizar seu mestrado na FGV/EBAPE, uma das mais prestigiadas instituições de ensino superior do Brasil.</p>
-          
-          <p>O mestrado na FGV foi apenas o início de uma jornada ainda mais impressionante. Gabriela foi selecionada para realizar seu doutorado (PhD) em Comportamento Organizacional na Weatherhead School of Management, localizada em Ohio, Estados Unidos. Esta é uma das mais renomadas escolas de negócios do mundo, conhecida por sua excelência em pesquisa e ensino.</p>
-        `,
+        content: '<p>Gabriela Cuconato foi aluna da ETPC e hoje é PhD em Comportamento Organizacional nos Estados Unidos.</p>',
         author: 'Equipe ETPC',
         featured: true,
         published: true,
@@ -174,18 +168,19 @@ async function main() {
 
   console.log('✅ News created:', news.length)
 
-  // Criar banners de exemplo
+  // Criar banners do carrossel
   const banners = await Promise.all([
     prisma.banner.upsert({
       where: { id: 'banner-1' },
       update: {},
       create: {
         id: 'banner-1',
-        title: 'Banner Principal',
-        description: 'Banner principal da homepage',
-        image: '/api/placeholder/800/400',
+        title: 'Cursos de curta duração',
+        subtitle: 'Capacitação rápida e eficiente',
+        description: 'Banner promocional para cursos de curta duração',
+        image: '/images/banners/banner-1.jpg',
         link: '/cursos-tecnicos',
-        position: 'homepage-top',
+        position: 'homepage-carousel',
         order: 1,
         active: true
       }
@@ -195,12 +190,28 @@ async function main() {
       update: {},
       create: {
         id: 'banner-2',
-        title: 'Promoção Cursos',
-        description: 'Banner promocional para cursos técnicos',
-        image: '/api/placeholder/800/400',
-        link: '/matriculas',
-        position: 'homepage-middle',
+        title: 'Estudantes ETPC',
+        subtitle: 'Futuro brilhante começa aqui',
+        description: 'Banner com estudantes da ETPC',
+        image: '/images/banners/banner-2.jpg',
+        link: '/quem-somos',
+        position: 'homepage-carousel',
         order: 2,
+        active: true
+      }
+    }),
+    prisma.banner.upsert({
+      where: { id: 'banner-3' },
+      update: {},
+      create: {
+        id: 'banner-3',
+        title: 'Educação Técnica',
+        subtitle: 'Preparando profissionais para o mercado',
+        description: 'Banner da estudante com capacete de segurança',
+        image: '/images/banners/banner-3.jpg',
+        link: '/ensinomedio',
+        position: 'homepage-carousel',
+        order: 3,
         active: true
       }
     })

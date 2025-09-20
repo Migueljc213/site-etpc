@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaNewspaper, FaImage, FaGraduationCap, FaCog, FaUsers } from 'react-icons/fa';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -26,29 +27,29 @@ export default function AdminDashboard() {
       title: 'Nova Notícia',
       description: 'Criar uma nova notícia para o site',
       href: '/admin/noticias/novo',
-      icon: '📰',
-      color: 'bg-blue-500'
+      icon: 'FaNewspaper',
+      color: 'bg-gray-600'
     },
     {
       title: 'Novo Banner',
       description: 'Adicionar um novo banner promocional',
       href: '/admin/banners/novo',
-      icon: '🖼️',
-      color: 'bg-green-500'
+      icon: 'FaImage',
+      color: 'bg-gray-600'
     },
     {
       title: 'Novo Curso',
       description: 'Cadastrar um novo curso técnico',
       href: '/admin/cursos/novo',
-      icon: '🎓',
-      color: 'bg-purple-500'
+      icon: 'FaGraduationCap',
+      color: 'bg-gray-600'
     },
     {
       title: 'Configurações',
       description: 'Ajustar configurações do site',
       href: '/admin/configuracoes',
-      icon: '⚙️',
-      color: 'bg-gray-500'
+      icon: 'FaCog',
+      color: 'bg-gray-600'
     }
   ];
 
@@ -57,19 +58,19 @@ export default function AdminDashboard() {
       action: 'Notícia criada',
       description: 'ETPC abre inscrições para curso preparatório Petrobrás 2023',
       time: '2 horas atrás',
-      icon: '📰'
+      icon: 'FaNewspaper'
     },
     {
       action: 'Banner atualizado',
       description: 'Banner principal da homepage',
       time: '4 horas atrás',
-      icon: '🖼️'
+      icon: 'FaImage'
     },
     {
       action: 'Curso editado',
       description: 'Automação Industrial - módulos atualizados',
       time: '1 dia atrás',
-      icon: '🎓'
+      icon: 'FaGraduationCap'
     }
   ];
 
@@ -85,8 +86,8 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <span className="text-2xl">📰</span>
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <FaNewspaper className="text-2xl text-gray-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Notícias</p>
@@ -97,8 +98,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <span className="text-2xl">🖼️</span>
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <FaImage className="text-2xl text-gray-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Banners</p>
@@ -109,8 +110,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <span className="text-2xl">🎓</span>
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <FaGraduationCap className="text-2xl text-gray-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Cursos</p>
@@ -121,8 +122,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <span className="text-2xl">👥</span>
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <FaUsers className="text-2xl text-gray-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Usuários</p>
@@ -147,7 +148,10 @@ export default function AdminDashboard() {
                   className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <div className={`p-2 ${action.color} rounded-lg text-white mr-3`}>
-                    <span className="text-lg">{action.icon}</span>
+                    {action.icon === 'FaNewspaper' && <FaNewspaper className="text-lg" />}
+                    {action.icon === 'FaImage' && <FaImage className="text-lg" />}
+                    {action.icon === 'FaGraduationCap' && <FaGraduationCap className="text-lg" />}
+                    {action.icon === 'FaCog' && <FaCog className="text-lg" />}
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">{action.title}</h3>

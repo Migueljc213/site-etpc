@@ -116,10 +116,11 @@ model Comment {
 model Banner {
   id          String   @id @default(cuid())
   title       String
+  subtitle    String?  // Subtítulo para o banner
   description String?
   image       String   // URL da imagem
   link        String?  // Link de destino
-  position    String   // homepage-top, homepage-middle, etc.
+  position    String   @default("homepage-carousel") // homepage-top, homepage-middle, etc.
   order       Int      @default(0) // Ordem de exibição
   active      Boolean  @default(true)
   startDate   DateTime?

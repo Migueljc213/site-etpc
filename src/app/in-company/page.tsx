@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaBullseye, FaChartLine, FaCalendarAlt, FaHandshake, FaIndustry } from 'react-icons/fa';
 
 export default function InCompany() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,25 +45,25 @@ export default function InCompany() {
 
   const benefits = [
     {
-      icon: '🎯',
+      icon: FaBullseye,
       title: 'Soluções Customizadas',
       description: 'Desenvolvemos programas específicos para as necessidades únicas de cada empresa, garantindo máxima relevância e aplicabilidade.',
       color: 'from-blue-500 to-cyan-600'
     },
     {
-      icon: '📈',
+      icon: FaChartLine,
       title: 'Otimização de Investimentos',
       description: 'Maximizamos o retorno do investimento em capacitação através de análises detalhadas e planos estratégicos personalizados.',
       color: 'from-green-500 to-emerald-600'
     },
     {
-      icon: '🏭',
+      icon: FaIndustry,
       title: 'Qualificação Específica',
       description: 'Focamos na qualificação e aperfeiçoamento da mão de obra específica da sua empresa, atendendo demandas técnicas precisas.',
       color: 'from-purple-500 to-indigo-600'
     },
     {
-      icon: '🤝',
+      icon: FaHandshake,
       title: 'Parceria Estratégica',
       description: 'Trabalhamos em parceria com sua empresa para desenvolver soluções que impulsionem o crescimento e a competitividade.',
       color: 'from-orange-500 to-red-600'
@@ -191,7 +192,9 @@ export default function InCompany() {
             {benefits.map((benefit, index) => (
               <div key={index} className="group">
                 <div className={`bg-gradient-to-br ${benefit.color} rounded-2xl p-8 h-full transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl`}>
-                  <div className="text-4xl mb-4">{benefit.icon}</div>
+                  <div className="text-4xl mb-4 text-white">
+                    <benefit.icon />
+                  </div>
                   <h3 className="text-xl font-bold text-white mb-4">{benefit.title}</h3>
                   <p className="text-blue-100 leading-relaxed">{benefit.description}</p>
                 </div>
@@ -205,7 +208,9 @@ export default function InCompany() {
       <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl">
-            <div className="text-6xl mb-6">📅</div>
+            <div className="text-6xl mb-6 text-white">
+              <FaCalendarAlt />
+            </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Próximas Turmas</h2>
             <p className="text-lg text-gray-600 mb-6">
               No momento não temos cursos In Company disponíveis, mas fique por dentro das datas de início e informações de valores!

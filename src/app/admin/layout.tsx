@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
+import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog } from 'react-icons/fa';
 
 interface UserWithRole {
   id: string;
@@ -45,12 +46,12 @@ export default function AdminLayout({
   }
 
   const menuItems = [
-    { name: 'Dashboard', href: '/admin', icon: '📊' },
-    { name: 'Notícias', href: '/admin/noticias', icon: '📰' },
-    { name: 'Banners', href: '/admin/banners', icon: '🖼️' },
-    { name: 'Cursos', href: '/admin/cursos', icon: '🎓' },
-    { name: 'Usuários', href: '/admin/usuarios', icon: '👥' },
-    { name: 'Configurações', href: '/admin/configuracoes', icon: '⚙️' },
+    { name: 'Dashboard', href: '/admin', icon: FaChartBar },
+    { name: 'Notícias', href: '/admin/noticias', icon: FaNewspaper },
+    { name: 'Banners', href: '/admin/banners', icon: FaImage },
+    { name: 'Cursos', href: '/admin/cursos', icon: FaGraduationCap },
+    { name: 'Usuários', href: '/admin/usuarios', icon: FaUsers },
+    { name: 'Configurações', href: '/admin/configuracoes', icon: FaCog },
   ];
 
   return (
@@ -73,16 +74,19 @@ export default function AdminLayout({
 
         <nav className="mt-6 px-3">
           <div className="space-y-1">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                <span className="mr-3 text-lg">{item.icon}</span>
-                {item.name}
-              </Link>
-            ))}
+            {menuItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                >
+                  <IconComponent className="mr-3 text-lg" />
+                  {item.name}
+                </Link>
+              );
+            })}
           </div>
         </nav>
 

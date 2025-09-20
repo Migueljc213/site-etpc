@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaBriefcase, FaGraduationCap, FaChartBar, FaClock, FaUserTie, FaChartLine, FaBullseye, FaEdit, FaUniversity, FaBook, FaFlask, FaDesktop, FaWrench } from 'react-icons/fa';
 
 export default function EnsinoMedio() {
   const [scrolled, setScrolled] = useState(false);
@@ -125,32 +126,34 @@ export default function EnsinoMedio() {
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             {[
               {
-                icon: '📚',
+                icon: FaBook,
                 title: 'Preparação para o ENEM e demais vestibulares',
                 description: 'Currículo completo com foco na preparação para os principais vestibulares do país, incluindo simulados e aulas específicas para o ENEM.',
                 features: ['Simulados mensais', 'Aulas de redação', 'Orientação para vestibulares', 'Material didático atualizado']
               },
               {
-                icon: '💼',
+                icon: FaBriefcase,
                 title: 'Curso Técnico que coloca os estudantes em contato com o mercado',
                 description: 'Formação técnica especializada com laboratórios modernos e parcerias com empresas para estágios e oportunidades profissionais.',
                 features: ['Estágios remunerados', 'Parcerias empresariais', 'Certificação técnica', 'Projetos reais']
               },
               {
-                icon: '🎓',
+                icon: FaGraduationCap,
                 title: 'Melhor desempenho durante a universidade',
                 description: 'Alunos chegam à universidade com base técnica sólida, facilitando o aprendizado em cursos de engenharia e tecnologia.',
                 features: ['Base técnica sólida', 'Experiência prática', 'Metodologia científica', 'Pensamento crítico']
               },
               {
-                icon: '🔬',
+                icon: FaFlask,
                 title: 'Conteúdo acadêmico e aulas práticas em laboratórios',
                 description: 'Integração perfeita entre teoria e prática com laboratórios equipados e professores especialistas do mercado.',
                 features: ['20+ laboratórios', 'Equipamentos modernos', 'Professores especialistas', 'Projetos inovadores']
               }
             ].map((advantage, index) => (
               <div key={index} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer group border border-gray-100">
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">{advantage.icon}</div>
+                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform text-purple-600">
+                  <advantage.icon />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors">{advantage.title}</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">{advantage.description}</p>
                 <div className="grid grid-cols-2 gap-3">
@@ -180,21 +183,21 @@ export default function EnsinoMedio() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: '💻',
+                icon: FaDesktop,
                 title: 'Desenvolvimento de Sistemas',
                 description: 'Programação, desenvolvimento web, mobile e sistemas empresariais',
                 duration: '3 anos',
                 market: '95% empregabilidade'
               },
               {
-                icon: '🔧',
+                icon: FaWrench,
                 title: 'Eletromecânica',
                 description: 'Manutenção industrial, automação e sistemas elétricos',
                 duration: '3 anos',
                 market: '92% empregabilidade'
               },
               {
-                icon: '📊',
+                icon: FaChartBar,
                 title: 'Administração',
                 description: 'Gestão empresarial, recursos humanos e empreendedorismo',
                 duration: '3 anos',
@@ -202,12 +205,14 @@ export default function EnsinoMedio() {
               }
             ].map((course, index) => (
               <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer">
-                <div className="text-5xl mb-4">{course.icon}</div>
+                <div className="text-5xl mb-4 text-purple-600">
+                  <course.icon />
+                </div>
                 <h4 className="text-2xl font-bold text-gray-900 mb-3">{course.title}</h4>
                 <p className="text-gray-600 mb-4">{course.description}</p>
                 <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-                  <span>⏱️ {course.duration}</span>
-                  <span>📈 {course.market}</span>
+                  <span className="flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
+                  <span className="flex items-center gap-1"><FaChartLine className="text-xs" /> {course.market}</span>
                 </div>
                 <button className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-semibold">
                   Saiba mais
@@ -222,13 +227,15 @@ export default function EnsinoMedio() {
       <section className="py-20 bg-gradient-to-r from-purple-600 to-indigo-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-12">
-            <div className="text-6xl mb-6">💼</div>
+            <div className="text-6xl mb-6 text-white">
+              <FaUserTie />
+            </div>
             <blockquote className="text-2xl text-white font-medium mb-8 leading-relaxed italic">
               &ldquo;Fiz Ensino Médio com técnico em Eletromecânica na ETPC e tenho o privilégio de dizer que por causa do meu curso consegui um estágio, uma promoção e uma carreira. Hoje sou técnico de manutenção em uma multinacional na área de gás e estou muito satisfeito com a minha carreira. O aprendizado da escola, eu levo para a minha vida até hoje&rdquo;
             </blockquote>
             <div className="flex items-center justify-center">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl mr-4">
-                👨‍🔧
+                <FaUserTie className="text-2xl" />
               </div>
               <div className="text-left">
                 <div className="text-white font-bold text-lg">Felipe Lemos</div>
@@ -248,13 +255,15 @@ export default function EnsinoMedio() {
 
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
-              { number: '87%', label: 'Aprovação em vestibulares', icon: '🎯' },
-              { number: '94%', label: 'Inserção no mercado', icon: '💼' },
-              { number: '750+', label: 'Média no ENEM', icon: '📝' },
-              { number: '85%', label: 'Seguem para universidade', icon: '🎓' }
+              { number: '87%', label: 'Aprovação em vestibulares', icon: FaBullseye },
+              { number: '94%', label: 'Inserção no mercado', icon: FaBriefcase },
+              { number: '750+', label: 'Média no ENEM', icon: FaEdit },
+              { number: '85%', label: 'Seguem para universidade', icon: FaUniversity }
             ].map((stat, index) => (
               <div key={index} className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer">
-                <div className="text-4xl mb-4">{stat.icon}</div>
+                <div className="text-4xl mb-4 text-purple-600">
+                  <stat.icon />
+                </div>
                 <div className="text-4xl font-bold text-purple-600 mb-2">{stat.number}</div>
                 <div className="text-gray-600">{stat.label}</div>
               </div>
