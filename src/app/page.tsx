@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask } from 'react-icons/fa';
 import BannerCarousel from '@/components/BannerCarousel';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,13 +72,13 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <Image
-                src="/etpc.png"
-                alt="ETPC Logo"
-                width={90}
-                height={30}
-                className="hover:scale-105 transition-transform cursor-pointer"
-              />
+              <div className="text-white font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
+                <div className="relative">
+                  etpc
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"></div>
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0.5 h-3 bg-white"></div>
+                </div>
+              </div>
             </div>
 
             <div className="hidden lg:flex items-center space-x-8">
@@ -143,31 +142,14 @@ export default function Home() {
       </nav>
 
       {/* Hero Section - Carrossel de Banners */}
-      <section className="relative pt-16 pb-8 overflow-hidden">
-        {/* Carrossel de Banners - Full Width */}
-        <div className="mb-8 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-full mx-auto">
-            <BannerCarousel 
-              banners={banners} 
-              autoPlay={true} 
-              interval={5000}
-            />
-          </div>
-        </div>
+      <section className="relative overflow-hidden">
+        {/* Carrossel de Banners - Full Screen */}
+        <BannerCarousel 
+          banners={banners} 
+          autoPlay={true} 
+          interval={5000}
+        />
 
-        {/* Botões de ação */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/matriculas" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                Comece sua jornada
-              </a>
-              <a href="/cursos-tecnicos" className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-all hover:shadow-lg">
-                Conheça os cursos
-              </a>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Statistics Section */}
