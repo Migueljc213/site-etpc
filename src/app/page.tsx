@@ -69,15 +69,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-4' : 'bg-white/95 backdrop-blur-sm py-6'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-white/95 backdrop-blur-sm py-4'}`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Image
                 src="/etpc.png"
                 alt="ETPC Logo"
-                width={120}
-                height={40}
+                width={90}
+                height={30}
                 className="hover:scale-105 transition-transform cursor-pointer"
               />
             </div>
@@ -143,7 +143,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section - Carrossel de Banners */}
-      <section className="relative pt-20 pb-8 overflow-hidden">
+      <section className="relative pt-16 pb-8 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Carrossel de Banners */}
           <div className="mb-6">

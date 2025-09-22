@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    // Permitir imagens locais
+    unoptimized: false,
   },
   typescript: {
     ignoreBuildErrors: true,
