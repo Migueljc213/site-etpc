@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 import { FaUsers, FaGraduationCap, FaUserTie, FaBook, FaStar, FaChalkboardTeacher, FaBullseye, FaDesktop, FaTrophy, FaFlask } from 'react-icons/fa';
 
 export default function Fundamental2() {
@@ -46,7 +47,13 @@ export default function Fundamental2() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent hover:scale-110 transition-transform cursor-pointer">ETPC</span>
+              <Image
+                src="/etpc.png"
+                alt="ETPC Logo"
+                width={120}
+                height={40}
+                className="hover:scale-105 transition-transform cursor-pointer"
+              />
             </Link>
 
             <div className="hidden lg:flex items-center space-x-6">
