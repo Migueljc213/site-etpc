@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaPlus, FaImage, FaEye, FaEyeSlash, FaEdit, FaTrash, FaCalendarAlt, FaLink, FaMapMarkerAlt } from 'react-icons/fa';
 
 interface Banner {
   id: string;
@@ -22,54 +23,75 @@ export default function BannersAdmin() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simular carregamento de banners
-    const mockBanners: Banner[] = [
-      {
-        id: '1',
-        title: 'Banner Principal',
-        description: 'Banner principal da homepage',
-        image: '/api/placeholder/800/400',
-        link: '/cursos-tecnicos',
-        position: 'homepage-top',
-        active: true,
-        startDate: '2024-01-01',
-        endDate: '2024-12-31',
-        createdAt: '2024-01-01T10:00:00Z',
-        updatedAt: '2024-01-01T10:00:00Z'
-      },
-      {
-        id: '2',
-        title: 'Promoção Cursos',
-        description: 'Banner promocional para cursos técnicos',
-        image: '/api/placeholder/800/400',
-        link: '/matriculas',
-        position: 'homepage-middle',
-        active: true,
-        startDate: '2024-01-15',
-        endDate: '2024-03-15',
-        createdAt: '2024-01-15T10:00:00Z',
-        updatedAt: '2024-01-15T10:00:00Z'
-      }
-    ];
-    
-    setTimeout(() => {
-      setBanners(mockBanners);
-      setLoading(false);
-    }, 1000);
+    fetchBanners();
   }, []);
+
+  const fetchBanners = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/banners');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setBanners(data);
+      } else {
+        console.error('Erro ao buscar banners:', data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar banners:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este banner?')) {
-      setBanners(banners.filter(banner => banner.id !== id));
+      try {
+        const response = await fetch(`/api/banners/${id}`, {
+          method: 'DELETE',
+        });
+        
+        if (response.ok) {
+          setBanners(banners.filter(banner => banner.id !== id));
+        } else {
+          alert('Erro ao excluir banner');
+        }
+      } catch (error) {
+        console.error('Erro ao excluir banner:', error);
+        alert('Erro ao excluir banner');
+      }
     }
   };
 
   const handleToggleActive = async (id: string) => {
-    setBanners(banners.map(banner => 
-      banner.id === id 
-        ? { ...banner, active: !banner.active }
-        : banner
-    ));
+    const banner = banners.find(b => b.id === id);
+    if (!banner) return;
+
+    try {
+      const response = await fetch(`/api/banners/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...banner,
+          active: !banner.active
+        }),
+      });
+      
+      if (response.ok) {
+        setBanners(banners.map(banner => 
+          banner.id === id 
+            ? { ...banner, active: !banner.active }
+            : banner
+        ));
+      } else {
+        alert('Erro ao atualizar banner');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar banner:', error);
+      alert('Erro ao atualizar banner');
+    }
   };
 
   if (loading) {
@@ -90,9 +112,10 @@ export default function BannersAdmin() {
         </div>
         <Link
           href="/admin/banners/novo"
-          className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
         >
-          + Novo Banner
+          <FaPlus className="text-sm" />
+          Novo Banner
         </Link>
       </div>
 
@@ -106,36 +129,47 @@ export default function BannersAdmin() {
         
         <div className="divide-y divide-gray-200">
           {banners.map((banner) => (
-            <div key={banner.id} className="p-6 hover:bg-gray-50">
-              <div className="flex items-start space-x-4">
+            <div key={banner.id} className="p-6 hover:bg-blue-50 transition-colors">
+              <div className="flex items-start space-x-6">
                 {/* Image Preview */}
                 <div className="flex-shrink-0">
-                  <div className="w-32 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-500 text-sm">Imagem</span>
+                  <div className="w-40 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center border-2 border-blue-200">
+                    <FaImage className="text-blue-600 text-2xl" />
                   </div>
                 </div>
                 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <h3 className="text-lg font-medium text-gray-900">{banner.title}</h3>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">{banner.title}</h3>
                     {banner.active ? (
-                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaEye className="text-xs" />
                         Ativo
                       </span>
                     ) : (
-                      <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaEyeSlash className="text-xs" />
                         Inativo
                       </span>
                     )}
                   </div>
                   
-                  <p className="text-gray-600 mb-2">{banner.description}</p>
+                  <p className="text-gray-600 mb-3 leading-relaxed">{banner.description}</p>
                   
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>Posição: {banner.position}</span>
-                    <span>Link: {banner.link}</span>
-                    <span>Período: {banner.startDate} - {banner.endDate}</span>
+                  <div className="flex items-center space-x-6 text-sm text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <FaMapMarkerAlt className="text-blue-600" />
+                      {banner.position}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaLink className="text-blue-600" />
+                      {banner.link}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaCalendarAlt className="text-blue-600" />
+                      {banner.startDate} - {banner.endDate}
+                    </span>
                   </div>
                 </div>
                 
@@ -143,26 +177,32 @@ export default function BannersAdmin() {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleToggleActive(banner.id)}
-                    className={`px-3 py-1 text-xs rounded-full ${
+                    className={`px-4 py-2 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2 ${
                       banner.active 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-green-100 text-green-800'
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
                     }`}
+                    title={banner.active ? 'Desativar banner' : 'Ativar banner'}
                   >
+                    {banner.active ? <FaEyeSlash className="text-sm" /> : <FaEye className="text-sm" />}
                     {banner.active ? 'Desativar' : 'Ativar'}
                   </button>
                   
                   <Link
                     href={`/admin/banners/${banner.id}/editar`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Editar banner"
                   >
+                    <FaEdit className="text-sm" />
                     Editar
                   </Link>
                   
                   <button
                     onClick={() => handleDelete(banner.id)}
-                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    className="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Excluir banner"
                   >
+                    <FaTrash className="text-sm" />
                     Excluir
                   </button>
                 </div>

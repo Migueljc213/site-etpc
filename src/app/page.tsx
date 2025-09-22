@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-white/95 backdrop-blur-sm py-4'}`}>
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-3' : 'bg-slate-900/90 backdrop-blur-md py-4'}`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
@@ -83,39 +83,39 @@ export default function Home() {
             </div>
 
             <div className="hidden lg:flex items-center space-x-8">
-              <a href="/quem-somos" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/quem-somos" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Quem Somos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/fundamental2" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/fundamental2" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Fundamental 2
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/ensinomedio" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/ensinomedio" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Ensino Médio
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/cursos-tecnicos" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/cursos-tecnicos" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Cursos Técnicos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/in-company" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/in-company" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 In Company
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/matriculas" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/matriculas" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Matrículas
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
-              <a href="/noticias" className="text-gray-600 hover:text-gray-900 transition-colors font-medium relative group">
+              <a href="/noticias" className="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
                 Notícias
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
               </a>
             </div>
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-600 hover:text-gray-900 transition-colors"
+              className="lg:hidden text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
@@ -129,32 +129,34 @@ export default function Home() {
         </div>
 
         {/* Mobile menu */}
-        <div className={`lg:hidden bg-white border-t border-gray-200 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className={`lg:hidden bg-slate-900/95 backdrop-blur-md border-t border-white/20 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <a href="/quem-somos" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Quem Somos</a>
-            <a href="/fundamental2" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Fundamental 2</a>
-            <a href="/ensinomedio" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Ensino Médio</a>
-            <a href="/cursos-tecnicos" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Cursos Técnicos</a>
-            <a href="/in-company" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">In Company</a>
-            <a href="/matriculas" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Matrículas</a>
-            <a href="/noticias" className="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all">Notícias</a>
+            <a href="/quem-somos" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Quem Somos</a>
+            <a href="/fundamental2" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Fundamental 2</a>
+            <a href="/ensinomedio" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Ensino Médio</a>
+            <a href="/cursos-tecnicos" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Cursos Técnicos</a>
+            <a href="/in-company" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">In Company</a>
+            <a href="/matriculas" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Matrículas</a>
+            <a href="/noticias" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Notícias</a>
           </div>
         </div>
       </nav>
 
       {/* Hero Section - Carrossel de Banners */}
       <section className="relative pt-16 pb-8 overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Carrossel de Banners */}
-          <div className="mb-6">
+        {/* Carrossel de Banners - Full Width */}
+        <div className="mb-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-full mx-auto">
             <BannerCarousel 
               banners={banners} 
               autoPlay={true} 
               interval={5000}
             />
           </div>
+        </div>
 
-          {/* Botões de ação */}
+        {/* Botões de ação */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="/matriculas" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">

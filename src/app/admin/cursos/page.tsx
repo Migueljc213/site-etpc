@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaPlus, FaGraduationCap, FaEye, FaEyeSlash, FaEdit, FaTrash, FaClock, FaMoneyBillWave, FaChartLine, FaBook } from 'react-icons/fa';
 
 interface Curso {
   id: string;
@@ -109,9 +110,10 @@ export default function CursosAdmin() {
         </div>
         <Link
           href="/admin/cursos/novo"
-          className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
         >
-          + Novo Curso
+          <FaPlus className="text-sm" />
+          Novo Curso
         </Link>
       </div>
 
@@ -125,49 +127,56 @@ export default function CursosAdmin() {
         
         <div className="divide-y divide-gray-200">
           {cursos.map((curso) => (
-            <div key={curso.id} className="p-6 hover:bg-gray-50">
-              <div className="flex items-start space-x-4">
+            <div key={curso.id} className="p-6 hover:bg-blue-50 transition-colors">
+              <div className="flex items-start space-x-6">
                 {/* Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
-                    {curso.icon}
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center text-3xl border-2 border-blue-200">
+                    <FaGraduationCap className="text-blue-600" />
                   </div>
                 </div>
                 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <h3 className="text-lg font-medium text-gray-900">{curso.title}</h3>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <h3 className="text-xl font-semibold text-gray-900">{curso.title}</h3>
                     {curso.active ? (
-                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaEye className="text-xs" />
                         Ativo
                       </span>
                     ) : (
-                      <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaEyeSlash className="text-xs" />
                         Inativo
                       </span>
                     )}
                   </div>
                   
-                  <p className="text-gray-600 mb-3">{curso.description}</p>
+                  <p className="text-gray-600 mb-4 leading-relaxed">{curso.description}</p>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500">
-                    <div>
-                      <span className="font-medium">Duração:</span> {curso.duration}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <FaClock className="text-blue-600" />
+                      <span className="text-gray-700"><strong>Duração:</strong> {curso.duration}</span>
                     </div>
-                    <div>
-                      <span className="font-medium">Empregabilidade:</span> {curso.employability}
+                    <div className="flex items-center gap-2">
+                      <FaChartLine className="text-blue-600" />
+                      <span className="text-gray-700"><strong>Empregabilidade:</strong> {curso.employability}</span>
                     </div>
-                    <div>
-                      <span className="font-medium">Salário:</span> {curso.salary}
+                    <div className="flex items-center gap-2">
+                      <FaMoneyBillWave className="text-blue-600" />
+                      <span className="text-gray-700"><strong>Salário:</strong> {curso.salary}</span>
                     </div>
-                    <div>
-                      <span className="font-medium">Mensalidade:</span> {curso.monthlyValue}
+                    <div className="flex items-center gap-2">
+                      <FaMoneyBillWave className="text-blue-600" />
+                      <span className="text-gray-700"><strong>Mensalidade:</strong> {curso.monthlyValue}</span>
                     </div>
                   </div>
                   
-                  <div className="mt-3 text-sm text-gray-500">
-                    <span className="font-medium">Módulos:</span> {curso.modules.length} módulos
+                  <div className="mt-3 flex items-center gap-2 text-sm">
+                    <FaBook className="text-blue-600" />
+                    <span className="text-gray-700"><strong>Módulos:</strong> {curso.modules.length} módulos</span>
                   </div>
                 </div>
                 
@@ -175,26 +184,32 @@ export default function CursosAdmin() {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleToggleActive(curso.id)}
-                    className={`px-3 py-1 text-xs rounded-full ${
+                    className={`px-4 py-2 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2 ${
                       curso.active 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-green-100 text-green-800'
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
                     }`}
+                    title={curso.active ? 'Desativar curso' : 'Ativar curso'}
                   >
+                    {curso.active ? <FaEyeSlash className="text-sm" /> : <FaEye className="text-sm" />}
                     {curso.active ? 'Desativar' : 'Ativar'}
                   </button>
                   
                   <Link
                     href={`/admin/cursos/${curso.id}/editar`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Editar curso"
                   >
+                    <FaEdit className="text-sm" />
                     Editar
                   </Link>
                   
                   <button
                     onClick={() => handleDelete(curso.id)}
-                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    className="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Excluir curso"
                   >
+                    <FaTrash className="text-sm" />
                     Excluir
                   </button>
                 </div>

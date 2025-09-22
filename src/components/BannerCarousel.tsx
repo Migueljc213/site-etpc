@@ -67,7 +67,7 @@ export default function BannerCarousel({
 
   if (activeBanners.length === 0) {
     return (
-      <div className="w-full h-[300px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+      <div className="w-full h-[400px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
         <div className="text-center text-white">
           <h2 className="text-2xl font-bold mb-2">ETPC</h2>
           <p className="text-blue-100">Excelência em educação técnica</p>
@@ -79,7 +79,7 @@ export default function BannerCarousel({
   if (activeBanners.length === 1) {
     const banner = activeBanners[0];
     return (
-      <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-2xl">
+      <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl">
         <Image
           src={banner.image}
           alt={banner.title}
@@ -105,7 +105,7 @@ export default function BannerCarousel({
   }
 
   return (
-    <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-2xl group">
+    <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl group">
       {/* Banner atual */}
       <div className="relative w-full h-full">
         <Image

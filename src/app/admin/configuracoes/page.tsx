@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Configuracoes() {
   const [config, setConfig] = useState({
     siteName: 'ETPC - Escola Técnica da Fundação CSN',
     siteDescription: 'Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.',
     contactEmail: 'contato@etpc.com.br',
-    contactPhone: '(11) 3340-5412',
+    contactPhone: '(24) 3340-5412',
     address: 'Volta Redonda, RJ',
     socialMedia: {
       instagram: 'https://instagram.com/etpc',
@@ -25,15 +25,42 @@ export default function Configuracoes() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    fetchConfig();
+  }, []);
+
+  const fetchConfig = async () => {
+    try {
+      const response = await fetch('/api/config');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setConfig(prev => ({ ...prev, ...data }));
+      }
+    } catch (error) {
+      console.error('Erro ao buscar configurações:', error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
 
     try {
-      // Simular salvamento
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setMessage('Configurações salvas com sucesso!');
+      const response = await fetch('/api/config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+
+      if (response.ok) {
+        setMessage('Configurações salvas com sucesso!');
+      } else {
+        setMessage('Erro ao salvar configurações');
+      }
     } catch {
       setMessage('Erro ao salvar configurações');
     } finally {
@@ -104,7 +131,7 @@ export default function Configuracoes() {
                 name="siteName"
                 value={config.siteName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
               />
             </div>
 
@@ -117,7 +144,7 @@ export default function Configuracoes() {
                 rows={3}
                 value={config.siteDescription}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
               />
             </div>
 
@@ -131,7 +158,7 @@ export default function Configuracoes() {
                   name="contactEmail"
                   value={config.contactEmail}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
 
@@ -144,7 +171,7 @@ export default function Configuracoes() {
                   name="contactPhone"
                   value={config.contactPhone}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
             </div>
@@ -158,7 +185,7 @@ export default function Configuracoes() {
                 name="address"
                 value={config.address}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
               />
             </div>
           </div>
@@ -180,7 +207,7 @@ export default function Configuracoes() {
                   name="socialMedia.instagram"
                   value={config.socialMedia.instagram}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
 
@@ -193,7 +220,7 @@ export default function Configuracoes() {
                   name="socialMedia.facebook"
                   value={config.socialMedia.facebook}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
 
@@ -206,7 +233,7 @@ export default function Configuracoes() {
                   name="socialMedia.youtube"
                   value={config.socialMedia.youtube}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
 
@@ -219,7 +246,7 @@ export default function Configuracoes() {
                   name="socialMedia.linkedin"
                   value={config.socialMedia.linkedin}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input-field"
                 />
               </div>
             </div>
@@ -241,7 +268,7 @@ export default function Configuracoes() {
                 name="seo.title"
                 value={config.seo.title}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
               />
             </div>
 
@@ -254,7 +281,7 @@ export default function Configuracoes() {
                 rows={3}
                 value={config.seo.description}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
               />
             </div>
 
@@ -267,7 +294,7 @@ export default function Configuracoes() {
                 name="seo.keywords"
                 value={config.seo.keywords}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input-field"
                 placeholder="palavra1, palavra2, palavra3"
               />
             </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaPlus, FaSearch, FaFilter, FaStar, FaEye, FaEyeSlash, FaEdit, FaTrash, FaCalendarAlt, FaTag, FaClock } from 'react-icons/fa';
 
 interface Noticia {
   id: string;
@@ -107,17 +108,23 @@ export default function NoticiasAdmin() {
         </div>
         <Link
           href="/admin/noticias/novo"
-          className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
         >
-          + Nova Notícia
+          <FaPlus className="text-sm" />
+          Nova Notícia
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <FaFilter className="text-blue-600" />
+          <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <FaSearch className="text-blue-600" />
               Buscar
             </label>
             <input
@@ -125,17 +132,18 @@ export default function NoticiasAdmin() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar por título ou conteúdo..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-field"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <FaTag className="text-blue-600" />
               Categoria
             </label>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-field"
             >
               <option value="todas">Todas as categorias</option>
               <option value="noticias">Notícias</option>
@@ -157,64 +165,89 @@ export default function NoticiasAdmin() {
         
         <div className="divide-y divide-gray-200">
           {filteredNoticias.map((noticia) => (
-            <div key={noticia.id} className="p-6 hover:bg-gray-50">
+            <div key={noticia.id} className="p-6 hover:bg-blue-50 transition-colors">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <h3 className="text-lg font-medium text-gray-900">{noticia.title}</h3>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">{noticia.title}</h3>
                     {noticia.featured && (
-                      <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-yellow-100 text-yellow-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaStar className="text-xs" />
                         Destaque
                       </span>
                     )}
                     {!noticia.published && (
-                      <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                      <span className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaClock className="text-xs" />
                         Rascunho
                       </span>
                     )}
+                    {noticia.published && (
+                      <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <FaEye className="text-xs" />
+                        Publicado
+                      </span>
+                    )}
                   </div>
-                  <p className="text-gray-600 mb-2">{noticia.excerpt}</p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>{noticia.date}</span>
-                    <span>{noticia.category}</span>
-                    <span>Criado em {new Date(noticia.createdAt).toLocaleDateString('pt-BR')}</span>
+                  <p className="text-gray-600 mb-3 leading-relaxed">{noticia.excerpt}</p>
+                  <div className="flex items-center space-x-6 text-sm text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <FaCalendarAlt className="text-blue-600" />
+                      {noticia.date}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaTag className="text-blue-600" />
+                      {noticia.category}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaClock className="text-blue-600" />
+                      {new Date(noticia.createdAt).toLocaleDateString('pt-BR')}
+                    </span>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-2 ml-4">
+                <div className="flex items-center space-x-2 ml-6">
                   <button
                     onClick={() => handleToggleFeatured(noticia.id)}
-                    className={`px-3 py-1 text-xs rounded-full ${
+                    className={`px-4 py-2 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2 ${
                       noticia.featured 
-                        ? 'bg-yellow-100 text-yellow-800' 
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
+                    title={noticia.featured ? 'Remover Destaque' : 'Destacar'}
                   >
+                    <FaStar className="text-sm" />
                     {noticia.featured ? 'Remover Destaque' : 'Destacar'}
                   </button>
                   
                   <button
                     onClick={() => handleTogglePublished(noticia.id)}
-                    className={`px-3 py-1 text-xs rounded-full ${
+                    className={`px-4 py-2 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2 ${
                       noticia.published 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
                     }`}
+                    title={noticia.published ? 'Despublicar' : 'Publicar'}
                   >
+                    {noticia.published ? <FaEyeSlash className="text-sm" /> : <FaEye className="text-sm" />}
                     {noticia.published ? 'Despublicar' : 'Publicar'}
                   </button>
                   
                   <Link
                     href={`/admin/noticias/${noticia.id}/editar`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Editar notícia"
                   >
+                    <FaEdit className="text-sm" />
                     Editar
                   </Link>
                   
                   <button
                     onClick={() => handleDelete(noticia.id)}
-                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    className="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-200 text-sm rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    title="Excluir notícia"
                   >
+                    <FaTrash className="text-sm" />
                     Excluir
                   </button>
                 </div>

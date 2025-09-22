@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaArrowLeft, FaSave, FaImage, FaNewspaper, FaCalendarAlt, FaTag, FaEye } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaImage, FaNewspaper, FaCalendarAlt, FaTag } from 'react-icons/fa';
 
-export default function NovaNoticia() {
+export default function EditarNoticia() {
   const router = useRouter();
+  const params = useParams();
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -15,13 +17,47 @@ export default function NovaNoticia() {
     image: '',
     author: 'ETPC',
     category: 'noticias',
-    type: 'noticias',
     featured: false,
     published: false,
     date: new Date().toISOString().split('T')[0]
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
+
+  useEffect(() => {
+    fetchNoticia();
+  }, [params.id]);
+
+  const fetchNoticia = async () => {
+    try {
+      setLoadingData(true);
+      const response = await fetch(`/api/news/${params.id}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        setFormData({
+          title: data.title || '',
+          excerpt: data.excerpt || '',
+          content: data.content || '',
+          image: data.image || '',
+          author: data.author || 'ETPC',
+          category: data.category?.slug || 'noticias',
+          featured: data.featured || false,
+          published: data.published || false,
+          date: data.publishedAt ? data.publishedAt.split('T')[0] : new Date().toISOString().split('T')[0]
+        });
+      } else {
+        alert('Erro ao carregar notícia');
+        router.push('/admin/noticias');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar notícia:', error);
+      alert('Erro ao carregar notícia');
+      router.push('/admin/noticias');
+    } finally {
+      setLoadingData(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,28 +87,28 @@ export default function NovaNoticia() {
         }
       }
 
-      const response = await fetch('/api/news', {
-        method: 'POST',
+      const response = await fetch(`/api/news/${params.id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...formData,
           image: imagePath,
-          categoryId: 'cmfrf39r90003i51wvvo84apg' // ID da categoria "Notícias"
+          categoryId: 'cmfrf39r90003i51wvvo84apg'
         }),
       });
 
       if (response.ok) {
-        alert('Notícia salva com sucesso!');
+        alert('Notícia atualizada com sucesso!');
         router.push('/admin/noticias');
       } else {
         const error = await response.json();
-        alert(`Erro ao salvar notícia: ${error.error}`);
+        alert(`Erro ao atualizar notícia: ${error.error}`);
       }
     } catch (error) {
-      console.error('Erro ao salvar notícia:', error);
-      alert('Erro ao salvar notícia');
+      console.error('Erro ao atualizar notícia:', error);
+      alert('Erro ao atualizar notícia');
     } finally {
       setLoading(false);
     }
@@ -100,6 +136,14 @@ export default function NovaNoticia() {
     }
   };
 
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -114,15 +158,15 @@ export default function NovaNoticia() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <FaNewspaper className="text-blue-600" />
-              Nova Notícia
+              Editar Notícia
             </h1>
-            <p className="text-gray-600">Crie uma nova notícia para o site</p>
+            <p className="text-gray-600">Editar notícia existente</p>
           </div>
         </div>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow">
+      <div className="bg-white rounded-lg shadow-lg">
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -158,7 +202,7 @@ export default function NovaNoticia() {
                       className="w-full px-4 py-3 border-2 border-dashed border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                     <p className="text-sm text-gray-600 mt-1">
-                      Selecione uma imagem (JPG, PNG, WebP) - máximo 5MB
+                      Selecione uma nova imagem (JPG, PNG, WebP) - máximo 5MB
                     </p>
                   </div>
                   
@@ -298,7 +342,7 @@ export default function NovaNoticia() {
                         onChange={handleInputChange}
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
-                      <span className="ml-2 text-sm text-gray-700">Publicar imediatamente</span>
+                      <span className="ml-2 text-sm text-gray-700">Publicar</span>
                     </label>
                   </div>
                 </div>
@@ -342,7 +386,7 @@ export default function NovaNoticia() {
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2"
             >
               <FaSave className="text-sm" />
-              {loading ? 'Salvando...' : 'Salvar Notícia'}
+              {loading ? 'Salvando...' : 'Atualizar Notícia'}
             </button>
           </div>
         </form>
