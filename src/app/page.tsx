@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask } from 'react-icons/fa';
+import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask } from 'react-icons/fa';
 import BannerCarousel from '@/components/BannerCarousel';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [banners, setBanners] = useState([]);
 
@@ -33,13 +34,6 @@ export default function Home() {
     fetchBanners();
   }, []);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,7 +73,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <span className="text-3xl font-bold text-gray-900 hover:scale-105 transition-transform cursor-pointer">ETPC</span>
+              <Image
+                src="/etpc.png"
+                alt="ETPC Logo"
+                width={120}
+                height={40}
+                className="hover:scale-105 transition-transform cursor-pointer"
+              />
             </div>
 
             <div className="hidden lg:flex items-center space-x-8">
@@ -142,32 +142,11 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section com Carrossel de Banners */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      {/* Hero Section - Carrossel de Banners */}
+      <section className="relative pt-20 pb-8 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <div className={`transition-all duration-1000 ${visibleSections.has('hero') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                Transforme seu futuro no
-                <span className="text-gray-900"> ETPC</span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
-                Educação técnica de excelência que conecta você às melhores oportunidades do mercado.
-                Prepare-se para liderar a próxima geração de profissionais.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/matriculas" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                  Comece sua jornada
-                </a>
-                <a href="/cursos-tecnicos" className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-all hover:shadow-lg">
-                  Conheça os cursos
-                </a>
-              </div>
-            </div>
-          </div>
-
           {/* Carrossel de Banners */}
-          <div className="mb-12">
+          <div className="mb-6">
             <BannerCarousel 
               banners={banners} 
               autoPlay={true} 
@@ -175,7 +154,23 @@ export default function Home() {
             />
           </div>
 
-          {/* Estatísticas */}
+          {/* Botões de ação */}
+          <div className="text-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/matriculas" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                Comece sua jornada
+              </a>
+              <a href="/cursos-tecnicos" className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-all hover:shadow-lg">
+                Conheça os cursos
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div id="stats" className="grid md:grid-cols-4 gap-8 text-center">
             <div className={`transition-all duration-1000 delay-200 ${visibleSections.has('stats') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <div className="text-4xl font-bold text-gray-900 mb-2">95%</div>
@@ -198,7 +193,7 @@ export default function Home() {
       </section>
 
       {/* About Section - Quem Somos */}
-      <section id="sobre" className={`py-20 bg-white transition-all duration-1000 ${visibleSections.has('sobre') ? 'opacity-100' : 'opacity-0'}`}>
+      <section id="sobre" className={`py-16 bg-white transition-all duration-1000 ${visibleSections.has('sobre') ? 'opacity-100' : 'opacity-0'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Quem Somos</h2>
@@ -489,9 +484,6 @@ export default function Home() {
             Junte-se a milhares de profissionais de sucesso formados pelo ETPC
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">
-              Inscreva-se agora
-            </button>
             <button className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105">
               Fale conosco
             </button>
@@ -499,50 +491,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-2xl font-bold mb-4 hover:text-blue-400 transition-colors cursor-pointer">ETPC</h3>
-              <p className="text-gray-400">Excelência em educação técnica desde 2009</p>
-              <div className="flex gap-4 mt-4">
-                <FaFacebook className="text-2xl cursor-pointer hover:scale-125 transition-transform text-gray-400 hover:text-blue-500" />
-                <FaInstagram className="text-2xl cursor-pointer hover:scale-125 transition-transform text-gray-400 hover:text-pink-500" />
-                <FaTwitter className="text-2xl cursor-pointer hover:scale-125 transition-transform text-gray-400 hover:text-blue-400" />
-                <FaLinkedin className="text-2xl cursor-pointer hover:scale-125 transition-transform text-gray-400 hover:text-blue-600" />
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Cursos</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Desenvolvimento</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Mecatrônica</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Análise de Dados</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Institucional</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Sobre nós</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Parceiros</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Trabalhe conosco</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contato</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li className="hover:text-white transition-colors cursor-pointer">contato@etpc.edu.br</li>
-                <li className="hover:text-white transition-colors cursor-pointer">(11) 1234-5678</li>
-                <li className="hover:text-white transition-colors cursor-pointer">São Paulo, SP</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ETPC. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

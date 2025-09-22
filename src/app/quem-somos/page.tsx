@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaBullseye, FaBuilding, FaChalkboardTeacher, FaHandshake, FaStar, FaLightbulb } from 'react-icons/fa';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function QuemSomos() {
   const [scrolled, setScrolled] = useState(false);
@@ -274,6 +276,8 @@ export default function QuemSomos() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

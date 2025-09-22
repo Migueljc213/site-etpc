@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Footer from '@/components/Footer';
 
 interface Noticia {
   id: string;
@@ -253,6 +254,8 @@ export default function NoticiaDetalhes() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 import { FaGraduationCap, FaCog, FaClock, FaRocket, FaBullseye, FaBook, FaFlask, FaIndustry, FaBuilding } from 'react-icons/fa';
 
 export default function Matriculas() {
@@ -114,9 +116,6 @@ export default function Matriculas() {
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>
               </Link>
               <Link href="/noticias" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Notícias</Link>
-              <button className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg">
-                Inscreva-se
-              </button>
             </div>
 
             <button
@@ -465,6 +464,8 @@ export default function Matriculas() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

@@ -28,28 +28,28 @@ export default function AdminDashboard() {
       description: 'Criar uma nova notícia para o site',
       href: '/admin/noticias/novo',
       icon: 'FaNewspaper',
-      color: 'bg-gray-600'
+      color: 'bg-blue-600'
     },
     {
       title: 'Novo Banner',
       description: 'Adicionar um novo banner promocional',
       href: '/admin/banners/novo',
       icon: 'FaImage',
-      color: 'bg-gray-600'
+      color: 'bg-blue-600'
     },
     {
       title: 'Novo Curso',
       description: 'Cadastrar um novo curso técnico',
       href: '/admin/cursos/novo',
       icon: 'FaGraduationCap',
-      color: 'bg-gray-600'
+      color: 'bg-blue-600'
     },
     {
       title: 'Configurações',
       description: 'Ajustar configurações do site',
       href: '/admin/configuracoes',
       icon: 'FaCog',
-      color: 'bg-gray-600'
+      color: 'bg-blue-600'
     }
   ];
 
@@ -86,8 +86,8 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <FaNewspaper className="text-2xl text-gray-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FaNewspaper className="text-2xl text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Notícias</p>
@@ -98,8 +98,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <FaImage className="text-2xl text-gray-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FaImage className="text-2xl text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Banners</p>
@@ -110,8 +110,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <FaGraduationCap className="text-2xl text-gray-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FaGraduationCap className="text-2xl text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Cursos</p>
@@ -122,8 +122,8 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <FaUsers className="text-2xl text-gray-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FaUsers className="text-2xl text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Usuários</p>
@@ -173,8 +173,10 @@ export default function AdminDashboard() {
               {recentActivity.map((activity, index) => (
                 <div key={index} className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <span className="text-sm">{activity.icon}</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      {activity.icon === 'FaNewspaper' && <FaNewspaper className="text-sm text-blue-600" />}
+                      {activity.icon === 'FaImage' && <FaImage className="text-sm text-blue-600" />}
+                      {activity.icon === 'FaGraduationCap' && <FaGraduationCap className="text-sm text-blue-600" />}
                     </div>
                   </div>
                   <div className="ml-3 flex-1">
@@ -197,15 +199,15 @@ export default function AdminDashboard() {
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
               <span className="text-sm text-gray-900">Site Online</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
               <span className="text-sm text-gray-900">Banco de Dados</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
               <span className="text-sm text-gray-900">API Funcionando</span>
             </div>
           </div>

@@ -6,10 +6,10 @@ import Image from 'next/image';
 interface Banner {
   id: string;
   title: string;
-  subtitle?: string;
+  description?: string;
   image: string;
   link?: string;
-  isActive: boolean;
+  active: boolean;
 }
 
 interface BannerCarouselProps {
@@ -27,7 +27,7 @@ export default function BannerCarousel({
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Filtrar apenas banners ativos
-  const activeBanners = banners.filter(banner => banner.isActive);
+  const activeBanners = banners.filter(banner => banner.active);
 
   useEffect(() => {
     if (!autoPlay || activeBanners.length <= 1) return;
@@ -67,7 +67,7 @@ export default function BannerCarousel({
 
   if (activeBanners.length === 0) {
     return (
-      <div className="w-full h-[400px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+      <div className="w-full h-[300px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
         <div className="text-center text-white">
           <h2 className="text-2xl font-bold mb-2">ETPC</h2>
           <p className="text-blue-100">Excelência em educação técnica</p>
@@ -79,7 +79,7 @@ export default function BannerCarousel({
   if (activeBanners.length === 1) {
     const banner = activeBanners[0];
     return (
-      <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl">
+      <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-2xl">
         <Image
           src={banner.image}
           alt={banner.title}
@@ -90,12 +90,12 @@ export default function BannerCarousel({
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-8">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg">
               {banner.title}
             </h1>
-            {banner.subtitle && (
-              <p className="text-xl md:text-2xl text-blue-100 drop-shadow-lg">
-                {banner.subtitle}
+            {banner.description && (
+              <p className="text-lg md:text-xl text-blue-100 drop-shadow-lg">
+                {banner.description}
               </p>
             )}
           </div>
@@ -105,7 +105,7 @@ export default function BannerCarousel({
   }
 
   return (
-    <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl group">
+    <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-2xl group">
       {/* Banner atual */}
       <div className="relative w-full h-full">
         <Image
@@ -122,12 +122,12 @@ export default function BannerCarousel({
         {/* Conteúdo do banner */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-8">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg transition-all duration-500">
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg transition-all duration-500">
               {activeBanners[currentIndex].title}
             </h1>
-            {activeBanners[currentIndex].subtitle && (
-              <p className="text-xl md:text-2xl text-blue-100 drop-shadow-lg transition-all duration-500">
-                {activeBanners[currentIndex].subtitle}
+            {activeBanners[currentIndex].description && (
+              <p className="text-lg md:text-xl text-blue-100 drop-shadow-lg transition-all duration-500">
+                {activeBanners[currentIndex].description}
               </p>
             )}
           </div>

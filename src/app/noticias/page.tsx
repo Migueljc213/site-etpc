@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import NoticiaCard from '@/components/NoticiaCard';
+import Footer from '@/components/Footer';
 import { FaNewspaper } from 'react-icons/fa';
 
 interface NewsArticle {
@@ -390,6 +391,8 @@ export default function Noticias() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

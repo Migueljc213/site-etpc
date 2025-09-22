@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 import { FaBriefcase, FaGraduationCap, FaChartBar, FaClock, FaUserTie, FaChartLine, FaBullseye, FaEdit, FaUniversity, FaBook, FaFlask, FaDesktop, FaWrench } from 'react-icons/fa';
 
 export default function EnsinoMedio() {
@@ -61,9 +62,6 @@ export default function EnsinoMedio() {
               <Link href="/in-company" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">In Company</Link>
               <Link href="/matriculas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Matrículas</Link>
               <Link href="/noticias" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Notícias</Link>
-              <button className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg">
-                Inscreva-se
-              </button>
             </div>
 
             <button
@@ -420,6 +418,8 @@ export default function EnsinoMedio() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

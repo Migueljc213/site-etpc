@@ -2,23 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaGraduationCap, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt } from 'react-icons/fa';
+import Footer from '@/components/Footer';
+import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt } from 'react-icons/fa';
 
 export default function CursosTecnicos() {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    idade: '',
-    escolaridade: '',
-    curso: '',
-    experiencia: '',
-    motivacao: ''
-  });
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,18 +17,6 @@ export default function CursosTecnicos() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 3000);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   const courses = [
     {
@@ -257,9 +234,6 @@ export default function CursosTecnicos() {
               <Link href="/in-company" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">In Company</Link>
               <Link href="/matriculas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Matrículas</Link>
               <Link href="/noticias" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Notícias</Link>
-              <button className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg">
-                Inscreva-se
-              </button>
             </div>
 
             <button
@@ -303,10 +277,7 @@ export default function CursosTecnicos() {
             Cursos práticos, atualizados e com alta empregabilidade.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#inscricao" className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl">
-              Inscreva-se Agora
-            </a>
-            <a href="#cursos" className="bg-white text-indigo-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-indigo-600 hover:bg-indigo-50 transition-all">
+            <a href="#cursos" className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-all">
               Ver Cursos
             </a>
           </div>
@@ -314,7 +285,7 @@ export default function CursosTecnicos() {
       </section>
 
       {/* Course Selection Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900">
+      <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">Escolha seu Curso Técnico</h2>
@@ -602,12 +573,11 @@ export default function CursosTecnicos() {
                     
                     <button
                       onClick={() => {
-                        setSelectedCourse(course.id);
-                        document.getElementById('inscricao')?.scrollIntoView({ behavior: 'smooth' });
+                        document.getElementById('cursos')?.scrollIntoView({ behavior: 'smooth' });
                       }}
                       className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105`}
                     >
-                      Inscrever-se Agora
+                      Ver Detalhes
                     </button>
                   </div>
                 </div>
@@ -661,150 +631,26 @@ export default function CursosTecnicos() {
       </section>
 
       {/* Registration Form */}
-      <section id="inscricao" className="py-20 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Faça sua Inscrição</h2>
-            <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
-            <p className="text-xl text-blue-100">
-              Preencha o formulário e comece sua jornada profissional
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-2xl">
-            {formSubmitted ? (
-              <div className="text-center">
-                <div className="text-6xl mb-4">🎉</div>
-                <h3 className="text-2xl font-bold text-green-600 mb-4">Inscrição Realizada!</h3>
-                <p className="text-gray-600">Em breve entraremos em contato para finalizar sua matrícula.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-6">
-                {/* Seleção do Curso */}
-                <div className="bg-blue-50 rounded-lg p-6">
-                  <label className="block text-lg font-semibold text-gray-900 mb-4">
-                    <div className="flex items-center gap-2">
-                      <FaGraduationCap />
-                      Escolha o curso de interesse *
-                    </div>
-                  </label>
-                  <select
-                    name="curso"
-                    required
-                    value={selectedCourse || formData.curso}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-lg"
-                  >
-                    <option value="">- Escolha uma opção -</option>
-                    {courses.map(course => (
-                      <option key={course.id} value={course.id}>{course.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Mensagem */}
-                <div className="bg-green-50 rounded-lg p-6">
-                  <label className="block text-lg font-semibold text-gray-900 mb-4">
-                    💬 Mensagem (opcional)
-                  </label>
-                  <textarea
-                    name="motivacao"
-                    value={formData.motivacao}
-                    onChange={handleInputChange}
-                    rows={6}
-                    className="w-full px-4 py-3 border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all text-lg resize-none"
-                    placeholder="Conte-nos sobre seus objetivos, dúvidas ou qualquer informação adicional que gostaria de compartilhar..."
-                  ></textarea>
-                </div>
-
-                {/* Dados de Contato */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Nome Completo *</label>
-                    <input
-                      type="text"
-                      name="nome"
-                      required
-                      value={formData.nome}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                      placeholder="Seu nome completo"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                      placeholder="seu@email.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Telefone *</label>
-                    <input
-                      type="tel"
-                      name="telefone"
-                      required
-                      value={formData.telefone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                      placeholder="(11) 99999-9999"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Escolaridade *</label>
-                    <select
-                      name="escolaridade"
-                      required
-                      value={formData.escolaridade}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Selecione sua escolaridade</option>
-                      <option value="medio-cursando">Ensino Médio (Cursando)</option>
-                      <option value="medio-completo">Ensino Médio Completo</option>
-                      <option value="superior-cursando">Ensino Superior (Cursando)</option>
-                      <option value="superior-completo">Ensino Superior Completo</option>
-                    </select>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg text-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl"
-                >
-                  ENVIAR
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-white mb-6">Transforme seu Futuro Profissional</h2>
           <p className="text-xl text-indigo-100 mb-8">
             Venha conhecer nossa estrutura e metodologia de perto
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-indigo-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
+            <button className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
               Agendar Visita
             </button>
-            <Link href="/" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-indigo-600 transition-all transform hover:scale-105">
+            <Link href="/" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105">
               Voltar ao Início
             </Link>
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
