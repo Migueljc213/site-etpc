@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt } from 'react-icons/fa';
 
 export default function CursosTecnicos() {
@@ -220,32 +219,32 @@ export default function CursosTecnicos() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/etpc.png"
-                alt="ETPC Logo"
-                width={90}
-                height={30}
-                className="hover:scale-105 transition-transform cursor-pointer"
-              />
+              <div className="text-etpc-blue font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
+                <div className="relative">
+                  etpc
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-etpc-blue"></div>
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 bg-etpc-blue"></div>
+                </div>
+              </div>
             </Link>
 
             <div className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Home</Link>
-              <Link href="/quem-somos" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Quem Somos</Link>
-              <Link href="/fundamental2" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Fundamental 2</Link>
-              <Link href="/ensinomedio" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Ensino Médio</Link>
-              <Link href="/cursos-tecnicos" className="text-blue-600 font-medium relative">
+              <Link href="/" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Home</Link>
+              <Link href="/quem-somos" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Quem Somos</Link>
+              <Link href="/fundamental2" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Fundamental 2</Link>
+              <Link href="/ensinomedio" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Ensino Médio</Link>
+              <Link href="/cursos-tecnicos" className="text-etpc-blue font-poppins font-medium relative">
                 Cursos Técnicos
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-etpc-blue"></span>
               </Link>
-              <Link href="/in-company" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">In Company</Link>
-              <Link href="/matriculas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Matrículas</Link>
-              <Link href="/noticias" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Notícias</Link>
+              <Link href="/in-company" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">In Company</Link>
+              <Link href="/matriculas" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Matrículas</Link>
+              <Link href="/noticias" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Notícias</Link>
             </div>
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700 hover:text-blue-600 transition-colors"
+              className="lg:hidden text-gray-700 hover:text-etpc-blue transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
@@ -257,34 +256,34 @@ export default function CursosTecnicos() {
         {/* Mobile menu */}
         <div className={`lg:hidden bg-white border-t transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Home</Link>
-            <Link href="/quem-somos" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Quem Somos</Link>
-            <Link href="/fundamental2" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Fundamental 2</Link>
-            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Ensino Médio</Link>
-            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-blue-600 bg-blue-50 rounded-lg">Cursos Técnicos</Link>
-            <Link href="/in-company" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">In Company</Link>
-            <Link href="/matriculas" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Matrículas</Link>
-            <Link href="/noticias" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Notícias</Link>
+            <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Home</Link>
+            <Link href="/quem-somos" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Quem Somos</Link>
+            <Link href="/fundamental2" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Fundamental 2</Link>
+            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Ensino Médio</Link>
+            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-etpc-blue bg-blue-50 rounded-lg font-poppins">Cursos Técnicos</Link>
+            <Link href="/in-company" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">In Company</Link>
+            <Link href="/matriculas" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Matrículas</Link>
+            <Link href="/noticias" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Notícias</Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
+      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-amber-50">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-etpc-blue/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-etpc-gold/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
+          <h1 className="text-5xl md:text-6xl font-poppins font-bold text-gray-900 leading-tight mb-6">
             Cursos Técnicos
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"> ETPC</span>
+            <span className="bg-gradient-to-r from-etpc-blue to-etpc-gold bg-clip-text text-transparent"> ETPC</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed font-poppins">
             Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.
             Cursos práticos, atualizados e com alta empregabilidade.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#cursos" className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-all">
+            <a href="#cursos" className="bg-etpc-blue text-white px-8 py-4 rounded-full text-lg font-poppins font-semibold border-2 border-etpc-blue hover:bg-etpc-blue-dark transition-all">
               Ver Cursos
             </a>
           </div>
@@ -292,19 +291,19 @@ export default function CursosTecnicos() {
       </section>
 
       {/* Course Selection Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+      <section className="py-20 bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Escolha seu Curso Técnico</h2>
-            <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
-            <p className="text-xl text-blue-100">
+            <h2 className="text-4xl font-poppins font-bold text-white mb-4">Escolha seu Curso Técnico</h2>
+            <div className="w-24 h-1 bg-etpc-gold mx-auto mb-8"></div>
+            <p className="text-xl text-blue-100 font-poppins">
               Cursos técnicos subsequentes com alta empregabilidade
             </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="bg-gray-800 px-6 py-4">
-              <h3 className="text-xl font-bold text-white text-center">Cursos Técnicos Disponíveis</h3>
+            <div className="bg-etpc-blue-dark px-6 py-4">
+              <h3 className="text-xl font-poppins font-bold text-white text-center">Cursos Técnicos Disponíveis</h3>
             </div>
             
             <div className="divide-y divide-gray-200">
@@ -318,23 +317,23 @@ export default function CursosTecnicos() {
                     className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-blue-50 transition-all"
                   >
                     <div className="flex items-center space-x-4">
-                      <span className="text-2xl text-blue-600">
+                      <span className="text-2xl text-etpc-blue">
                         <course.icon />
                       </span>
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        <h4 className="text-lg font-poppins font-semibold text-gray-900 group-hover:text-etpc-blue transition-colors">
                           {course.title}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 font-poppins">
                           {course.duration} • {course.monthlyValue}/mês
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">
+                      <span className="text-sm font-semibold text-green-600 bg-green-100 px-2 py-1 rounded font-poppins">
                         {course.employability} empregabilidade
                       </span>
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-400 group-hover:text-etpc-blue transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -350,8 +349,8 @@ export default function CursosTecnicos() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Por que Escolher os Cursos Técnicos do ETPC?</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto mb-8"></div>
+            <h2 className="text-4xl font-poppins font-bold text-gray-900 mb-4">Por que Escolher os Cursos Técnicos do ETPC?</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-etpc-blue to-etpc-gold mx-auto mb-8"></div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -376,12 +375,12 @@ export default function CursosTecnicos() {
               }
             ].map((item, index) => (
               <div key={index} className="text-center group">
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform text-indigo-600">
+                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform text-etpc-blue">
                   <item.icon />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                <p className="text-gray-600 mb-4">{item.description}</p>
-                <div className="text-indigo-600 font-semibold">{item.stats}</div>
+                <h3 className="text-2xl font-poppins font-bold text-gray-900 mb-4">{item.title}</h3>
+                <p className="text-gray-600 mb-4 font-poppins">{item.description}</p>
+                <div className="text-etpc-blue font-poppins font-semibold">{item.stats}</div>
               </div>
             ))}
           </div>
@@ -392,8 +391,8 @@ export default function CursosTecnicos() {
       <section id="cursos" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Nossos Cursos Técnicos</h2>
-            <p className="text-xl text-gray-600">Escolha sua área de especialização</p>
+            <h2 className="text-4xl font-poppins font-bold text-gray-900 mb-4">Nossos Cursos Técnicos</h2>
+            <p className="text-xl text-gray-600 font-poppins">Escolha sua área de especialização</p>
           </div>
 
           <div className="space-y-8 sm:space-y-12">
@@ -402,11 +401,11 @@ export default function CursosTecnicos() {
                 <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-center">
                   <div className="lg:col-span-2">
                     <div className="flex items-center mb-4 sm:mb-6">
-                      <div className="text-4xl sm:text-5xl lg:text-6xl mr-3 sm:mr-4 text-blue-600">
+                      <div className="text-4xl sm:text-5xl lg:text-6xl mr-3 sm:mr-4 text-etpc-blue">
                         <course.icon />
                       </div>
                       <div>
-                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{course.title}</h3>
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-poppins font-bold text-gray-900 mb-2">{course.title}</h3>
                         <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                           <span className="flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
                           <span className="flex items-center gap-1"><FaCalendarAlt className="text-xs" /> {course.period}</span>
@@ -640,17 +639,17 @@ export default function CursosTecnicos() {
       {/* Registration Form */}
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
+      <section className="py-20 bg-gradient-to-r from-etpc-blue to-etpc-blue-dark">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-white mb-6">Transforme seu Futuro Profissional</h2>
-          <p className="text-xl text-indigo-100 mb-8">
+          <h2 className="text-4xl font-poppins font-bold text-white mb-6">Transforme seu Futuro Profissional</h2>
+          <p className="text-xl text-blue-100 mb-8 font-poppins">
             Venha conhecer nossa estrutura e metodologia de perto
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
+            <button className="bg-white text-etpc-blue px-8 py-4 rounded-full text-lg font-poppins font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
               Agendar Visita
             </button>
-            <Link href="/" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105">
+            <Link href="/" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-poppins font-semibold border-2 border-white hover:bg-white hover:text-etpc-blue transition-all transform hover:scale-105">
               Voltar ao Início
             </Link>
           </div>

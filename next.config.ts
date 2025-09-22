@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'etpc.com.br',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Permitir imagens locais
     unoptimized: false,

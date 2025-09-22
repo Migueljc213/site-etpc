@@ -258,3 +258,18 @@ model Contact {
 
   @@map("contacts")
 }
+
+// Galeria de fotos da home
+model GalleryPhoto {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String   // URL da imagem
+  category    String   @default("geral") // geral, laboratorio, evento, etc.
+  order       Int      @default(0) // Ordem de exibição
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("gallery_photos")
+}

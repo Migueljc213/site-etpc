@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog } from 'react-icons/fa';
-import Image from 'next/image';
+import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog, FaCamera } from 'react-icons/fa';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AdminLayout({
   children,
@@ -23,6 +24,7 @@ export default function AdminLayout({
     { name: 'Dashboard', href: '/admin', icon: 'FaChartBar' },
     { name: 'Notícias', href: '/admin/noticias', icon: 'FaNewspaper' },
     { name: 'Banners', href: '/admin/banners', icon: 'FaImage' },
+    { name: 'Galeria', href: '/admin/galeria', icon: 'FaCamera' },
     { name: 'Cursos', href: '/admin/cursos', icon: 'FaGraduationCap' },
     { name: 'Usuários', href: '/admin/usuarios', icon: 'FaUsers' },
     { name: 'Configurações', href: '/admin/configuracoes', icon: 'FaCog' },
@@ -34,13 +36,12 @@ export default function AdminLayout({
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <Link href="/admin" className="flex items-center">
-            <Image
-              src="/etpc.png"
-              alt="ETPC Logo"
-              width={100}
-              height={35}
-              className="hover:scale-105 transition-transform"
-            />
+            <div className="text-etpc-blue font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
+              <div className="relative">
+                etpc
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-etpc-blue"></div>
+              </div>
+            </div>
             <span className="ml-2 text-sm font-medium text-gray-600">Admin</span>
           </Link>
           <button
@@ -65,6 +66,7 @@ export default function AdminLayout({
                   {item.icon === 'FaChartBar' && <FaChartBar />}
                   {item.icon === 'FaNewspaper' && <FaNewspaper />}
                   {item.icon === 'FaImage' && <FaImage />}
+                  {item.icon === 'FaCamera' && <FaCamera />}
                   {item.icon === 'FaGraduationCap' && <FaGraduationCap />}
                   {item.icon === 'FaUsers' && <FaUsers />}
                   {item.icon === 'FaCog' && <FaCog />}
@@ -137,6 +139,20 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
+      
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

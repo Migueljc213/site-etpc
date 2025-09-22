@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -50,13 +49,12 @@ export default function AdminLogin() {
             {/* Logo e título */}
             <div className="text-center mb-8">
               <Link href="/" className="inline-block mb-6">
-                <Image
-                  src="/etpc.png"
-                  alt="ETPC Logo"
-                  width={120}
-                  height={40}
-                  className="hover:scale-105 transition-transform duration-300"
-                />
+                <div className="text-etpc-blue font-poppins font-bold text-3xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
+                  <div className="relative">
+                    etpc
+                    <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-etpc-blue"></div>
+                  </div>
+                </div>
               </Link>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 Painel Administrativo
