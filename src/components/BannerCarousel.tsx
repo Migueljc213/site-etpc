@@ -107,7 +107,7 @@ export default function BannerCarousel({
         <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
         
         {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-32 pb-32">
+        <div className="relative z-10 h-full flex items-center justify-center pt-40 pb-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Seção de texto à esquerda */}
@@ -176,7 +176,7 @@ export default function BannerCarousel({
         <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
         
         {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-32 pb-32">
+        <div className="relative z-10 h-full flex items-center justify-center pt-40 pb-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Seção de texto à esquerda */}
@@ -242,7 +242,7 @@ export default function BannerCarousel({
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
       
       {/* Layout principal - Texto à esquerda, imagem à direita */}
-      <div className="relative z-10 h-full flex items-center pt-20 pb-20">
+      <div className="relative z-10 h-full flex items-center pt-40 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Seção de texto à esquerda */}

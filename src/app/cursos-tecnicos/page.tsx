@@ -235,7 +235,7 @@ export default function CursosTecnicos() {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-poppins font-bold text-white mb-4">Escolha seu Curso Técnico</h2>
             <div className="w-24 h-1 bg-etpc-gold mx-auto mb-8"></div>
-            <p className="text-xl text-etpc-blue/20 font-poppins">
+            <p className="text-xl text-white/90 font-poppins">
               Cursos técnicos subsequentes com alta empregabilidade
             </p>
           </div>
@@ -581,7 +581,7 @@ export default function CursosTecnicos() {
       <section className="py-20 bg-gradient-to-r from-etpc-blue to-etpc-blue-dark">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-poppins font-bold text-white mb-6">Transforme seu Futuro Profissional</h2>
-          <p className="text-xl text-etpc-blue/20 mb-8 font-poppins">
+          <p className="text-xl text-white/90 mb-8 font-poppins">
             Venha conhecer nossa estrutura e metodologia de perto
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

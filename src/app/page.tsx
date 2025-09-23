@@ -156,7 +156,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="bg-etpc-blue rounded-2xl p-8 text-white hover:scale-105 transition-transform cursor-pointer">
                   <div className="text-4xl font-bold mb-2">15+</div>
-                  <div className="text-etpc-blue/20">Anos de história</div>
+                  <div className="text-white/80">Anos de história</div>
                 </div>
                 <div className="bg-gradient-to-br from-etpc-gold to-etpc-gold-dark rounded-2xl p-8 text-white hover:scale-105 transition-transform cursor-pointer">
                   <div className="text-4xl font-bold mb-2">20+</div>
@@ -166,7 +166,7 @@ export default function Home() {
               <div className="space-y-4 mt-8">
                 <div className="bg-gradient-to-br from-etpc-blue-light to-etpc-blue rounded-2xl p-8 text-white hover:scale-105 transition-transform cursor-pointer">
                   <div className="text-4xl font-bold mb-2">100%</div>
-                  <div className="text-etpc-blue/20">Professores especialistas</div>
+                  <div className="text-white/80">Professores especialistas</div>
                 </div>
                 <div className="bg-etpc-gold rounded-2xl p-8 text-white hover:scale-105 transition-transform cursor-pointer">
                   <div className="text-4xl font-bold mb-2">MEC</div>
@@ -316,7 +316,7 @@ export default function Home() {
                   <stat.icon className="text-2xl text-white" />
                 </div>
                 <div className="text-5xl font-poppins font-bold group-hover:scale-110 transition-transform">{stat.number}</div>
-                <div className="text-etpc-blue/20 group-hover:text-white transition-colors font-poppins text-center text-sm leading-tight">{stat.label}</div>
+                <div className="text-white/80 group-hover:text-white transition-colors font-poppins text-center text-sm leading-tight">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -387,7 +387,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-white mb-6">
             Pronto para transformar seu futuro?
           </h2>
-          <p className="text-xl text-etpc-blue/20 mb-8">
+          <p className="text-xl text-white/90 mb-8">
             Junte-se a milhares de profissionais de sucesso formados pelo ETPC
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

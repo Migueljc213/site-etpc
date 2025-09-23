@@ -109,7 +109,7 @@ export default function QuemSomos() {
                     <FaBuilding />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">Fundação CSN</h3>
-                  <p className="text-etpc-blue/20 leading-relaxed">
+                  <p className="text-white/90 leading-relaxed">
                     A ETPC é mantida pela Fundação CSN, uma das principais fundações empresariais do Brasil, 
                     com mais de 50 anos de experiência em educação e responsabilidade social.
                   </p>
@@ -180,7 +180,7 @@ export default function QuemSomos() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Números que Compõem Nossa História</h2>
-            <p className="text-xl text-etpc-blue/20">
+            <p className="text-xl text-white/90">
               Resultados que demonstram nosso compromisso com a excelência educacional
             </p>
           </div>
@@ -188,19 +188,19 @@ export default function QuemSomos() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-4xl sm:text-5xl font-bold text-white mb-2">500+</div>
-              <div className="text-etpc-blue/20">Alunos Formados</div>
+              <div className="text-white/80">Alunos Formados</div>
             </div>
             <div className="text-center">
               <div className="text-4xl sm:text-5xl font-bold text-white mb-2">95%</div>
-              <div className="text-etpc-blue/20">Empregabilidade</div>
+              <div className="text-white/80">Empregabilidade</div>
             </div>
             <div className="text-center">
               <div className="text-4xl sm:text-5xl font-bold text-white mb-2">15+</div>
-              <div className="text-etpc-blue/20">Anos de Experiência</div>
+              <div className="text-white/80">Anos de Experiência</div>
             </div>
             <div className="text-center">
               <div className="text-4xl sm:text-5xl font-bold text-white mb-2">50+</div>
-              <div className="text-etpc-blue/20">Professores Especialistas</div>
+              <div className="text-white/80">Professores Especialistas</div>
             </div>
           </div>
         </div>

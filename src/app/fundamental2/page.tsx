@@ -175,7 +175,7 @@ export default function Fundamental2() {
               </div>
               <div className="text-left">
                 <div className="text-white font-bold text-lg">Maria Santos</div>
-                <div className="text-etpc-blue/20">Mãe de aluna do ETPC</div>
+                <div className="text-white/80">Mãe de aluna do ETPC</div>
               </div>
             </div>
           </div>

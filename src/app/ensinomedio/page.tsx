@@ -189,7 +189,7 @@ export default function EnsinoMedio() {
               </div>
               <div className="text-left">
                 <div className="text-white font-bold text-lg">Felipe Lemos</div>
-                <div className="text-etpc-blue/20">Ex-aluno da ETPC</div>
+                <div className="text-white/80">Ex-aluno da ETPC</div>
               </div>
             </div>
           </div>
