@@ -21,14 +21,47 @@ export default function Matriculas() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreedToTerms) {
       alert('Por favor, aceite os termos de uso para continuar.');
       return;
     }
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 3000);
+
+    try {
+      const response = await fetch('/api/matriculas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setFormSubmitted(true);
+        // Reset form after 5 seconds
+        setTimeout(() => {
+          setFormSubmitted(false);
+          setFormData({
+            responsavel: '',
+            email: '',
+            telefone: '',
+            aluno: '',
+            ano: '2024',
+            nivel: '',
+            mensagem: ''
+          });
+          setAgreedToTerms(false);
+        }, 5000);
+      } else {
+        alert(`Erro: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+      alert('Erro ao enviar formulário. Tente novamente.');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

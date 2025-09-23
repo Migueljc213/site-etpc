@@ -273,3 +273,20 @@ model GalleryPhoto {
 
   @@map("gallery_photos")
 }
+
+// Matrículas
+model Matricula {
+  id          String   @id @default(cuid())
+  responsavel String   // Nome do responsável
+  email       String   // Email do responsável
+  telefone    String   // Telefone para contato
+  aluno       String   // Nome do aluno
+  ano         Int      // Ano pretendido
+  nivel       String   // Nível pretendido (Fundamental 2, Ensino Médio, etc.)
+  mensagem    String?  // Mensagem adicional
+  status      String   @default("pendente") // pendente, contatado, matriculado, cancelado
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("matriculas")
+}

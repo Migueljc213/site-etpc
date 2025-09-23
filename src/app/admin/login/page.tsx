@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -17,13 +18,19 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      // Simulação de login simples para teste
-      if (email === 'admin@etpc.com.br' && password === 'admin123') {
-        router.push('/admin');
-      } else {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
         setError('Credenciais inválidas');
+      } else if (result?.ok) {
+        router.push('/admin');
       }
-    } catch {
+    } catch (error) {
+      console.error('Erro no login:', error);
       setError('Erro ao fazer login');
     } finally {
       setLoading(false);
