@@ -101,7 +101,7 @@ export default function InCompany() {
       <Header currentPage="/in-company" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light">
+      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light">
         <div className="absolute top-20 left-10 w-72 h-72 bg-etpc-blue/30 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
         <div className="absolute top-40 right-10 w-72 h-72 bg-etpc-gold/30 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-etpc-blue-light/30 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-4000"></div>

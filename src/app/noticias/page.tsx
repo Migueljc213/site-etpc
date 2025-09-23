@@ -90,7 +90,7 @@ export default function Noticias() {
       <Header currentPage="/noticias" />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-gray-700 to-gray-800 py-20 mt-16">
+      <section className="bg-gradient-to-r from-gray-700 to-gray-800 py-20 pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">

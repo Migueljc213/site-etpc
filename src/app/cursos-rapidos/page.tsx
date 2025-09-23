@@ -226,7 +226,7 @@ export default function CursosRapidosPage() {
       <Header currentPage="/cursos-rapidos" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white">
+      <section className="relative pt-24 pb-20 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">

@@ -26,9 +26,9 @@ export default function Header({ currentPage }: HeaderProps) {
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-3' : 'bg-slate-900/90 backdrop-blur-md py-4'}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-3' : 'bg-slate-900/90 backdrop-blur-md py-4'} h-20`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex justify-between items-center h-full">
           <div className="flex items-center">
             <Link href="/" className="text-white font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer py-2">
               <div className="relative">

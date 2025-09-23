@@ -37,7 +37,7 @@ export default function Fundamental2() {
       <Header currentPage="/fundamental2" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue/5 via-white to-etpc-gold/5">
+      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue/5 via-white to-etpc-gold/5">
         <div className="absolute top-20 left-10 w-64 h-64 bg-etpc-blue/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
         <div className="absolute top-40 right-10 w-64 h-64 bg-etpc-gold/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
 
