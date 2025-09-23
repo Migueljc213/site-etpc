@@ -6,22 +6,13 @@ import Image from 'next/image';
 import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask, FaWrench, FaShieldAlt } from 'react-icons/fa';
 import BannerCarousel from '@/components/BannerCarousel';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mobileExtracurricularOpen, setMobileExtracurricularOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [banners, setBanners] = useState([]);
   const [galleryPhotos, setGalleryPhotos] = useState([]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -82,83 +73,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-3' : 'bg-slate-900/90 backdrop-blur-md py-4'}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <div className="text-white font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer py-2">
-                <div className="relative">
-                  <span className="block">etpc</span>
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden lg:flex items-center space-x-6">
-              <a href="/quem-somos" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Quem Somos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/fundamental2" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Fundamental 2
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/ensinomedio" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Ensino Médio
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/cursos-tecnicos" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Cursos Técnicos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/cursos-rapidos" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Cursos Rápidos
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/in-company" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                In Company
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/matriculas" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Matrículas
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-              <a href="/noticias" className="text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group">
-                Notícias
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full group-hover:bg-white"></span>
-              </a>
-            </div>
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <div className={`lg:hidden bg-slate-900/95 backdrop-blur-md border-t border-white/20 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="px-4 pt-2 pb-3 space-y-1">
-            <a href="/quem-somos" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Quem Somos</a>
-            <a href="/fundamental2" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Fundamental 2</a>
-            <a href="/ensinomedio" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Ensino Médio</a>
-            <a href="/cursos-tecnicos" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Cursos Técnicos</a>
-            <a href="/cursos-rapidos" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Cursos Rápidos</a>
-            <a href="/in-company" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">In Company</a>
-            <a href="/matriculas" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Matrículas</a>
-            <a href="/noticias" className="block px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300">Notícias</a>
-          </div>
-        </div>
-      </nav>
+      <Header currentPage="/" />
 
       {/* Hero Section - Carrossel de Banners */}
       <section className="relative overflow-hidden">

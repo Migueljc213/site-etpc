@@ -91,10 +91,6 @@ export default function BannerCarousel({
                     <span className="block">que unem teoria e prática para impulsionar sua carreira com <span className="text-etpc-gold">qualidade</span> e <span className="text-etpc-gold">inovação</span>.</span>
                   </h1>
                   
-                  <div className="flex items-center space-x-3 text-lg font-medium">
-                    <span className="text-etpc-gold font-bold">ETPC</span>
-                    <span>no ensino técnico.</span>
-                  </div>
                 </div>
 
                 {/* Botão CTA */}
@@ -168,10 +164,6 @@ export default function BannerCarousel({
                     </p>
                   )}
                   
-                  <div className="flex items-center space-x-3 text-lg font-medium">
-                    <span className="text-etpc-gold font-bold">ETPC</span>
-                    <span>no ensino técnico.</span>
-                  </div>
                 </div>
 
                 {/* Botão CTA */}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaChevronDown, FaChevronUp, FaPhone, FaEnvelope, FaGraduationCap, FaFlask, FaRocket, FaTools, FaDesktop, FaWrench } from 'react-icons/fa';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 import Image from 'next/image';
 
 export default function CursosTeenPage() {
@@ -73,6 +74,7 @@ export default function CursosTeenPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Header currentPage="/cursos-teen" />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light text-white py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 z-0">

@@ -3,19 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt } from 'react-icons/fa';
+import Header from '@/components/Header';
+import { FaTools, FaShieldAlt, FaClock, FaBriefcase, FaChartBar, FaUserTie, FaCalendarAlt, FaChartLine, FaMoneyBillWave, FaBullseye, FaChalkboardTeacher, FaBook, FaDesktop, FaWrench, FaTrophy, FaFlask, FaIndustry, FaBolt, FaChevronDown } from 'react-icons/fa';
 
 export default function CursosTecnicos() {
-  const [scrolled, setScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
 
   const courses = [
@@ -214,59 +205,7 @@ export default function CursosTecnicos() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-white/95 backdrop-blur-sm py-4'}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center">
-              <div className="text-etpc-blue font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
-                <div className="relative">
-                  etpc
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-etpc-blue"></div>
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 bg-etpc-blue"></div>
-                </div>
-              </div>
-            </Link>
-
-            <div className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Home</Link>
-              <Link href="/quem-somos" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Quem Somos</Link>
-              <Link href="/fundamental2" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Fundamental 2</Link>
-              <Link href="/ensinomedio" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Ensino Médio</Link>
-              <Link href="/cursos-tecnicos" className="text-etpc-blue font-poppins font-medium relative">
-                Cursos Técnicos
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-etpc-blue"></span>
-              </Link>
-              <Link href="/in-company" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">In Company</Link>
-              <Link href="/matriculas" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Matrículas</Link>
-              <Link href="/noticias" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Notícias</Link>
-            </div>
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700 hover:text-etpc-blue transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <div className={`lg:hidden bg-white border-t transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Home</Link>
-            <Link href="/quem-somos" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Quem Somos</Link>
-            <Link href="/fundamental2" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Fundamental 2</Link>
-            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Ensino Médio</Link>
-            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-etpc-blue bg-blue-50 rounded-lg font-poppins">Cursos Técnicos</Link>
-            <Link href="/in-company" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">In Company</Link>
-            <Link href="/matriculas" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Matrículas</Link>
-            <Link href="/noticias" className="block px-3 py-2 text-gray-700 hover:text-etpc-blue hover:bg-blue-50 rounded-lg transition-all font-poppins">Notícias</Link>
-          </div>
-        </div>
-      </nav>
+      <Header currentPage="/cursos-tecnicos" />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-amber-50">

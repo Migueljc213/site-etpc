@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 import Link from 'next/link';
-import { FaChevronDown, FaChevronUp, FaPhone, FaEnvelope, FaGraduationCap, FaWrench, FaShieldAlt, FaCog, FaChartBar, FaTools, FaIndustry, FaBolt, FaRocket, FaCheck, FaArrowRight } from 'react-icons/fa';
+import { FaChevronUp, FaPhone, FaEnvelope, FaGraduationCap, FaWrench, FaShieldAlt, FaCog, FaChartBar, FaTools, FaIndustry, FaBolt, FaRocket, FaCheck, FaArrowRight } from 'react-icons/fa';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 
 export default function CursosRapidosPage() {
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
@@ -221,37 +223,7 @@ export default function CursosRapidosPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="flex items-center">
-              <div className="text-etpc-blue font-poppins font-bold text-2xl tracking-wide hover:scale-105 transition-transform cursor-pointer">
-                <div className="relative">
-                  etpc
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-etpc-blue"></div>
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 bg-etpc-blue"></div>
-                </div>
-              </div>
-            </Link>
-
-            <div className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Home</Link>
-              <Link href="/quem-somos" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Quem Somos</Link>
-              <Link href="/fundamental2" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Fundamental 2</Link>
-              <Link href="/ensinomedio" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Ensino Médio</Link>
-              <Link href="/cursos-tecnicos" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Cursos Técnicos</Link>
-              <Link href="/cursos-rapidos" className="text-etpc-blue font-poppins font-medium relative">
-                Cursos Rápidos
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-etpc-blue"></span>
-              </Link>
-              <Link href="/in-company" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">In Company</Link>
-              <Link href="/matriculas" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Matrículas</Link>
-              <Link href="/noticias" className="text-gray-700 hover:text-etpc-blue transition-colors font-poppins font-medium">Notícias</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header currentPage="/cursos-rapidos" />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white">
