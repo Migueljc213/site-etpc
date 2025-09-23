@@ -18,6 +18,19 @@ interface NoticiaCardProps {
 export default function NoticiaCard({ article, featured = false }: NoticiaCardProps) {
   const displayDate = article.date || article.createdAt || '';
   const categoryName = typeof article.category === 'string' ? article.category : article.category.name;
+  
+  // Formatar a data para exibir dia/mês de forma compacta
+  const formatDateForCircle = (dateString: string) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      return `${day}/${month}`;
+    } catch {
+      return '';
+    }
+  };
   if (featured) {
     return (
       <div className="mb-8 sm:mb-12">
@@ -33,8 +46,8 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
             </div>
             <div className="md:w-1/2 p-8">
               <div className="flex items-center mb-4">
-                <div className="bg-gray-600 text-white rounded-full w-16 h-16 flex items-center justify-center font-bold text-sm">
-                  {displayDate}
+                <div className="bg-gray-600 text-white rounded-full w-16 h-16 flex items-center justify-center font-bold text-xs">
+                  {formatDateForCircle(displayDate)}
                 </div>
                 <div className="ml-4">
                   <span className="text-gray-500 text-sm">{categoryName}</span>
@@ -69,8 +82,8 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
         </div>
         <div className="md:w-2/3 p-6">
           <div className="flex items-center mb-3">
-            <div className="bg-gray-600 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xs">
-              {displayDate}
+            <div className="bg-gray-600 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xs leading-none">
+              {formatDateForCircle(displayDate)}
             </div>
             <div className="ml-3">
               <span className="text-gray-500 text-sm">{categoryName}</span>
