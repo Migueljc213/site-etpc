@@ -8,9 +8,5 @@
     "src/app/api/**/*.ts": {
       "runtime": "nodejs20.x"
     }
-  },
-  "env": {
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "DATABASE_URL": "@database_url"
   }
 }
