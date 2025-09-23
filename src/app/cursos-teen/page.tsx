@@ -82,7 +82,7 @@ export default function CursosTeenPage() {
           <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-etpc-blue-light/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
           <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-etpc-gold/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
         </div>
-        <div className="container mx-auto px-4 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl font-extrabold font-poppins leading-tight mb-4">
               Cursos <span className="text-etpc-gold">Teen</span>
@@ -110,20 +110,20 @@ export default function CursosTeenPage() {
       </section>
 
       {/* Courses List Section */}
-      <section id="courses-list" className="py-16 bg-etpc-gold flex-grow">
-        <div className="container mx-auto px-4">
+      <section id="courses-list" className="py-16 bg-gradient-to-br from-etpc-blue-light via-etpc-blue to-etpc-blue-dark flex-grow">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="space-y-6">
             {courses.map((course, index) => (
-              <div key={index} className="bg-gray-100 rounded-lg shadow-md overflow-hidden border border-gray-200">
+              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden border border-etpc-blue/20">
                 <button
-                  className="flex justify-between items-center w-full p-6 text-left text-xl font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                  className="flex justify-between items-center w-full p-6 text-left text-xl font-semibold text-etpc-blue-dark bg-white hover:bg-etpc-blue/5 transition-colors duration-200"
                   onClick={() => toggleAccordion(index)}
                 >
                   <span className="flex items-center">
                     {course.icon && <course.icon className="mr-3 text-etpc-blue" />}
                     {course.title}
                   </span>
-                  {openAccordion === index ? <FaChevronUp /> : <FaChevronDown />}
+                  {openAccordion === index ? <FaChevronUp className="text-etpc-blue" /> : <FaChevronDown className="text-etpc-blue" />}
                 </button>
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${
@@ -133,8 +133,8 @@ export default function CursosTeenPage() {
                     maxHeight: openAccordion === index ? '1000px' : '0px',
                   }}
                 >
-                  <div className="p-6 border-t border-gray-200">
-                    <div className="mb-6 relative h-48 md:h-64 w-full rounded-lg overflow-hidden">
+                  <div className="p-6 border-t border-etpc-blue/20 bg-white">
+                    <div className="mb-6 relative h-48 md:h-64 w-full rounded-lg overflow-hidden shadow-md">
                       <Image
                         src={course.image}
                         alt={course.title}
@@ -142,27 +142,27 @@ export default function CursosTeenPage() {
                         className="object-cover"
                       />
                     </div>
-                    <div className="text-gray-700 space-y-4">
-                      <div dangerouslySetInnerHTML={{ __html: course.description }} />
-                      <div>
-                        <strong className="text-etpc-blue">Pré-requisito:</strong>
-                        <p>{course.prerequisites}</p>
+                    <div className="text-etpc-blue-dark space-y-4">
+                      <div className="text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: course.description }} />
+                      <div className="bg-etpc-blue/5 p-4 rounded-lg">
+                        <strong className="text-etpc-blue-dark font-semibold">Pré-requisito:</strong>
+                        <p className="text-gray-700 mt-1">{course.prerequisites}</p>
                       </div>
-                      <div>
-                        <strong className="text-etpc-blue">Público Alvo:</strong>
-                        <p>{course.targetAudience}</p>
+                      <div className="bg-etpc-gold/5 p-4 rounded-lg">
+                        <strong className="text-etpc-blue-dark font-semibold">Público Alvo:</strong>
+                        <p className="text-gray-700 mt-1">{course.targetAudience}</p>
                       </div>
-                      <div>
-                        <strong className="text-etpc-blue">Conteúdo:</strong>
-                        <div dangerouslySetInnerHTML={{ __html: course.content }} />
+                      <div className="bg-etpc-blue/5 p-4 rounded-lg">
+                        <strong className="text-etpc-blue-dark font-semibold">Conteúdo:</strong>
+                        <div className="text-gray-700 mt-2" dangerouslySetInnerHTML={{ __html: course.content }} />
                       </div>
-                      <div>
-                        <strong className="text-etpc-blue">Carga Horária:</strong>
-                        <p>{course.workload}</p>
+                      <div className="bg-etpc-gold/5 p-4 rounded-lg">
+                        <strong className="text-etpc-blue-dark font-semibold">Carga Horária:</strong>
+                        <p className="text-gray-700 mt-1">{course.workload}</p>
                       </div>
-                      <div>
-                        <strong className="text-etpc-blue">Valor:</strong>
-                        <p dangerouslySetInnerHTML={{ __html: course.value }} />
+                      <div className="bg-etpc-blue/5 p-4 rounded-lg">
+                        <strong className="text-etpc-blue-dark font-semibold">Valor:</strong>
+                        <p className="text-gray-700 mt-1" dangerouslySetInnerHTML={{ __html: course.value }} />
                       </div>
                     </div>
                   </div>

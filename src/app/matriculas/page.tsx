@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 import Image from 'next/image';
 import { FaGraduationCap, FaCog, FaClock, FaRocket, FaBullseye, FaBook, FaFlask, FaIndustry, FaBuilding } from 'react-icons/fa';
 
 export default function Matriculas() {
-  const [scrolled, setScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     responsavel: '',
     email: '',
@@ -21,13 +20,6 @@ export default function Matriculas() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,65 +88,13 @@ export default function Matriculas() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-white/95 backdrop-blur-sm py-4'}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center">
-              <Image
-                src="/etpc.png"
-                alt="ETPC Logo"
-                width={90}
-                height={30}
-                className="hover:scale-105 transition-transform cursor-pointer"
-              />
-            </Link>
-
-            <div className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Home</Link>
-              <Link href="/quem-somos" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Quem Somos</Link>
-              <Link href="/fundamental2" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Fundamental 2</Link>
-              <Link href="/ensinomedio" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Ensino Médio</Link>
-              <Link href="/cursos-tecnicos" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Cursos Técnicos</Link>
-              <Link href="/in-company" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">In Company</Link>
-              <Link href="/matriculas" className="text-blue-600 font-medium relative">
-                Matrículas
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>
-              </Link>
-              <Link href="/noticias" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Notícias</Link>
-            </div>
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <div className={`lg:hidden bg-white border-t transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Home</Link>
-            <Link href="/quem-somos" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Quem Somos</Link>
-            <Link href="/fundamental2" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Fundamental 2</Link>
-            <Link href="/ensinomedio" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Ensino Médio</Link>
-            <Link href="/cursos-tecnicos" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Cursos Técnicos</Link>
-            <Link href="/in-company" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">In Company</Link>
-            <Link href="/matriculas" className="block px-3 py-2 text-blue-600 bg-blue-50 rounded-lg">Matrículas</Link>
-            <Link href="/noticias" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Notícias</Link>
-          </div>
-        </div>
-      </nav>
+      <Header currentPage="/matriculas" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-red-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
+      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-etpc-gold/30 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-etpc-blue-light/30 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-etpc-gold/30 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
@@ -162,17 +102,17 @@ export default function Matriculas() {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
                 Saiba mais
               </h1>
-              <p className="text-xl text-orange-100 mb-6 leading-relaxed">
+              <p className="text-xl text-white/90 mb-6 leading-relaxed">
                 Nós oferecemos Ensino Médio + Técnico, Cursos Técnicos Subsequentes, Cursos Técnicos Rápidos, Cursos Livres e cursos de capacitação para empresas.
               </p>
-              <p className="text-lg text-orange-200 mb-8">
+              <p className="text-lg text-white/80 mb-8">
                 O método adotado é o conhecimento na prática, valorizando experiências em laboratórios, empresas e universidades. São cursos que preparam tanto pra universidade como pro mercado de trabalho.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#formulario" className="bg-white text-orange-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-50 transition-all transform hover:scale-105 shadow-xl">
+                <a href="#formulario" className="bg-white text-etpc-blue px-8 py-4 rounded-full text-lg font-semibold hover:bg-etpc-blue/5 transition-all transform hover:scale-105 shadow-xl">
                   Fazer Matrícula
                 </a>
-                <a href="#cursos" className="bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-orange-700 transition-all">
+                <a href="#cursos" className="bg-etpc-blue text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-etpc-blue-dark transition-all">
                   Ver Cursos
                 </a>
               </div>
@@ -181,21 +121,21 @@ export default function Matriculas() {
             <div className="relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
                 <div className="text-center">
-                  <div className="text-6xl mb-4 text-blue-600">
+                  <div className="text-6xl mb-4 text-etpc-blue">
                     <FaFlask />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-4">Conhecimento na Prática</h3>
-                  <p className="text-orange-100 mb-6">
+                  <p className="text-white/90 mb-6">
                     Laboratórios modernos e experiências reais
                   </p>
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div className="bg-white/20 rounded-lg p-4">
                       <div className="text-2xl font-bold text-white">100%</div>
-                      <div className="text-sm text-orange-200">Prático</div>
+                      <div className="text-sm text-white/80">Prático</div>
                     </div>
                     <div className="bg-white/20 rounded-lg p-4">
                       <div className="text-2xl font-bold text-white">24/7</div>
-                      <div className="text-sm text-orange-200">Suporte</div>
+                      <div className="text-sm text-white/80">Suporte</div>
                     </div>
                   </div>
                 </div>
@@ -210,7 +150,7 @@ export default function Matriculas() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Nosso Método de Ensino</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-orange-600 to-red-600 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-etpc-blue to-etpc-gold mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Conhecimento na prática, valorizando experiências em laboratórios, empresas e universidades
             </p>
@@ -222,19 +162,19 @@ export default function Matriculas() {
                 icon: FaFlask,
                 title: 'Laboratórios Modernos',
                 description: 'Infraestrutura completa com equipamentos de última geração para aprendizado prático e experimental.',
-                color: 'from-blue-500 to-cyan-600'
+                color: 'from-etpc-blue to-etpc-blue-dark'
               },
               {
                 icon: FaIndustry,
                 title: 'Experiência em Empresas',
                 description: 'Parcerias com empresas para estágios e projetos reais que conectam teoria à prática profissional.',
-                color: 'from-green-500 to-emerald-600'
+                color: 'from-etpc-gold to-etpc-gold-dark'
               },
               {
                 icon: FaGraduationCap,
                 title: 'Preparação Universitária',
                 description: 'Formação que prepara tanto para o mercado de trabalho quanto para o ingresso na universidade.',
-                color: 'from-purple-500 to-indigo-600'
+                color: 'from-etpc-blue-light to-etpc-blue'
               }
             ].map((item, index) => (
               <div key={index} className="group">
@@ -243,7 +183,7 @@ export default function Matriculas() {
                     <item.icon />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-4">{item.title}</h3>
-                  <p className="text-blue-100 leading-relaxed">{item.description}</p>
+                  <p className="text-white/90 leading-relaxed">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -256,7 +196,7 @@ export default function Matriculas() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Nossos Cursos</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-orange-600 to-red-600 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-etpc-blue to-etpc-gold mx-auto mb-8"></div>
             <p className="text-xl text-gray-600">
               Escolha a modalidade que melhor se adapta ao seu perfil e objetivos
             </p>
@@ -266,18 +206,18 @@ export default function Matriculas() {
             {courses.map((course, index) => (
               <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group">
                 <div className="text-center mb-6">
-                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform text-orange-600">
+                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform text-etpc-blue">
                     <course.icon />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-600">
-                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1"><FaBullseye className="text-xs" /> {course.target}</span>
+                    <span className="bg-etpc-gold/10 text-etpc-gold-dark px-3 py-1 rounded-full flex items-center gap-1"><FaClock className="text-xs" /> {course.duration}</span>
+                    <span className="bg-etpc-blue/10 text-etpc-blue-dark px-3 py-1 rounded-full flex items-center gap-1"><FaBullseye className="text-xs" /> {course.target}</span>
                   </div>
                 </div>
                 <p className="text-gray-700 text-center leading-relaxed">{course.description}</p>
                 <div className="mt-6 text-center">
-                  <a href="#formulario" className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg">
+                  <a href="#formulario" className="bg-gradient-to-r from-etpc-blue to-etpc-blue-dark text-white px-6 py-3 rounded-lg font-semibold hover:from-etpc-blue-dark hover:to-etpc-blue transition-all transform hover:scale-105 shadow-lg">
                     Saiba Mais
                   </a>
                 </div>
@@ -288,12 +228,12 @@ export default function Matriculas() {
       </section>
 
       {/* Form Section */}
-      <section id="formulario" className="py-20 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600">
+      <section id="formulario" className="py-20 bg-gradient-to-br from-etpc-blue-dark via-etpc-blue to-etpc-blue-light">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">Formulário de Interesse</h2>
             <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
-            <p className="text-xl text-orange-100">
+            <p className="text-xl text-white/90">
               Preencha o formulário e nossa equipe entrará em contato para realizar sua matrícula
             </p>
           </div>
@@ -320,7 +260,7 @@ export default function Matriculas() {
                     });
                     setAgreedToTerms(false);
                   }}
-                  className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+                  className="bg-etpc-blue text-white px-6 py-3 rounded-lg hover:bg-etpc-blue-dark transition-colors"
                 >
                   Nova Solicitação
                 </button>
@@ -336,7 +276,7 @@ export default function Matriculas() {
                       required
                       value={formData.responsavel}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                       placeholder="Nome completo do responsável"
                     />
                   </div>
@@ -348,7 +288,7 @@ export default function Matriculas() {
                       required
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                       placeholder="seu@email.com"
                     />
                   </div>
@@ -363,7 +303,7 @@ export default function Matriculas() {
                       required
                       value={formData.telefone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                       placeholder="(11) 99999-9999"
                     />
                   </div>
@@ -375,7 +315,7 @@ export default function Matriculas() {
                       required
                       value={formData.aluno}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                       placeholder="Nome do aluno"
                     />
                   </div>
@@ -389,7 +329,7 @@ export default function Matriculas() {
                       required
                       value={formData.ano}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                     >
                       {yearOptions.map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -403,7 +343,7 @@ export default function Matriculas() {
                       required
                       value={formData.nivel}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all"
                     >
                       <option value="">Selecione o nível</option>
                       {levelOptions.map(level => (
@@ -420,7 +360,7 @@ export default function Matriculas() {
                     value={formData.mensagem}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent transition-all resize-none"
                     placeholder="Conte-nos mais sobre seus objetivos, dúvidas ou qualquer informação adicional..."
                   ></textarea>
                 </div>
@@ -432,7 +372,7 @@ export default function Matriculas() {
                       id="terms"
                       checked={agreedToTerms}
                       onChange={(e) => setAgreedToTerms(e.target.checked)}
-                      className="mt-1 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-etpc-blue focus:ring-etpc-blue border-gray-300 rounded"
                     />
                     <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
                       Os dados coletados pela ETPC e Fundação CSN nesse formulário serão apenas utilizados para fins estatísticos, bem como para inclusão em nosso banco de dados e também na plataforma de NewsLetter Mailee, para que você seja notificado de assuntos relacionados às iniciativas e unidades da Fundação CSN. Ao preencher o formulário você concorda com esses termos.
@@ -443,7 +383,7 @@ export default function Matriculas() {
                 <button
                   type="submit"
                   disabled={!agreedToTerms}
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white py-4 rounded-lg text-lg font-semibold hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full bg-gradient-to-r from-etpc-blue to-etpc-blue-dark text-white py-4 rounded-lg text-lg font-semibold hover:from-etpc-blue-dark hover:to-etpc-blue transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   ENVIAR
                 </button>
@@ -454,17 +394,17 @@ export default function Matriculas() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-orange-600 to-red-600">
+      <section className="py-20 bg-gradient-to-r from-etpc-blue to-etpc-blue-dark">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-white mb-6">Comece sua Jornada de Sucesso</h2>
-          <p className="text-xl text-orange-100 mb-8">
+          <p className="text-xl text-white/90 mb-8">
             Junte-se aos milhares de alunos que já transformaram suas vidas com a ETPC
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#formulario" className="bg-white text-orange-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-50 transition-all transform hover:scale-105 shadow-xl">
+            <a href="#formulario" className="bg-white text-etpc-blue px-8 py-4 rounded-full text-lg font-semibold hover:bg-etpc-blue/5 transition-all transform hover:scale-105 shadow-xl">
               Fazer Matrícula Agora
             </a>
-            <Link href="/cursos-tecnicos" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-orange-600 transition-all transform hover:scale-105">
+            <Link href="/cursos-tecnicos" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-etpc-blue transition-all transform hover:scale-105">
               Ver Todos os Cursos
             </Link>
           </div>

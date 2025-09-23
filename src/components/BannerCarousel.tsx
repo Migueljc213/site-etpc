@@ -26,9 +26,20 @@ export default function BannerCarousel({
 }: BannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Filtrar apenas banners ativos
   const activeBanners = banners.filter(banner => banner.active);
+
+  // Controlar loading inicial
+  useEffect(() => {
+    if (activeBanners.length > 0) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000); // 1 segundo de loading
+      return () => clearTimeout(timer);
+    }
+  }, [activeBanners.length]);
 
   useEffect(() => {
     if (!autoPlay || activeBanners.length <= 1) return;
@@ -66,6 +77,23 @@ export default function BannerCarousel({
     goToSlide(currentIndex === activeBanners.length - 1 ? 0 : currentIndex + 1);
   };
 
+  // Tela de loading
+  if (isLoading) {
+    return (
+      <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden flex items-center justify-center">
+        {/* Elementos decorativos */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
+        
+        {/* Loading spinner */}
+        <div className="relative z-10 text-center">
+          <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-6"></div>
+          <p className="text-white/80 text-lg font-poppins">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (activeBanners.length === 0) {
     return (
       <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden">
@@ -79,12 +107,12 @@ export default function BannerCarousel({
         <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
         
         {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-20 pb-20">
+        <div className="relative z-10 h-full flex items-center justify-center pt-32 pb-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Seção de texto à esquerda */}
-              <div className="text-white space-y-6">
-                <div className="space-y-3">
+              <div className="text-white space-y-8">
+                <div className="space-y-4">
                   <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
                     Preparando Profissionais para o Mercado de Trabalho
                     <span className="block text-etpc-gold">Cursos técnicos</span>
@@ -94,7 +122,7 @@ export default function BannerCarousel({
                 </div>
 
                 {/* Botão CTA */}
-                <div className="pt-4">
+                <div className="pt-8">
                   <a 
                     href="/matriculas" 
                      className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
@@ -148,12 +176,12 @@ export default function BannerCarousel({
         <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
         
         {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-20 pb-20">
+        <div className="relative z-10 h-full flex items-center justify-center pt-32 pb-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Seção de texto à esquerda */}
-              <div className="text-white space-y-6">
-                <div className="space-y-3">
+              <div className="text-white space-y-8">
+                <div className="space-y-4">
                   <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
                     {banner.title}
                   </h1>
@@ -167,7 +195,7 @@ export default function BannerCarousel({
                 </div>
 
                 {/* Botão CTA */}
-                <div className="pt-4">
+                <div className="pt-8">
                   <a 
                     href={banner.link || "/matriculas"} 
                      className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"

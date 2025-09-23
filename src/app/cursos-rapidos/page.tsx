@@ -50,7 +50,7 @@ export default function CursosRapidosPage() {
       ],
       duration: '40 horas',
       icon: FaCog,
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-etpc-blue to-cyan-600'
     },
     {
       id: 2,
@@ -183,7 +183,7 @@ export default function CursosRapidosPage() {
       ],
       duration: '60 horas',
       icon: FaRocket,
-      color: 'from-blue-600 to-indigo-700'
+      color: 'from-etpc-blue to-indigo-700'
     },
     {
       id: 9,

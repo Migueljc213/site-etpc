@@ -38,8 +38,8 @@ export default function CursosTecnicos() {
       opportunities: ['Técnico em Automação Industrial', 'Técnico em Robótica', 'Técnico em Manutenção Industrial', 'Operador de CLP', 'Técnico em Instrumentação', 'Supervisor de Produção'],
       labs: ['Laboratório de Automação Industrial', 'Lab de Robótica', 'Lab de Eletrônica Industrial', 'Lab de Pneumática e Hidráulica'],
       monthlyValue: 'R$ 504,00',
-      color: 'from-blue-500 to-cyan-600',
-      bgColor: 'from-blue-50 to-cyan-50'
+      color: 'from-etpc-blue to-cyan-600',
+      bgColor: 'from-etpc-blue/5 to-cyan-50'
     },
     {
       id: 'eletromecanica',
@@ -208,7 +208,7 @@ export default function CursosTecnicos() {
       <Header currentPage="/cursos-tecnicos" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-amber-50">
+      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-etpc-blue/5 via-white to-amber-50">
         <div className="absolute top-20 left-10 w-72 h-72 bg-etpc-blue/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
         <div className="absolute top-40 right-10 w-72 h-72 bg-etpc-gold/20 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
 
@@ -235,7 +235,7 @@ export default function CursosTecnicos() {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-poppins font-bold text-white mb-4">Escolha seu Curso Técnico</h2>
             <div className="w-24 h-1 bg-etpc-gold mx-auto mb-8"></div>
-            <p className="text-xl text-blue-100 font-poppins">
+            <p className="text-xl text-etpc-blue/20 font-poppins">
               Cursos técnicos subsequentes com alta empregabilidade
             </p>
           </div>
@@ -247,13 +247,13 @@ export default function CursosTecnicos() {
             
             <div className="divide-y divide-gray-200">
               {courses.map((course) => (
-                <div key={course.id} className="group hover:bg-blue-50 transition-colors">
+                <div key={course.id} className="group hover:bg-etpc-blue/5 transition-colors">
                   <button
                     onClick={() => {
                       setSelectedCourse(course.id);
                       document.getElementById('cursos')?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-blue-50 transition-all"
+                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-etpc-blue/5 transition-all"
                   >
                     <div className="flex items-center space-x-4">
                       <span className="text-2xl text-etpc-blue">
@@ -383,7 +383,7 @@ export default function CursosTecnicos() {
 
                     {/* Pré-requisitos e Público-Alvo */}
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
-                      <div className="bg-blue-50 rounded-lg p-4">
+                      <div className="bg-etpc-blue/5 rounded-lg p-4">
                         <h4 className="font-bold text-gray-900 mb-2 flex items-center">
                           <span className="text-blue-600 mr-2">📋</span>
                           Pré-requisito:
@@ -452,50 +452,50 @@ export default function CursosTecnicos() {
                       </h4>
                       
                       <div className="space-y-4">
-                        <div className="bg-blue-50 rounded-lg p-4">
+                        <div className="bg-etpc-blue/5 rounded-lg p-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                               <FaClock className="text-xs" />
                               Duração:
                             </span>
-                            <span className="font-bold text-blue-600">{course.duration}</span>
+                            <span className="font-bold text-etpc-blue text-right">{course.duration}</span>
                           </div>
                         </div>
                         
-                        <div className="bg-green-50 rounded-lg p-4">
+                        <div className="bg-etpc-gold/5 rounded-lg p-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                               <FaCalendarAlt className="text-xs" />
                               Período:
                             </span>
-                            <span className="font-bold text-green-600 text-xs">{course.period}</span>
+                            <span className="font-bold text-etpc-gold text-right">{course.period}</span>
                           </div>
                         </div>
                         
-                        <div className="bg-purple-50 rounded-lg p-4">
+                        <div className="bg-etpc-blue/5 rounded-lg p-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                               <FaChartLine className="text-xs" />
                               Empregabilidade:
                             </span>
-                            <span className="font-bold text-purple-600">{course.employability}</span>
+                            <span className="font-bold text-etpc-blue text-right">{course.employability}</span>
                           </div>
                         </div>
                         
-                        <div className="bg-yellow-50 rounded-lg p-4">
+                        <div className="bg-etpc-gold/5 rounded-lg p-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                               <FaMoneyBillWave className="text-xs" />
                               Salário:
                             </span>
-                            <span className="font-bold text-yellow-600 text-sm">{course.salary}</span>
+                            <span className="font-bold text-etpc-gold text-right">{course.salary}</span>
                           </div>
                         </div>
                         
-                        <div className="bg-red-50 rounded-lg p-4">
+                        <div className="bg-etpc-blue/5 rounded-lg p-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">💵 Mensalidade:</span>
-                            <span className="font-bold text-red-600 text-lg">{course.monthlyValue}</span>
+                            <span className="font-bold text-etpc-blue text-right text-lg">{course.monthlyValue}</span>
                           </div>
                         </div>
                       </div>
@@ -581,7 +581,7 @@ export default function CursosTecnicos() {
       <section className="py-20 bg-gradient-to-r from-etpc-blue to-etpc-blue-dark">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-poppins font-bold text-white mb-6">Transforme seu Futuro Profissional</h2>
-          <p className="text-xl text-blue-100 mb-8 font-poppins">
+          <p className="text-xl text-etpc-blue/20 mb-8 font-poppins">
             Venha conhecer nossa estrutura e metodologia de perto
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
