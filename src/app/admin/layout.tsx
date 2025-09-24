@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog, FaCamera, FaPhone } from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,11 +14,45 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'loading') {
+      setIsLoading(true);
+    } else if (status === 'unauthenticated') {
+      // Se não estiver autenticado e não estiver na página de login, redirecionar
+      if (pathname !== '/admin/login') {
+        router.push('/admin/login');
+      }
+      setIsLoading(false);
+    } else if (status === 'authenticated') {
+      setIsLoading(false);
+    }
+  }, [status, pathname, router]);
 
   // Se estiver na página de login, não aplicar o layout
   if (pathname === '/admin/login') {
     return <>{children}</>;
+  }
+
+  // Mostrar loading enquanto verifica autenticação
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-etpc-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Se não estiver autenticado, não mostrar nada (será redirecionado)
+  if (!session) {
+    return null;
   }
 
   const menuItems = [

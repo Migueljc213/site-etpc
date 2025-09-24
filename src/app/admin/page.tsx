@@ -2,15 +2,25 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { FaNewspaper, FaImage, FaGraduationCap, FaCog, FaUsers } from 'react-icons/fa';
 
 export default function AdminDashboard() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState({
     noticias: 0,
     banners: 0,
     cursos: 0,
     usuarios: 0
   });
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/admin/login');
+    }
+  }, [status, router]);
 
   useEffect(() => {
     // Simular carregamento de estatísticas
@@ -21,6 +31,21 @@ export default function AdminDashboard() {
       usuarios: 1
     });
   }, []);
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-etpc-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null;
+  }
 
   const quickActions = [
     {
