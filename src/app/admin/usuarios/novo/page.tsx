@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaUser, FaEnvelope, FaLock, FaUserShield } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function NovoUsuario() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function NovoUsuario() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      alert('As senhas não coincidem');
+      toast.error('As senhas não coincidem');
       return;
     }
 
@@ -30,12 +31,12 @@ export default function NovoUsuario() {
     try {
       // Simular criação de usuário
       setTimeout(() => {
-        alert('Usuário criado com sucesso!');
+        toast.success('Usuário criado com sucesso!');
         router.push('/admin/usuarios');
       }, 1000);
     } catch (error) {
       console.error('Error creating user:', error);
-      alert('Erro ao criar usuário');
+      toast.error('Erro ao criar usuário');
       setLoading(false);
     }
   };

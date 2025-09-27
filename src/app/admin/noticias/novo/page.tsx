@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaImage, FaNewspaper, FaCalendarAlt, FaTag, FaEye } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function NovaNoticia() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function NovaNoticia() {
           const uploadResult = await uploadResponse.json();
           imagePath = uploadResult.path;
         } else {
-          alert('Erro ao fazer upload da imagem');
+          toast.error('Erro ao fazer upload da imagem');
           setLoading(false);
           return;
         }
@@ -64,15 +65,15 @@ export default function NovaNoticia() {
       });
 
       if (response.ok) {
-        alert('Notícia salva com sucesso!');
+        toast.success('Notícia salva com sucesso!');
         router.push('/admin/noticias');
       } else {
         const error = await response.json();
-        alert(`Erro ao salvar notícia: ${error.error}`);
+        toast.error(`Erro ao salvar notícia: ${error.error}`);
       }
     } catch (error) {
       console.error('Erro ao salvar notícia:', error);
-      alert('Erro ao salvar notícia');
+      toast.error('Erro ao salvar notícia');
     } finally {
       setLoading(false);
     }

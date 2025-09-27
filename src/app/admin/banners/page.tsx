@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaPlus, FaImage, FaEye, FaEyeSlash, FaEdit, FaTrash, FaCalendarAlt, FaLink, FaMapMarkerAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 interface Banner {
   id: string;
@@ -54,11 +55,11 @@ export default function BannersAdmin() {
         if (response.ok) {
           setBanners(banners.filter(banner => banner.id !== id));
         } else {
-          alert('Erro ao excluir banner');
+          toast.error('Erro ao excluir banner');
         }
       } catch (error) {
         console.error('Erro ao excluir banner:', error);
-        alert('Erro ao excluir banner');
+        toast.error('Erro ao excluir banner');
       }
     }
   };
@@ -86,11 +87,11 @@ export default function BannersAdmin() {
             : banner
         ));
       } else {
-        alert('Erro ao atualizar banner');
+        toast.error('Erro ao atualizar banner');
       }
     } catch (error) {
       console.error('Erro ao atualizar banner:', error);
-      alert('Erro ao atualizar banner');
+      toast.error('Erro ao atualizar banner');
     }
   };
 

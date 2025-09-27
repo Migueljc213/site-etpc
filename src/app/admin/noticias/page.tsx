@@ -3,19 +3,31 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaPlus, FaSearch, FaFilter, FaStar, FaEye, FaEyeSlash, FaEdit, FaTrash, FaCalendarAlt, FaTag, FaClock } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 interface Noticia {
   id: string;
   title: string;
   excerpt: string;
   content: string;
-  date: string;
-  category: string;
-  type: string;
+  image?: string;
+  author: string;
   featured: boolean;
   published: boolean;
+  publishedAt?: string;
   createdAt: string;
   updatedAt: string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  tags: Array<{
+    tag: {
+      id: string;
+      name: string;
+    };
+  }>;
 }
 
 export default function NoticiasAdmin() {
@@ -25,69 +37,119 @@ export default function NoticiasAdmin() {
   const [filterCategory, setFilterCategory] = useState('todas');
 
   useEffect(() => {
-    // Simular carregamento de notícias
-    const mockNoticias: Noticia[] = [
-      {
-        id: '1',
-        title: 'ETPC abre inscrições para curso preparatório para concurso da Petrobrás 2023!',
-        excerpt: 'A ETPC abriu as inscrições para curso preparatório para o concurso da Petrobrás de 2023...',
-        content: 'Conteúdo completo da notícia...',
-        date: '14 FEV',
-        category: 'Notícias',
-        type: 'noticias',
-        featured: true,
-        published: true,
-        createdAt: '2024-01-14T10:00:00Z',
-        updatedAt: '2024-01-14T10:00:00Z'
-      },
-      {
-        id: '2',
-        title: 'ETPC abre inscrições para capacitação em Energia Solar On-Grid e NR35',
-        excerpt: 'Estão abertas as inscrições para a capacitação preparatória...',
-        content: 'Conteúdo completo da notícia...',
-        date: '17 JAN',
-        category: 'Notícias',
-        type: 'noticias',
-        featured: false,
-        published: true,
-        createdAt: '2024-01-17T10:00:00Z',
-        updatedAt: '2024-01-17T10:00:00Z'
+    const fetchNoticias = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/news');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setNoticias(data.news);
+        } else {
+          console.error('Error fetching news:', data.error);
+          toast.error('Erro ao carregar notícias');
+        }
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        toast.error('Erro ao carregar notícias');
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
     
-    setTimeout(() => {
-      setNoticias(mockNoticias);
-      setLoading(false);
-    }, 1000);
+    fetchNoticias();
   }, []);
 
   const filteredNoticias = noticias.filter(noticia => {
     const matchesSearch = noticia.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          noticia.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'todas' || noticia.type === filterCategory;
+    const matchesCategory = filterCategory === 'todas' || noticia.category.slug === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
   const handleDelete = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir esta notícia?')) {
-      setNoticias(noticias.filter(noticia => noticia.id !== id));
+      try {
+        const response = await fetch(`/api/news/${id}`, {
+          method: 'DELETE',
+        });
+        
+        if (response.ok) {
+          setNoticias(noticias.filter(noticia => noticia.id !== id));
+          toast.success('Notícia excluída com sucesso!');
+        } else {
+          toast.error('Erro ao excluir notícia');
+        }
+      } catch (error) {
+        console.error('Error deleting news:', error);
+        toast.error('Erro ao excluir notícia');
+      }
     }
   };
 
   const handleToggleFeatured = async (id: string) => {
-    setNoticias(noticias.map(noticia => 
-      noticia.id === id 
-        ? { ...noticia, featured: !noticia.featured }
-        : noticia
-    ));
+    const noticia = noticias.find(n => n.id === id);
+    if (!noticia) return;
+    
+    try {
+      const response = await fetch(`/api/news/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...noticia,
+          featured: !noticia.featured,
+        }),
+      });
+      
+      if (response.ok) {
+        setNoticias(noticias.map(n => 
+          n.id === id 
+            ? { ...n, featured: !n.featured }
+            : n
+        ));
+        toast.success('Status de destaque atualizado!');
+      } else {
+        toast.error('Erro ao atualizar destaque');
+      }
+    } catch (error) {
+      console.error('Error updating featured status:', error);
+      toast.error('Erro ao atualizar destaque');
+    }
   };
 
   const handleTogglePublished = async (id: string) => {
-    setNoticias(noticias.map(noticia => 
-      noticia.id === id 
-        ? { ...noticia, published: !noticia.published }
-        : noticia
-    ));
+    const noticia = noticias.find(n => n.id === id);
+    if (!noticia) return;
+    
+    try {
+      const response = await fetch(`/api/news/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...noticia,
+          published: !noticia.published,
+          publishedAt: !noticia.published ? new Date().toISOString() : null,
+        }),
+      });
+      
+      if (response.ok) {
+        setNoticias(noticias.map(n => 
+          n.id === id 
+            ? { ...n, published: !n.published, publishedAt: !n.published ? new Date().toISOString() : null }
+            : n
+        ));
+        toast.success('Status de publicação atualizado!');
+      } else {
+        toast.error('Erro ao atualizar publicação');
+      }
+    } catch (error) {
+      console.error('Error updating published status:', error);
+      toast.error('Erro ao atualizar publicação');
+    }
   };
 
   if (loading) {
@@ -193,11 +255,11 @@ export default function NoticiasAdmin() {
                   <div className="flex items-center space-x-6 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <FaCalendarAlt className="text-blue-600" />
-                      {noticia.date}
+                      {noticia.publishedAt ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR') : 'Não publicado'}
                     </span>
                     <span className="flex items-center gap-1">
                       <FaTag className="text-blue-600" />
-                      {noticia.category}
+                      {noticia.category.name}
                     </span>
                     <span className="flex items-center gap-1">
                       <FaClock className="text-blue-600" />

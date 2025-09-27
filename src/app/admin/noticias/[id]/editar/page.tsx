@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaImage, FaNewspaper, FaCalendarAlt, FaTag } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function EditarNoticia() {
   const router = useRouter();
@@ -47,12 +48,12 @@ export default function EditarNoticia() {
           date: data.publishedAt ? data.publishedAt.split('T')[0] : new Date().toISOString().split('T')[0]
         });
       } else {
-        alert('Erro ao carregar notícia');
+        toast.error('Erro ao carregar notícia');
         router.push('/admin/noticias');
       }
     } catch (error) {
       console.error('Erro ao carregar notícia:', error);
-      alert('Erro ao carregar notícia');
+      toast.error('Erro ao carregar notícia');
       router.push('/admin/noticias');
     } finally {
       setLoadingData(false);
@@ -81,7 +82,7 @@ export default function EditarNoticia() {
           const uploadResult = await uploadResponse.json();
           imagePath = uploadResult.path;
         } else {
-          alert('Erro ao fazer upload da imagem');
+          toast.error('Erro ao fazer upload da imagem');
           setLoading(false);
           return;
         }
@@ -100,15 +101,15 @@ export default function EditarNoticia() {
       });
 
       if (response.ok) {
-        alert('Notícia atualizada com sucesso!');
+        toast.success('Notícia atualizada com sucesso!');
         router.push('/admin/noticias');
       } else {
         const error = await response.json();
-        alert(`Erro ao atualizar notícia: ${error.error}`);
+        toast.error(`Erro ao atualizar notícia: ${error.error}`);
       }
     } catch (error) {
       console.error('Erro ao atualizar notícia:', error);
-      alert('Erro ao atualizar notícia');
+      toast.error('Erro ao atualizar notícia');
     } finally {
       setLoading(false);
     }

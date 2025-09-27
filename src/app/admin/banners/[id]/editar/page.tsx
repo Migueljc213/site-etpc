@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaImage, FaLink, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 interface Banner {
   id: string;
@@ -60,12 +61,12 @@ export default function EditarBanner() {
           endDate: data.endDate ? data.endDate.split('T')[0] : ''
         });
       } else {
-        alert('Erro ao carregar banner');
+        toast.error('Erro ao carregar banner');
         router.push('/admin/banners');
       }
     } catch (error) {
       console.error('Erro ao carregar banner:', error);
-      alert('Erro ao carregar banner');
+      toast.error('Erro ao carregar banner');
       router.push('/admin/banners');
     } finally {
       setLoadingData(false);
@@ -94,7 +95,7 @@ export default function EditarBanner() {
           const uploadResult = await uploadResponse.json();
           imagePath = uploadResult.path;
         } else {
-          alert('Erro ao fazer upload da imagem');
+          toast.error('Erro ao fazer upload da imagem');
           setLoading(false);
           return;
         }
@@ -112,15 +113,15 @@ export default function EditarBanner() {
       });
 
       if (response.ok) {
-        alert('Banner atualizado com sucesso!');
+        toast.success('Banner atualizado com sucesso!');
         router.push('/admin/banners');
       } else {
         const error = await response.json();
-        alert(`Erro ao atualizar banner: ${error.error}`);
+        toast.error(`Erro ao atualizar banner: ${error.error}`);
       }
     } catch (error) {
       console.error('Error updating banner:', error);
-      alert('Erro ao atualizar banner');
+      toast.error('Erro ao atualizar banner');
     } finally {
       setLoading(false);
     }

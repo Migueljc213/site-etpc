@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { FaUpload, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import MultiFileUpload from '@/components/MultiFileUpload';
 
 interface GalleryPhoto {
   id: string;
@@ -20,7 +21,7 @@ export default function GaleriaAdmin() {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [category, setCategory] = useState('geral');
   const [showUploadModal, setShowUploadModal] = useState(false);
 
@@ -40,10 +41,8 @@ export default function GaleriaAdmin() {
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setSelectedFiles(e.target.files);
-    }
+  const handleFilesChange = (files: File[]) => {
+    setSelectedFiles(files);
   };
 
   const handleUpload = async () => {
@@ -53,9 +52,9 @@ export default function GaleriaAdmin() {
     try {
       const formData = new FormData();
       
-      for (let i = 0; i < selectedFiles.length; i++) {
-        formData.append('files', selectedFiles[i]);
-      }
+      selectedFiles.forEach(file => {
+        formData.append('files', file);
+      });
       formData.append('category', category);
 
       const response = await fetch('/api/gallery/upload-multiple', {
@@ -248,27 +247,20 @@ export default function GaleriaAdmin() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">
-                Selecionar Fotos (múltiplas)
-              </label>
-              <input
-                type="file"
-                multiple
+              <MultiFileUpload
+                onFilesChange={handleFilesChange}
                 accept="image/*"
-                onChange={handleFileSelect}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-etpc-blue"
+                multiple={true}
+                maxFiles={20}
+                label="Selecionar Fotos"
+                placeholder="Clique para selecionar fotos ou arraste aqui"
               />
-              {selectedFiles && (
-                <p className="text-sm text-gray-600 mt-1 font-poppins">
-                  {selectedFiles.length} arquivo(s) selecionado(s)
-                </p>
-              )}
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={handleUpload}
-                disabled={!selectedFiles || uploading}
+                disabled={selectedFiles.length === 0 || uploading}
                 className="flex-1 bg-etpc-blue text-white px-4 py-2 rounded-lg hover:bg-etpc-blue-dark transition-colors disabled:opacity-50 font-poppins"
               >
                 {uploading ? 'Enviando...' : 'Enviar Fotos'}

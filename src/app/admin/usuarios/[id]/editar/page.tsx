@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaUser, FaEnvelope, FaLock, FaUserShield } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function EditarUsuario() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function EditarUsuario() {
     e.preventDefault();
     
     if (formData.password && formData.password !== formData.confirmPassword) {
-      alert('As senhas não coincidem');
+      toast.error('As senhas não coincidem');
       return;
     }
 
@@ -47,12 +48,12 @@ export default function EditarUsuario() {
     try {
       // Simular atualização de usuário
       setTimeout(() => {
-        alert('Usuário atualizado com sucesso!');
+        toast.success('Usuário atualizado com sucesso!');
         router.push('/admin/usuarios');
       }, 1000);
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('Erro ao atualizar usuário');
+      toast.error('Erro ao atualizar usuário');
       setLoading(false);
     }
   };

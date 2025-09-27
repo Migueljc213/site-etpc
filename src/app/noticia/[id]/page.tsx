@@ -127,29 +127,47 @@ export default function NoticiaDetalhes() {
             {/* Article */}
             <article className="bg-white rounded-lg shadow-lg overflow-hidden">
               {/* Featured Image */}
-              <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900">
-                <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white px-4">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4">
-                      {noticia.title}
-                    </h1>
+              {noticia.image ? (
+                <div className="relative h-64 sm:h-80 lg:h-96">
+                  <img
+                    src={noticia.image}
+                    alt={noticia.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white px-4">
+                      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4">
+                        {noticia.title}
+                      </h1>
+                    </div>
                   </div>
                 </div>
-                {/* Decorative elements */}
-                <div className="absolute top-4 left-4 w-16 h-16 bg-yellow-400 rounded-full opacity-20"></div>
-                <div className="absolute bottom-4 right-4 w-12 h-12 bg-pink-400 rounded-full opacity-20"></div>
-                <div className="absolute top-1/2 right-8 w-8 h-8 bg-blue-400 transform rotate-45 opacity-20"></div>
-              </div>
+              ) : (
+                <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900">
+                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white px-4">
+                      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4">
+                        {noticia.title}
+                      </h1>
+                    </div>
+                  </div>
+                  {/* Decorative elements */}
+                  <div className="absolute top-4 left-4 w-16 h-16 bg-yellow-400 rounded-full opacity-20"></div>
+                  <div className="absolute bottom-4 right-4 w-12 h-12 bg-pink-400 rounded-full opacity-20"></div>
+                  <div className="absolute top-1/2 right-8 w-8 h-8 bg-blue-400 transform rotate-45 opacity-20"></div>
+                </div>
+              )}
 
               {/* Article Meta */}
               <div className="p-6 border-b border-gray-200">
                 <div className="flex flex-wrap items-center justify-between mb-4">
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                      {noticia.date}
+                      {noticia.publishedAt ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR') : 'Não publicado'}
                     </span>
-                    <span className="text-red-600 font-medium">{noticia.category}</span>
+                    <span className="text-red-600 font-medium">{typeof noticia.category === 'string' ? noticia.category : noticia.category.name}</span>
                     <span>Por {noticia.author}</span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -173,15 +191,17 @@ export default function NoticiaDetalhes() {
                 </div>
 
                 {/* Tags */}
-                <div className="flex flex-wrap items-center space-x-2">
-                  <span className="text-sm font-medium text-gray-700">TAGS:</span>
-                  {noticia.tags.map((tag, index) => (
-                    <span key={index} className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
-                      {tag}
-                      {index < noticia.tags.length - 1 && ','}
-                    </span>
-                  ))}
-                </div>
+                {noticia.tags && noticia.tags.length > 0 && (
+                  <div className="flex flex-wrap items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-700">TAGS:</span>
+                    {noticia.tags.map((tag, index) => (
+                      <span key={index} className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+                        {typeof tag === 'string' ? tag : tag.name}
+                        {index < noticia.tags.length - 1 && ','}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Article Content */}
@@ -205,15 +225,27 @@ export default function NoticiaDetalhes() {
                     <Link key={news.id} href={`/noticia/${news.id}`} className="block group">
                       <div className="flex space-x-3">
                         <div className="flex-shrink-0">
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <span className="text-gray-500 text-xs">Imagem</span>
-                          </div>
+                          {news.image ? (
+                            <div className="w-16 h-16 relative rounded-lg overflow-hidden">
+                              <img
+                                src={news.image}
+                                alt={news.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                              <span className="text-gray-500 text-xs">Imagem</span>
+                            </div>
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
                             {news.title}
                           </h4>
-                          <p className="text-xs text-gray-500 mt-1">{news.date}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {news.publishedAt ? new Date(news.publishedAt).toLocaleDateString('pt-BR') : 'Não publicado'}
+                          </p>
                         </div>
                       </div>
                     </Link>

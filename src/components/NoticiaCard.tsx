@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaNewspaper, FaCamera } from 'react-icons/fa';
 
 interface NoticiaCardProps {
@@ -6,8 +7,10 @@ interface NoticiaCardProps {
     id: string;
     title: string;
     excerpt: string;
+    image?: string;
     date?: string;
     createdAt?: string;
+    publishedAt?: string;
     category: string | { name: string; slug: string };
     author: string;
     featured?: boolean;
@@ -16,7 +19,7 @@ interface NoticiaCardProps {
 }
 
 export default function NoticiaCard({ article, featured = false }: NoticiaCardProps) {
-  const displayDate = article.date || article.createdAt || '';
+  const displayDate = article.date || article.publishedAt || article.createdAt || '';
   const categoryName = typeof article.category === 'string' ? article.category : article.category.name;
   
   // Formatar a data para exibir dia/mês de forma compacta
@@ -37,12 +40,23 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
           <div className="sm:flex">
             <div className="sm:w-1/2">
-              <div className="h-64 md:h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <FaNewspaper className="text-6xl mb-4 text-gray-300 mx-auto" />
-                  <p className="text-lg">Imagem da Notícia</p>
+              {article.image ? (
+                <div className="h-64 md:h-full relative">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-              </div>
+              ) : (
+                <div className="h-64 md:h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <FaNewspaper className="text-6xl mb-4 text-gray-300 mx-auto" />
+                    <p className="text-lg">Imagem da Notícia</p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="md:w-1/2 p-8">
               <div className="flex items-center mb-4">
@@ -73,12 +87,23 @@ export default function NoticiaCard({ article, featured = false }: NoticiaCardPr
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
       <div className="md:flex">
         <div className="md:w-1/3">
-          <div className="h-48 md:h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
-            <div className="text-center text-white">
-              <FaCamera className="text-4xl mb-2 text-gray-300 mx-auto" />
-              <p className="text-sm">Imagem</p>
+          {article.image ? (
+            <div className="h-48 md:h-full relative">
+              <Image
+                src={article.image}
+                alt={article.title}
+                fill
+                className="object-cover"
+              />
             </div>
-          </div>
+          ) : (
+            <div className="h-48 md:h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+              <div className="text-center text-white">
+                <FaCamera className="text-4xl mb-2 text-gray-300 mx-auto" />
+                <p className="text-sm">Imagem</p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="md:w-2/3 p-6">
           <div className="flex items-center mb-3">

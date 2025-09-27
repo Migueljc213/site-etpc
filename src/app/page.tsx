@@ -3,40 +3,163 @@
 import { useState, useEffect } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import Image from 'next/image';
-import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask, FaWrench, FaShieldAlt } from 'react-icons/fa';
+import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefcase, FaRocket, FaChalkboardTeacher, FaUserTie, FaDesktop, FaFlask, FaWrench, FaShieldAlt, FaNewspaper, FaGraduationCap } from 'react-icons/fa';
 import BannerCarousel from '@/components/BannerCarousel';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 
+interface Banner {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  image: string;
+  link?: string;
+  active: boolean;
+}
+
+interface GalleryPhoto {
+  id: string;
+  title: string;
+  image: string;
+  category: string;
+}
+
+interface NewsArticle {
+  id: string;
+  title: string;
+  excerpt: string;
+  image?: string;
+  author: string;
+  publishedAt: string;
+  slug: string;
+}
+
 export default function Home() {
   const [visibleSections, setVisibleSections] = useState(new Set());
-  const [banners, setBanners] = useState([]);
-  const [galleryPhotos, setGalleryPhotos] = useState([]);
-
+  const [banners, setBanners] = useState<Banner[]>([
+    {
+      id: '1',
+      title: 'Bem-vindo à ETPC',
+      subtitle: 'Escola Técnica da Fundação CSN',
+      description: 'Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.',
+      image: '/images/banners/banner-1.jpg',
+      link: '/cursos-tecnicos',
+      active: true
+    }
+  ]);
+  const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
+  const [news, setNews] = useState<NewsArticle[]>([]);
+  const [showAllGalleryPhotos, setShowAllGalleryPhotos] = useState(false);
 
   useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const response = await fetch('/api/banners?position=homepage-carousel&active=true');
-        const data = await response.json();
-        setBanners(data);
-      } catch (error) {
-        console.error('Error fetching banners:', error);
-      }
-    };
-
     const fetchGalleryPhotos = async () => {
       try {
         const response = await fetch('/api/gallery?active=true');
         const data = await response.json();
-        setGalleryPhotos(data);
+        // A API retorna um objeto com 'value' contendo o array de fotos
+        setGalleryPhotos(Array.isArray(data) ? data : data.value || []);
       } catch (error) {
         console.error('Error fetching gallery photos:', error);
+        // Fallback para fotos estáticas se a API falhar
+        setGalleryPhotos([
+          {
+            id: '1',
+            title: 'Laboratório de Automação',
+            image: '/images/gallery/1758570763408-0-etpc9.jpg',
+            category: 'laboratorio'
+          },
+          {
+            id: '2',
+            title: 'Aulas Práticas',
+            image: '/images/gallery/1758570765218-1-etpc8.jpg',
+            category: 'aulas'
+          },
+          {
+            id: '3',
+            title: 'Laboratório de Informática',
+            image: '/images/gallery/1758570765838-2-etpc7.jpg',
+            category: 'laboratorio'
+          },
+          {
+            id: '4',
+            title: 'Aulas de Robótica',
+            image: '/images/gallery/1758570766452-3-etpc6.jpg',
+            category: 'robotica'
+          },
+          {
+            id: '5',
+            title: 'Projetos Práticos',
+            image: '/images/gallery/1758570767071-4-etpc5.jpg',
+            category: 'projetos'
+          },
+          {
+            id: '6',
+            title: 'Eventos Escolares',
+            image: '/images/gallery/1758570767687-5-etpc4.jpg',
+            category: 'eventos'
+          },
+          {
+            id: '7',
+            title: 'Workshops',
+            image: '/images/gallery/1758570768301-6-etpc3.jpg',
+            category: 'workshops'
+          },
+          {
+            id: '8',
+            title: 'Formaturas',
+            image: '/images/gallery/1758570768917-7-etpc2.jpg',
+            category: 'formatura'
+          }
+        ]);
       }
     };
 
-    fetchBanners();
     fetchGalleryPhotos();
+  }, []);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('/api/news?published=true&featured=true');
+        const data = await response.json();
+        setNews(data);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        // Fallback para notícias estáticas se a API falhar
+        setNews([
+          {
+            id: '1',
+            title: 'ETPC inaugura novo laboratório de Automação Industrial',
+            excerpt: 'A Escola Técnica da Fundação CSN investe em tecnologia de ponta para preparar os estudantes para o mercado de trabalho.',
+            image: '/images/noticias/lab-automacao.jpg',
+            author: 'Equipe ETPC',
+            publishedAt: '2024-09-20',
+            slug: 'etpc-inaugura-novo-laboratorio-automacao-industrial'
+          },
+          {
+            id: '2',
+            title: 'Alunos da ETPC conquistam primeiro lugar em competição nacional',
+            excerpt: 'Estudantes do curso técnico em Informática se destacaram na Olimpíada Brasileira de Informática.',
+            image: '/images/noticias/premiacao.jpg',
+            author: 'Equipe ETPC',
+            publishedAt: '2024-09-18',
+            slug: 'alunos-etpc-conquistam-primeiro-lugar-competicao-nacional'
+          },
+          {
+            id: '3',
+            title: 'Workshop gratuito sobre Inteligência Artificial',
+            excerpt: 'Evento aberto ao público abordará as principais tendências em IA e suas aplicações práticas.',
+            image: '/images/noticias/workshop-ia.jpg',
+            author: 'Equipe ETPC',
+            publishedAt: '2024-09-15',
+            slug: 'workshop-gratuito-inteligencia-artificial'
+          }
+        ]);
+      }
+    };
+
+    fetchNews();
   }, []);
 
 
@@ -192,7 +315,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {galleryPhotos.length > 0 ? (
-              galleryPhotos.slice(0, 8).map((photo) => (
+              galleryPhotos.slice(0, showAllGalleryPhotos ? galleryPhotos.length : 8).map((photo) => (
                 <div key={photo.id} className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all">
                   <div className="aspect-square relative">
                     <Image
@@ -226,8 +349,112 @@ export default function Home() {
           </div>
 
           <div className="mt-12 text-center">
-            <a href="/admin/galeria" className="bg-etpc-blue text-white px-8 py-3 rounded-full hover:bg-etpc-blue-dark transition-all transform hover:scale-105 shadow-lg inline-block">
-              Ver mais fotos
+            {galleryPhotos.length > 8 && (
+              <button 
+                onClick={() => setShowAllGalleryPhotos(!showAllGalleryPhotos)}
+                className="bg-etpc-blue text-white px-8 py-3 rounded-full hover:bg-etpc-blue-dark transition-all transform hover:scale-105 shadow-lg inline-block"
+              >
+                {showAllGalleryPhotos ? 'Ver menos fotos' : `Ver mais fotos (${galleryPhotos.length - 8} restantes)`}
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog & Notícias Section */}
+      <section id="blog" className={`py-20 bg-white transition-all duration-1000 ${visibleSections.has('blog') ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Blog & Notícias</h2>
+            <div className="w-24 h-1 bg-etpc-blue mx-auto mb-8"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Fique por dentro das últimas tendências em educação técnica e tecnologia
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {news.length > 0 ? (
+              news.slice(0, 6).map((article) => (
+                <article key={article.id} className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+                  <div className="relative h-48 overflow-hidden">
+                    {article.image ? (
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-etpc-blue to-etpc-blue-dark">
+                        <div className="text-center text-white">
+                          <FaNewspaper className="text-6xl mb-4 mx-auto opacity-80" />
+                          <p className="text-lg font-medium">Imagem da Notícia</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute top-4 left-4 bg-etpc-blue text-white px-3 py-1 rounded-full text-sm font-medium">
+                      Notícia
+                    </div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="flex items-center text-sm text-gray-500 mb-3">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                      </svg>
+                      {new Date(article.publishedAt).toLocaleDateString('pt-BR')}
+                      <svg className="w-4 h-4 ml-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                      {article.author}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-etpc-blue transition-colors line-clamp-2">
+                      {article.title}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                    
+                    <a 
+                      href={`/noticia/${article.slug}`}
+                      className="inline-flex items-center text-etpc-blue font-semibold hover:text-etpc-blue-dark transition-colors"
+                    >
+                      Ler mais
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ))
+            ) : (
+              // Placeholder quando não há notícias
+              Array.from({ length: 3 }).map((_, index) => (
+                <article key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <div className="relative h-48 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600">
+                      <div className="text-center text-white">
+                        <FaGraduationCap className="text-6xl mb-4 mx-auto opacity-80" />
+                        <p className="text-lg font-medium">Imagem da Notícia</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="h-4 bg-gray-300 rounded mb-3"></div>
+                    <div className="h-6 bg-gray-300 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-300 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-300 rounded w-20"></div>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+
+          <div className="mt-12 text-center">
+            <a href="/noticias" className="bg-etpc-blue text-white px-8 py-3 rounded-full hover:bg-etpc-blue-dark transition-all transform hover:scale-105 shadow-lg inline-block">
+              Ver todas as notícias
             </a>
           </div>
         </div>
