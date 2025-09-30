@@ -7,6 +7,7 @@ import { FaStar, FaCamera, FaLaptopCode, FaTools, FaChartBar, FaCheck, FaBriefca
 import BannerCarousel from '@/components/BannerCarousel';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import ImageModal from '@/components/ImageModal';
 
 interface Banner {
   id: string;
@@ -48,6 +49,8 @@ export default function Home() {
   const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [showAllGalleryPhotos, setShowAllGalleryPhotos] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -229,6 +232,19 @@ export default function Home() {
     };
   }, []);
 
+  const openModal = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalNavigate = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
   // Removido parallaxStyle não utilizado
 
   return (
@@ -352,8 +368,12 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {galleryPhotos.length > 0 ? (
-              galleryPhotos.slice(0, showAllGalleryPhotos ? galleryPhotos.length : 8).map((photo) => (
-                <div key={photo.id} className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all">
+              galleryPhotos.slice(0, showAllGalleryPhotos ? galleryPhotos.length : 8).map((photo, index) => (
+                <div
+                  key={photo.id}
+                  className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
+                  onClick={() => openModal(index)}
+                >
                   <div className="aspect-square relative">
                     <Image
                       src={photo.image}
@@ -366,6 +386,14 @@ export default function Home() {
                     <div className="p-4 text-white">
                       <div className="font-semibold font-poppins">{photo.title}</div>
                       <div className="text-sm text-gray-300 capitalize font-poppins">{photo.category}</div>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -641,159 +669,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Blog & Notícias Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Blog & Notícias
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Fique por dentro das últimas novidades, eventos e conquistas da ETPC
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card de Notícia 1 */}
-            <article className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
-              <div className="relative h-48 bg-gradient-to-br from-etpc-blue to-etpc-blue-dark">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <FaNewspaper className="text-6xl mb-4 mx-auto opacity-80" />
-                    <p className="text-lg font-medium">Imagem da Notícia</p>
-                  </div>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 text-etpc-blue px-3 py-1 rounded-full text-sm font-semibold">
-                    Notícias
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4 text-sm text-gray-500">
-                  <div className="flex items-center mr-4">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <span>15/01/2024</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                    </svg>
-                    <span>Admin ETPC</span>
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-etpc-blue transition-colors">
-                  ETPC inaugura novos laboratórios de tecnologia
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  A ETPC expande sua infraestrutura com laboratórios modernos equipados com as mais recentes tecnologias para proporcionar uma experiência de aprendizado ainda mais completa...
-                </p>
-                <a href="/noticias" className="text-etpc-blue font-semibold hover:text-etpc-blue-dark transition-colors inline-flex items-center">
-                  Ler mais <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </a>
-              </div>
-            </article>
-
-            {/* Card de Notícia 2 */}
-            <article className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
-              <div className="relative h-48 bg-gradient-to-br from-etpc-gold to-etpc-gold-dark">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <FaGraduationCap className="text-6xl mb-4 mx-auto opacity-80" />
-                    <p className="text-lg font-medium">Imagem da Notícia</p>
-                  </div>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 text-etpc-gold-dark px-3 py-1 rounded-full text-sm font-semibold">
-                    Eventos
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4 text-sm text-gray-500">
-                  <div className="flex items-center mr-4">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <span>12/01/2024</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                    </svg>
-                    <span>Admin ETPC</span>
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-etpc-blue transition-colors">
-                  Formatura 2024: Celebração do sucesso dos nossos alunos
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  Mais de 200 alunos se formaram nos cursos técnicos da ETPC, prontos para ingressar no mercado de trabalho com excelente qualificação...
-                </p>
-                <a href="/noticias" className="text-etpc-blue font-semibold hover:text-etpc-blue-dark transition-colors inline-flex items-center">
-                  Ler mais <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </a>
-              </div>
-            </article>
-
-            {/* Card de Notícia 3 */}
-            <article className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
-              <div className="relative h-48 bg-gradient-to-br from-etpc-blue-light to-etpc-blue">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <FaBriefcase className="text-6xl mb-4 mx-auto opacity-80" />
-                    <p className="text-lg font-medium">Imagem da Notícia</p>
-                  </div>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 text-etpc-blue px-3 py-1 rounded-full text-sm font-semibold">
-                    Parcerias
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4 text-sm text-gray-500">
-                  <div className="flex items-center mr-4">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <span>08/01/2024</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                    </svg>
-                    <span>Admin ETPC</span>
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-etpc-blue transition-colors">
-                  Nova parceria com empresas da região
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  ETPC firma parcerias estratégicas com empresas locais para oferecer estágios e oportunidades de emprego aos nossos alunos...
-                </p>
-                <a href="/noticias" className="text-etpc-blue font-semibold hover:text-etpc-blue-dark transition-colors inline-flex items-center">
-                  Ler mais <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </a>
-              </div>
-            </article>
-          </div>
-
-          <div className="text-center mt-12">
-            <a href="/noticias" className="inline-flex items-center bg-etpc-blue text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-etpc-blue-dark transition-all transform hover:scale-105">
-              Ver todas as notícias
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-etpc-blue to-etpc-blue-dark relative overflow-hidden">
@@ -817,6 +692,15 @@ export default function Home() {
       </section>
 
       <Footer />
+
+      {/* Image Modal */}
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        images={galleryPhotos}
+        currentIndex={currentImageIndex}
+        onNavigate={handleModalNavigate}
+      />
     </div>
   );
 }
