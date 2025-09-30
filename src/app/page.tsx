@@ -236,11 +236,11 @@ export default function Home() {
       <Header currentPage="/" />
 
       {/* Hero Section - Carrossel de Banners */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden pt-16">
         {/* Carrossel de Banners - Full Screen */}
-        <BannerCarousel 
-          banners={banners} 
-          autoPlay={true} 
+        <BannerCarousel
+          banners={banners}
+          autoPlay={true}
           interval={5000}
         />
 

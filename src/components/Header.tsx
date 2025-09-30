@@ -26,7 +26,7 @@ export default function Header({ currentPage }: HeaderProps) {
   };
 
   return (
-    <nav className={`w-full transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-2' : 'bg-slate-900/90 backdrop-blur-md py-3'} h-16`}>
+    <nav className={`fixed top-0 w-full transition-all duration-300 ${scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl py-2' : 'bg-slate-900/90 backdrop-blur-md py-3'} h-16 z-50`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-10">
           <div className="flex items-center">
@@ -97,9 +97,8 @@ export default function Header({ currentPage }: HeaderProps) {
         </div>
 
         {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden mt-4 bg-slate-900/95 backdrop-blur-md border-t border-white/20">
-            <div className="px-4 pt-2 pb-3 space-y-1">
+        <div className={`fixed top-16 left-0 right-0 lg:hidden bg-slate-900/98 backdrop-blur-md border-t border-white/20 shadow-2xl z-40 max-h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300 ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
+            <div className="px-4 pt-4 pb-6 space-y-1">
               <Link href="/quem-somos" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/quem-somos') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
                 Quem Somos
               </Link>
@@ -142,7 +141,6 @@ export default function Header({ currentPage }: HeaderProps) {
               </Link>
             </div>
           </div>
-        )}
       </div>
     </nav>
   );
