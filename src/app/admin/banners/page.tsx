@@ -134,8 +134,26 @@ export default function BannersAdmin() {
               <div className="flex items-start space-x-6">
                 {/* Image Preview */}
                 <div className="flex-shrink-0">
-                  <div className="w-40 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center border-2 border-blue-200">
-                    <FaImage className="text-blue-600 text-2xl" />
+                  <div className="w-40 h-24 bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
+                    {banner.image ? (
+                      <img
+                        src={banner.image}
+                        alt={banner.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center"><svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg></div>`;
+                          }
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                        <FaImage className="text-blue-600 text-2xl" />
+                      </div>
+                    )}
                   </div>
                 </div>
                 

@@ -15,7 +15,14 @@ interface Banner {
   description?: string;
   image: string;
   link?: string;
+  position?: string;
+  order?: number;
   active: boolean;
+  startDate?: string;
+  endDate?: string;
+  clicks?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface GalleryPhoto {
@@ -37,22 +44,51 @@ interface NewsArticle {
 
 export default function Home() {
   const [visibleSections, setVisibleSections] = useState(new Set());
-  const [banners, setBanners] = useState<Banner[]>([
-    {
-      id: '1',
-      title: 'Bem-vindo à ETPC',
-      subtitle: 'Escola Técnica da Fundação CSN',
-      description: 'Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.',
-      image: '/images/banners/banner-1.jpg',
-      link: '/cursos-tecnicos',
-      active: true
-    }
-  ]);
+  const [banners, setBanners] = useState<Banner[]>([]);
   const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [showAllGalleryPhotos, setShowAllGalleryPhotos] = useState(false);
 
   useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await fetch('/api/banners?position=homepage-carousel&active=true');
+        const data = await response.json();
+
+        if (response.ok && Array.isArray(data)) {
+          setBanners(data);
+        } else {
+          console.error('Erro ao buscar banners:', data);
+          // Fallback para banner padrão se a API falhar
+          setBanners([
+            {
+              id: '1',
+              title: 'Bem-vindo à ETPC',
+              subtitle: 'Escola Técnica da Fundação CSN',
+              description: 'Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.',
+              image: '/images/banners/banner-1.jpg',
+              link: '/cursos-tecnicos',
+              active: true
+            }
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+        // Fallback para banner padrão se a API falhar
+        setBanners([
+          {
+            id: '1',
+            title: 'Bem-vindo à ETPC',
+            subtitle: 'Escola Técnica da Fundação CSN',
+            description: 'Formação técnica de excelência que conecta você diretamente ao mercado de trabalho.',
+            image: '/images/banners/banner-1.jpg',
+            link: '/cursos-tecnicos',
+            active: true
+          }
+        ]);
+      }
+    };
+
     const fetchGalleryPhotos = async () => {
       try {
         const response = await fetch('/api/gallery?active=true');
@@ -115,6 +151,7 @@ export default function Home() {
       }
     };
 
+    fetchBanners();
     fetchGalleryPhotos();
   }, []);
 

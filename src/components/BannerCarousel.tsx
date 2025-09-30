@@ -80,7 +80,7 @@ export default function BannerCarousel({
   // Tela de loading
   if (isLoading) {
     return (
-      <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden flex items-center justify-center">
+      <div className="relative w-full h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden flex items-center justify-center">
         {/* Elementos decorativos */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
@@ -96,63 +96,41 @@ export default function BannerCarousel({
 
   if (activeBanners.length === 0) {
     return (
-      <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden">
-        {/* Elementos decorativos fixos */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
-        
-        {/* Elementos gráficos sutis */}
-        <div className="absolute top-20 right-20 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-32 right-40 w-24 h-24 bg-yellow-300/30 rounded-full blur-xl"></div>
-        <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
-        
-        {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-40 pb-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Seção de texto à esquerda */}
-              <div className="text-white space-y-8">
-                <div className="space-y-4">
-                  <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
-                    Preparando Profissionais para o Mercado de Trabalho
-                    <span className="block text-etpc-gold">Cursos técnicos</span>
-                    <span className="block">que unem teoria e prática para impulsionar sua carreira com <span className="text-etpc-gold">qualidade</span> e <span className="text-etpc-gold">inovação</span>.</span>
-                  </h1>
-                  
+      <div className="relative w-full h-[calc(100vh-4rem)] overflow-hidden">
+        {/* Imagem de fundo completa */}
+        <div className="absolute inset-0">
+          <Image
+            src="/sofundoComaluno.jfif"
+            alt="Banner ETPC com aluna"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {/* Texto sobreposto no lado esquerdo */}
+        <div className="relative z-10 h-full flex items-center py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-xl">
+              <div className="space-y-4 text-white">
+                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
+                  Bem-vindo à ETPC
+                </h1>
+
+                <div className="space-y-2 text-lg text-white/90 leading-relaxed">
+                  <p>Formação técnica de excelência que</p>
+                  <p>conecta você diretamente ao mercado</p>
+                  <p>de trabalho.</p>
                 </div>
 
                 {/* Botão CTA */}
-                <div className="pt-8">
+                <div className="pt-6">
                   <a 
                     href="/matriculas" 
-                     className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
+                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
                   >
-                    Comece sua jornada
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                    Comece sua jornada →
                   </a>
-                </div>
-              </div>
-
-              {/* Seção de imagem à direita */}
-              <div className="relative">
-                <div className="relative w-full h-96 lg:h-[500px] xl:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-etpc-blue/20 to-etpc-gold/20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <FaGraduationCap className="text-6xl text-white/80 mx-auto mb-4" />
-                      <p className="text-lg font-medium">Imagem do estudante</p>
-                      <p className="text-sm text-white/70">[Espaço para foto real]</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Emblema no canto superior direito */}
-                <div className="absolute -top-4 -right-4 bg-white rounded-full p-4 shadow-xl">
-                  <div className="w-16 h-16 bg-gradient-to-br from-etpc-blue to-etpc-gold rounded-full flex items-center justify-center">
-                    <FaGraduationCap className="text-2xl text-white" />
-                  </div>
                 </div>
               </div>
             </div>
@@ -165,67 +143,43 @@ export default function BannerCarousel({
   if (activeBanners.length === 1) {
     const banner = activeBanners[0];
     return (
-      <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden">
-        {/* Elementos decorativos fixos */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
-        
-        {/* Elementos gráficos sutis */}
-        <div className="absolute top-20 right-20 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-32 right-40 w-24 h-24 bg-yellow-300/30 rounded-full blur-xl"></div>
-        <div className="absolute top-1/2 right-10 w-16 h-16 bg-yellow-500/20 rounded-full blur-lg"></div>
-        
-        {/* Layout principal - Texto à esquerda, imagem à direita */}
-        <div className="relative z-10 h-full flex items-center justify-center pt-40 pb-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Seção de texto à esquerda */}
-              <div className="text-white space-y-8">
-                <div className="space-y-4">
-                  <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
-                    {banner.title}
-                  </h1>
-                  
-                  {banner.description && (
-                    <p className="text-lg text-white/90 leading-relaxed">
-                      {banner.description}
-                    </p>
-                  )}
-                  
-                </div>
+      <div className="relative w-full h-[calc(100vh-4rem)] overflow-hidden">
+        {/* Imagem de fundo completa */}
+        <div className="absolute inset-0">
+          <Image
+            src="/sofundoComaluno.jfif"
+            alt="Banner ETPC com aluna"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {/* Texto sobreposto no lado esquerdo */}
+        <div className="relative z-10 h-full flex items-center py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-xl">
+              <div className="space-y-4 text-white">
+                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
+                  {banner.title}
+                </h1>
+
+                {banner.description && (
+                  <div className="space-y-2 text-lg text-white/90 leading-relaxed">
+                    {banner.description.split('\n').map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
+                )}
 
                 {/* Botão CTA */}
-                <div className="pt-8">
+                <div className="pt-6">
                   <a 
                     href={banner.link || "/matriculas"} 
-                     className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
+                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
                   >
-                    Comece sua jornada
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                    Comece sua jornada →
                   </a>
-                </div>
-              </div>
-
-              {/* Seção de imagem à direita */}
-              <div className="relative">
-                <div className="relative w-full h-96 lg:h-[500px] xl:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-                  <Image
-                    src={banner.image}
-                    alt={banner.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-etpc-blue/20 to-etpc-gold/20"></div>
-                </div>
-                
-                {/* Emblema no canto superior direito */}
-                <div className="absolute -top-4 -right-4 bg-white rounded-full p-4 shadow-xl">
-                  <div className="w-16 h-16 bg-gradient-to-br from-etpc-blue to-etpc-gold rounded-full flex items-center justify-center">
-                    <FaGraduationCap className="text-2xl text-white" />
-                  </div>
                 </div>
               </div>
             </div>
@@ -236,68 +190,43 @@ export default function BannerCarousel({
   }
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden group">
-      {/* Elementos decorativos fixos */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
-      
-      {/* Layout principal - Texto à esquerda, imagem à direita */}
-      <div className="relative z-10 h-full flex items-center pt-40 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Seção de texto à esquerda */}
-            <div className="text-white space-y-6">
-              <div className="space-y-3">
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight transition-all duration-500">
-                  {activeBanners[currentIndex].title}
-                </h1>
-                
-                {activeBanners[currentIndex].description && (
-                  <p className="text-lg text-white/90 leading-relaxed transition-all duration-500">
-                    {activeBanners[currentIndex].description}
-                  </p>
-                )}
-                
-                <div className="flex items-center space-x-3 text-lg font-medium">
-                  <span className="text-etpc-gold font-bold">ETPC</span>
-                  <span>no ensino técnico.</span>
+    <div className="relative w-full h-[calc(100vh-4rem)] overflow-hidden group">
+      {/* Imagem de fundo completa */}
+      <div className="absolute inset-0">
+        <Image
+          src="/sofundoComaluno.jfif"
+          alt="Banner ETPC com aluna"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+
+      {/* Texto sobreposto no lado esquerdo */}
+      <div className="relative z-10 h-full flex items-center py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-xl">
+            <div className="space-y-4 text-white">
+              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight transition-all duration-500">
+                {activeBanners[currentIndex].title}
+              </h1>
+
+              {activeBanners[currentIndex].description && (
+                <div className="space-y-2 text-lg text-white/90 leading-relaxed transition-all duration-500">
+                  {activeBanners[currentIndex].description.split('\n').map((line, index) => (
+                    <p key={index}>{line}</p>
+                  ))}
                 </div>
-              </div>
+              )}
 
               {/* Botão CTA */}
-              <div className="pt-4">
+              <div className="pt-6">
                 <a 
                   href={activeBanners[currentIndex].link || "/matriculas"} 
-                  className="inline-flex items-center bg-gradient-to-r from-etpc-gold to-etpc-gold-dark text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-etpc-gold-dark hover:to-etpc-gold transition-all transform hover:scale-105 shadow-2xl hover:shadow-etpc-gold/25"
+                  className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
                 >
-                  Agende uma visita
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
+                  Comece sua jornada →
                 </a>
-              </div>
-            </div>
-
-            {/* Seção de imagem à direita */}
-            <div className="relative">
-              <div className="relative w-full h-96 lg:h-[500px] xl:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src={activeBanners[currentIndex].image}
-                  alt={activeBanners[currentIndex].title}
-                  fill
-                  className={`object-cover transition-all duration-500 ${
-                    isTransitioning ? 'scale-105 opacity-80' : 'scale-100 opacity-100'
-                  }`}
-                  priority={currentIndex === 0}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-etpc-blue/20 to-etpc-gold/20"></div>
-              </div>
-              
-              {/* Emblema no canto superior direito */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-full p-4 shadow-xl">
-                <div className="w-16 h-16 bg-gradient-to-br from-etpc-blue to-etpc-gold rounded-full flex items-center justify-center">
-                  <FaGraduationCap className="text-2xl text-white" />
-                </div>
               </div>
             </div>
           </div>

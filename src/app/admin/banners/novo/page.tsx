@@ -51,6 +51,13 @@ export default function NovoBanner() {
         }
       }
 
+      // Validar que tem uma imagem (do upload ou URL)
+      if (!imagePath) {
+        toast.error('Por favor, faça upload de uma imagem ou insira uma URL');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch('/api/banners', {
         method: 'POST',
         headers: {
@@ -189,18 +196,23 @@ export default function NovoBanner() {
                     Selecione uma imagem (JPG, PNG, WebP) - máximo 5MB
                   </p>
                 </div>
-                
+
                 {/* Ou URL manual */}
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Ou digite a URL da imagem:</label>
                   <input
-                    type="url"
+                    type="text"
                     name="image"
                     value={formData.image}
                     onChange={handleInputChange}
                     className="input-field"
                     placeholder="/images/banners/banner-1.jpg ou https://exemplo.com/imagem.jpg"
                   />
+                  {!formData.image && !imageFile && (
+                    <p className="text-sm text-red-600 mt-1">
+                      * Campo obrigatório - Faça upload ou insira uma URL
+                    </p>
+                  )}
                 </div>
 
                 {/* Preview da imagem */}
@@ -212,6 +224,9 @@ export default function NovoBanner() {
                         src={imagePreview || formData.image}
                         alt="Preview"
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23ddd"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="20" fill="%23999"%3EImagem não encontrada%3C/text%3E%3C/svg%3E';
+                        }}
                       />
                     </div>
                   </div>
