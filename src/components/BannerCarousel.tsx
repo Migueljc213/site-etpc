@@ -100,34 +100,37 @@ export default function BannerCarousel({
         {/* Imagem de fundo completa */}
         <div className="absolute inset-0">
           <Image
-            src="/sofundoComaluno.jfif"
+            src="/images/banner-background.jpg"
             alt="Banner ETPC com aluna"
             fill
-            className="object-cover"
+            className="object-cover md:object-center object-[75%_center]"
             priority
           />
         </div>
 
+        {/* Overlay gradiente para melhor leitura do texto em mobile */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent md:from-black/50 md:via-transparent md:to-transparent"></div>
+
         {/* Texto sobreposto no lado esquerdo */}
-        <div className="relative z-10 h-full flex items-center py-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-xl">
+        <div className="relative z-10 h-full flex items-center py-8 md:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-xl lg:max-w-2xl">
               <div className="space-y-4 text-white">
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
                   Bem-vindo à ETPC
                 </h1>
 
-                <div className="space-y-2 text-lg text-white/90 leading-relaxed">
+                <div className="space-y-1 text-base sm:text-lg text-white/90 leading-relaxed">
                   <p>Formação técnica de excelência que</p>
                   <p>conecta você diretamente ao mercado</p>
                   <p>de trabalho.</p>
                 </div>
 
                 {/* Botão CTA */}
-                <div className="pt-6">
+                <div className="pt-4 md:pt-6">
                   <a 
                     href="/matriculas" 
-                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
+                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
                   >
                     Comece sua jornada →
                   </a>
@@ -147,25 +150,28 @@ export default function BannerCarousel({
         {/* Imagem de fundo completa */}
         <div className="absolute inset-0">
           <Image
-            src="/sofundoComaluno.jfif"
+            src="/images/banner-background.jpg"
             alt="Banner ETPC com aluna"
             fill
-            className="object-cover"
+            className="object-cover md:object-center object-[75%_center]"
             priority
           />
         </div>
 
+        {/* Overlay gradiente para melhor leitura do texto em mobile */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent md:from-black/50 md:via-transparent md:to-transparent"></div>
+
         {/* Texto sobreposto no lado esquerdo */}
-        <div className="relative z-10 h-full flex items-center py-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-xl">
+        <div className="relative z-10 h-full flex items-center py-8 md:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-xl lg:max-w-2xl">
               <div className="space-y-4 text-white">
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight">
                   {banner.title}
                 </h1>
 
                 {banner.description && (
-                  <div className="space-y-2 text-lg text-white/90 leading-relaxed">
+                  <div className="space-y-1 text-base sm:text-lg text-white/90 leading-relaxed">
                     {banner.description.split('\n').map((line, index) => (
                       <p key={index}>{line}</p>
                     ))}
@@ -173,10 +179,10 @@ export default function BannerCarousel({
                 )}
 
                 {/* Botão CTA */}
-                <div className="pt-6">
+                <div className="pt-4 md:pt-6">
                   <a 
                     href={banner.link || "/matriculas"} 
-                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
+                    className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-400/25"
                   >
                     Comece sua jornada →
                   </a>
@@ -194,18 +200,21 @@ export default function BannerCarousel({
       {/* Imagem de fundo completa */}
       <div className="absolute inset-0">
         <Image
-          src="/sofundoComaluno.jfif"
+          src="/images/banner-background.jpg"
           alt="Banner ETPC com aluna"
           fill
-          className="object-cover"
+          className="object-cover md:object-center object-[75%_center]"
           priority
         />
       </div>
 
+      {/* Overlay gradiente para melhor leitura do texto em mobile */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent md:from-black/50 md:via-transparent md:to-transparent"></div>
+
       {/* Texto sobreposto no lado esquerdo */}
-      <div className="relative z-10 h-full flex items-center py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-xl">
+      <div className="relative z-10 h-full flex items-center py-8 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-xl lg:max-w-2xl">
             <div className="space-y-4 text-white">
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold font-poppins leading-tight transition-all duration-500">
                 {activeBanners[currentIndex].title}
