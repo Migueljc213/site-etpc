@@ -5,16 +5,23 @@ import { useRouter } from 'next/navigation';
 import { FaCreditCard, FaBarcode, FaQrcode, FaShoppingCart, FaLock } from 'react-icons/fa';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Toast from '@/components/Toast';
 import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
 
 type PaymentMethod = 'credit_card' | 'debit_card' | 'pix' | 'boleto';
+
+interface ToastState {
+  message: string;
+  type: 'success' | 'error' | 'info' | 'warning';
+}
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getCartTotal, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix');
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   // Form states
   const [customerData, setCustomerData] = useState({
@@ -38,12 +45,43 @@ export default function CheckoutPage() {
     }).format(price);
   };
 
+  const showToast = (message: string, type: 'success' | 'error' | 'info' | 'warning') => {
+    setToast({ message, type });
+  };
+
+  const validateCardDate = (expiry: string): boolean => {
+    if (!expiry || expiry.length !== 5) return false;
+    
+    const [month, year] = expiry.split('/');
+    const monthNum = parseInt(month);
+    const yearNum = parseInt(`20${year}`);
+    
+    if (monthNum < 1 || monthNum > 12) return false;
+    
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    if (yearNum < currentYear) return false;
+    if (yearNum === currentYear && monthNum < currentMonth) return false;
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (items.length === 0) {
-      alert('Carrinho vazio');
+      showToast('Carrinho vazio', 'error');
       return;
+    }
+
+    // Validar cartão se método for crédito ou débito
+    if ((paymentMethod === 'credit_card' || paymentMethod === 'debit_card') && cardData) {
+      if (!validateCardDate(cardData.expiry)) {
+        showToast('Data de validade inválida. Use o formato MM/AA', 'error');
+        return;
+      }
     }
 
     setLoading(true);
@@ -96,9 +134,11 @@ export default function CheckoutPage() {
       }
 
       clearCart();
-    } catch (error) {
+      showToast('Pedido criado com sucesso!', 'success');
+    } catch (error: any) {
       console.error('Error:', error);
-      alert('Erro ao processar pagamento. Tente novamente.');
+      const message = error?.message || 'Erro ao processar pagamento. Tente novamente.';
+      showToast(message, 'error');
     } finally {
       setLoading(false);
     }
@@ -145,7 +185,7 @@ export default function CheckoutPage() {
                       required
                       value={customerData.name}
                       onChange={(e) => setCustomerData({...customerData, name: e.target.value})}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
                   <div>
@@ -155,7 +195,7 @@ export default function CheckoutPage() {
                       required
                       value={customerData.email}
                       onChange={(e) => setCustomerData({...customerData, email: e.target.value})}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
                   <div>
@@ -166,7 +206,7 @@ export default function CheckoutPage() {
                       value={customerData.phone}
                       onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
                       placeholder="(00) 00000-0000"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -177,7 +217,7 @@ export default function CheckoutPage() {
                       value={customerData.cpf}
                       onChange={(e) => setCustomerData({...customerData, cpf: e.target.value})}
                       placeholder="000.000.000-00"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
                 </div>
@@ -204,8 +244,8 @@ export default function CheckoutPage() {
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <method.icon className="text-2xl mx-auto mb-2" />
-                      <div className="text-sm font-medium">{method.label}</div>
+                      <method.icon className={`text-2xl mx-auto mb-2 ${paymentMethod === method.value ? 'text-etpc-blue' : 'text-gray-700'}`} />
+                      <div className={`text-sm font-medium ${paymentMethod === method.value ? 'text-etpc-blue' : 'text-gray-900'}`}>{method.label}</div>
                     </button>
                   ))}
                 </div>
@@ -221,7 +261,7 @@ export default function CheckoutPage() {
                         value={cardData.number}
                         onChange={(e) => setCardData({...cardData, number: e.target.value})}
                         placeholder="0000 0000 0000 0000"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                       />
                     </div>
                     <div>
@@ -231,7 +271,7 @@ export default function CheckoutPage() {
                         required
                         value={cardData.holder}
                         onChange={(e) => setCardData({...cardData, holder: e.target.value})}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -241,9 +281,16 @@ export default function CheckoutPage() {
                           type="text"
                           required
                           value={cardData.expiry}
-                          onChange={(e) => setCardData({...cardData, expiry: e.target.value})}
+                          onChange={(e) => {
+                            let value = e.target.value.replace(/\D/g, '');
+                            if (value.length >= 2) {
+                              value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                            }
+                            setCardData({...cardData, expiry: value});
+                          }}
                           placeholder="MM/AA"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                          maxLength={5}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                         />
                       </div>
                       <div>
@@ -254,7 +301,7 @@ export default function CheckoutPage() {
                           value={cardData.cvv}
                           onChange={(e) => setCardData({...cardData, cvv: e.target.value})}
                           placeholder="000"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                         />
                       </div>
                     </div>
@@ -317,6 +364,15 @@ export default function CheckoutPage() {
       </div>
 
       <Footer />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

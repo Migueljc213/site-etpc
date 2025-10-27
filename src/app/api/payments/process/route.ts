@@ -94,7 +94,9 @@ export async function POST(request: NextRequest) {
       };
 
     } else if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
-      // Pagamento Cartão
+      // Pagamento Cartão - Formato correto da API v1 do Mercado Pago
+      const [month, year] = cardData.expiry.split('/');
+      
       response = await paymentInstance.create({
         body: {
           transaction_amount: Number(order.total),
@@ -103,18 +105,22 @@ export async function POST(request: NextRequest) {
           installments: 1,
           payer: {
             email: customerData.email,
+            first_name: customerData.name.split(' ')[0],
+            last_name: customerData.name.split(' ').slice(1).join(' ') || customerData.name.split(' ')[0],
             identification: {
               type: 'CPF',
               number: customerData.cpf.replace(/[^\d]/g, '')
             }
           },
+          // Dados do cartão
           card: {
             card_number: cardData.number.replace(/\s/g, ''),
             cardholder_name: cardData.holder,
-            card_expiration_month: cardData.expiry.split('/')[0],
-            card_expiration_year: `20${cardData.expiry.split('/')[1]}`,
+            card_expiration_month: parseInt(month),
+            card_expiration_year: parseInt(`20${year}`),
             security_code: cardData.cvv
-          }
+          },
+          statement_descriptor: 'ETPC CURSOS'
         }
       });
 
@@ -190,15 +196,19 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
       paymentMethod: paymentData.paymentMethod,
       amount: paymentData.amount,
       status: paymentData.status,
-      mercadoPagoPaymentId: paymentData.mercadoPagoPaymentId || null,
-      pixQrCode: paymentData.pixQrCode || null,
-      pixQrCodeText: paymentData.pixQrCodeText || null,
-      pixExpiresAt: paymentData.pixExpiresAt || null,
-      boletoBarcode: paymentData.boletoBarcode || null,
-      boletoPdf: paymentData.boletoPdf || null,
-      boletoExpiresAt: paymentData.boletoExpiresAt || null,
-      cardBrand: paymentData.cardBrand || null,
-      cardLastDigits: paymentData.cardLastDigits || null
+      // Mercado Pago ID
+      ...(paymentData.mercadoPagoPaymentId && { mercadoPagoPaymentId: paymentData.mercadoPagoPaymentId }),
+      // PIX data
+      ...(paymentData.pixQrCode && { pixQrCode: paymentData.pixQrCode }),
+      ...(paymentData.pixQrCodeText && { pixQrCodeText: paymentData.pixQrCodeText }),
+      ...(paymentData.pixExpiresAt && { pixExpiresAt: paymentData.pixExpiresAt }),
+      // Boleto data
+      ...(paymentData.boletoBarcode && { boletoBarcode: paymentData.boletoBarcode }),
+      ...(paymentData.boletoPdf && { boletoPdf: paymentData.boletoPdf }),
+      ...(paymentData.boletoExpiresAt && { boletoExpiresAt: paymentData.boletoExpiresAt }),
+      // Card data
+      ...(paymentData.cardBrand && { cardBrand: paymentData.cardBrand }),
+      ...(paymentData.cardLastDigits && { cardLastDigits: paymentData.cardLastDigits })
     }
   });
 

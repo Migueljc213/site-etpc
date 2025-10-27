@@ -32,11 +32,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-[210] transform transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-screen w-full md:w-96 bg-white shadow-2xl z-[210] transform transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex flex-col h-full bg-white">
+        <div className="flex flex-col h-screen bg-white">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
@@ -54,7 +54,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 pb-24">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-500">
                 <FaShoppingCart size={64} className="mb-4 text-gray-300" />
@@ -68,10 +68,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   return (
                     <div
                       key={item.id}
-                      className="flex gap-4 p-4 bg-gray-50 rounded-lg"
+                      className="flex gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       {/* Image */}
-                      <div className="relative w-20 h-20 flex-shrink-0">
+                      <div className="relative w-24 h-24 flex-shrink-0">
                         {item.image ? (
                           <Image
                             src={item.image}
@@ -88,10 +88,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                       {/* Details */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2">
+                        <h3 className="font-semibold text-gray-900 text-base line-clamp-2">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className="text-sm text-gray-600 mt-1">
                           {item.instructor}
                         </p>
 
@@ -107,30 +107,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             </span>
                           </div>
 
-                          {/* Quantity Controls */}
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                            >
-                              -
-                            </button>
-                            <span className="w-8 text-center font-medium">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                            >
-                              +
-                            </button>
-                            <button
-                              onClick={() => removeFromCart(item.id)}
-                              className="ml-2 text-red-500 hover:text-red-700 transition-colors"
-                            >
-                              <FaTrash size={14} />
-                            </button>
-                          </div>
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="text-red-500 hover:text-red-700 transition-colors p-2 rounded hover:bg-red-50"
+                            title="Remover do carrinho"
+                          >
+                            <FaTrash size={16} />
+                          </button>
                         </div>
                       </div>
                     </div>

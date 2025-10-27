@@ -346,12 +346,6 @@ Consulte as tabelas:
 
 ## ⚠️ Importante
 
-- **NÃO commite** o arquivo `.env` no Git
-- Use **diferentes tokens** para testes e produção
-- **Valide** sempre os webhooks por segurança
-- **Teste** extensivamente no ambiente de testes antes de produção
-- Mercado Pago aceita apenas pagamentos em Real Brasileiro (BRL)
-
 ## 📝 Checklist Final
 
 - [ ] Conta criada no Mercado Pago

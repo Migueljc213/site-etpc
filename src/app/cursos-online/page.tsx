@@ -151,20 +151,20 @@ export default function CursosOnlinePage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue bg-white text-gray-900 font-medium"
               >
                 {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  <option key={cat.value} value={cat.value} className="text-gray-900">{cat.label}</option>
                 ))}
               </select>
 
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue bg-white text-gray-900 font-medium"
               >
                 {levels.map(level => (
-                  <option key={level.value} value={level.value}>{level.label}</option>
+                  <option key={level.value} value={level.value} className="text-gray-900">{level.label}</option>
                 ))}
               </select>
             </div>
@@ -176,20 +176,20 @@ export default function CursosOnlinePage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue bg-white text-gray-900 font-medium"
               >
                 {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  <option key={cat.value} value={cat.value} className="text-gray-900">{cat.label}</option>
                 ))}
               </select>
 
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue bg-white text-gray-900 font-medium"
               >
                 {levels.map(level => (
-                  <option key={level.value} value={level.value}>{level.label}</option>
+                  <option key={level.value} value={level.value} className="text-gray-900">{level.label}</option>
                 ))}
               </select>
             </div>
