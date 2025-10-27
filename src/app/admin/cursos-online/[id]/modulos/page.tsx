@@ -188,7 +188,7 @@ export default function ModulosPage() {
         {/* Formulário de Módulo */}
         {showModuleForm && (
           <form onSubmit={handleCreateModule} className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-bold mb-4">Novo Módulo</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Novo Módulo</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -199,7 +199,7 @@ export default function ModulosPage() {
                   required
                   value={moduleData.title}
                   onChange={(e) => setModuleData({ ...moduleData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
                 />
               </div>
               <div>
@@ -211,7 +211,7 @@ export default function ModulosPage() {
                   required
                   value={moduleData.order}
                   onChange={(e) => setModuleData({ ...moduleData, order: parseInt(e.target.value) })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
                 />
               </div>
               <div className="md:col-span-2">
@@ -222,7 +222,7 @@ export default function ModulosPage() {
                   value={moduleData.description}
                   onChange={(e) => setModuleData({ ...moduleData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
                 />
               </div>
             </div>
@@ -312,7 +312,7 @@ export default function ModulosPage() {
                             required
                             value={lessonData.title}
                             onChange={(e) => setLessonData({ ...lessonData, title: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"
                           />
                         </div>
                         <div>
@@ -324,7 +324,7 @@ export default function ModulosPage() {
                             required
                             value={lessonData.videoUrl}
                             onChange={(e) => setLessonData({ ...lessonData, videoUrl: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"
                           />
                         </div>
                         <div>
@@ -336,7 +336,7 @@ export default function ModulosPage() {
                             required
                             value={lessonData.duration}
                             onChange={(e) => setLessonData({ ...lessonData, duration: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"
                           />
                         </div>
                         <div>
@@ -348,7 +348,7 @@ export default function ModulosPage() {
                             required
                             value={lessonData.order}
                             onChange={(e) => setLessonData({ ...lessonData, order: parseInt(e.target.value) })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"
                           />
                         </div>
                         <div className="md:col-span-2">
@@ -359,7 +359,7 @@ export default function ModulosPage() {
                             value={lessonData.description}
                             onChange={(e) => setLessonData({ ...lessonData, description: e.target.value })}
                             rows={2}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900"
                           />
                         </div>
                       </div>

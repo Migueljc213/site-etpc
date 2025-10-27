@@ -109,7 +109,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="Ex: Desenvolvimento Web Completo com React"
               />
             </div>
@@ -123,7 +123,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.shortDescription}
                 onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="Resumo em uma linha"
               />
             </div>
@@ -137,7 +137,7 @@ export default function NovoCursoOnline() {
                 rows={6}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="Descrição detalhada do curso..."
               />
             </div>
@@ -151,7 +151,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.instructor}
                 onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="Nome do instrutor"
               />
             </div>
@@ -165,7 +165,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.duration}
                 onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="Ex: 40 horas"
               />
             </div>
@@ -178,7 +178,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
               >
                 <option value="programacao">Programação</option>
                 <option value="design">Design</option>
@@ -197,7 +197,7 @@ export default function NovoCursoOnline() {
                 required
                 value={formData.level}
                 onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
               >
                 <option value="iniciante">Iniciante</option>
                 <option value="intermediario">Intermediário</option>
@@ -223,7 +223,7 @@ export default function NovoCursoOnline() {
                 min="0"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="0.00"
               />
             </div>
@@ -238,7 +238,7 @@ export default function NovoCursoOnline() {
                 min="0"
                 value={formData.discountPrice}
                 onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="0.00 (opcional)"
               />
             </div>
@@ -277,7 +277,7 @@ export default function NovoCursoOnline() {
                   type="text"
                   value={topic}
                   onChange={(e) => handleTopicChange(index, e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                   placeholder={`Tópico ${index + 1}`}
                 />
                 {formData.whatYouWillLearn.length > 1 && (
