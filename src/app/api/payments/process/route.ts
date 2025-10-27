@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
         mercadoPagoPaymentId: String(response.id),
         pixQrCode: response.point_of_interaction?.transaction_data?.qr_code_base64,
         pixQrCodeText: response.point_of_interaction?.transaction_data?.qr_code,
-        pixExpiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutos
+        pixExpiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutos
+        status: 'pending' // PIX fica pendente até confirmação via webhook
       };
 
     } else if (paymentMethod === 'boleto') {
@@ -94,7 +95,8 @@ export async function POST(request: NextRequest) {
         mercadoPagoPaymentId: String(response.id),
         boletoBarcode: charge?.data?.barcode,
         boletoPdf: charge?.data?.external_resource_url,
-        boletoExpiresAt: new Date(response.date_of_expiration)
+        boletoExpiresAt: new Date(response.date_of_expiration),
+        status: 'pending' // Boleto fica pendente até confirmação via webhook
       };
 
     } else if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
@@ -143,13 +145,22 @@ function detectCardBrand(cardNumber: string): string {
 
 // Função para salvar pagamento e atualizar pedido
 async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
-  // Criar registro de pagamento usando campos básicos
-  // NOTA: Prisma Client precisa ser regenerado para reconhecer mercadoPagoPaymentId
+  // Criar registro de pagamento usando campos básicos e extras
   const paymentDataToSave: any = {
     orderId: order.id,
     paymentMethod: paymentData.paymentMethod,
     amount: paymentData.amount,
     status: paymentData.status,
+    // Adicionar campos extras diretamente (se existirem)
+    ...(paymentData.pixQrCode && { pixQrCode: paymentData.pixQrCode }),
+    ...(paymentData.pixQrCodeText && { pixQrCodeText: paymentData.pixQrCodeText }),
+    ...(paymentData.pixExpiresAt && { pixExpiresAt: paymentData.pixExpiresAt }),
+    ...(paymentData.boletoBarcode && { boletoBarcode: paymentData.boletoBarcode }),
+    ...(paymentData.boletoPdf && { boletoPdf: paymentData.boletoPdf }),
+    ...(paymentData.boletoExpiresAt && { boletoExpiresAt: paymentData.boletoExpiresAt }),
+    ...(paymentData.cardBrand && { cardBrand: paymentData.cardBrand }),
+    ...(paymentData.cardLastDigits && { cardLastDigits: paymentData.cardLastDigits }),
+    // Salvar também no webhookData para backup
     webhookData: JSON.stringify({
       mercadoPagoPaymentId: paymentData.mercadoPagoPaymentId,
       pixQrCode: paymentData.pixQrCode,

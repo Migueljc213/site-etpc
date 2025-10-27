@@ -125,12 +125,24 @@ export default function CheckoutPage() {
       const payment = await paymentResponse.json();
 
       // 3. Redirecionar conforme método
-      if (paymentMethod === 'pix' && payment.pixQrCode) {
-        router.push(`/payment/pix/${order.id}`);
-      } else if (paymentMethod === 'boleto' && payment.boletoPdf) {
-        router.push(`/payment/boleto/${order.id}`);
+      // Só redireciona para sucesso se o pagamento já está aprovado
+      if (payment.status === 'paid' || payment.status === 'approved') {
+        if (paymentMethod === 'pix' && payment.pixQrCode) {
+          router.push(`/payment/pix/${order.id}`);
+        } else if (paymentMethod === 'boleto' && payment.boletoPdf) {
+          router.push(`/payment/boleto/${order.id}`);
+        } else {
+          router.push(`/payment/success/${order.id}`);
+        }
       } else {
-        router.push(`/payment/success/${order.id}`);
+        // Pagamento pendente - redireciona para página apropriada
+        if (paymentMethod === 'pix') {
+          router.push(`/payment/pix/${order.id}`);
+        } else if (paymentMethod === 'boleto') {
+          router.push(`/payment/boleto/${order.id}`);
+        } else {
+          router.push(`/payment/success/${order.id}`);
+        }
       }
 
       clearCart();
