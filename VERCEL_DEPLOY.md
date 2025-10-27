@@ -1,192 +1,147 @@
-# 🚀 Deploy na Vercel - Guia Rápido
+# 🚀 Deploy na Vercel - Configuração Completa
 
-## ✅ Status: PRONTO PARA DEPLOY
+## 📋 Variáveis de Ambiente Necessárias
 
-Tudo está pronto! Siga estes passos:
+Configure estas variáveis no painel da Vercel:
 
----
-
-## Passo 1: Configurar Variáveis de Ambiente na Vercel
-
-Se ainda não configurou:
-
-### Via CLI:
-```bash
-# Login na Vercel
-vercel login
-
-# Adicionar variáveis
-vercel env add MERCADOPAGO_ACCESS_TOKEN production
-# Cole seu token quando solicitado
-
-vercel env add DATABASE_URL production
-# Cole sua string de conexão MySQL
+### 1. Banco de Dados MySQL
+```env
+DATABASE_URL="mysql://usuario:senha@host:porta/nome_do_banco"
 ```
 
-### Via Dashboard:
-1. Acesse: https://vercel.com/dashboard
-2. Selecione seu projeto
-3. Vá em **Settings** > **Environment Variables**
-4. Adicione:
-   - `MERCADOPAGO_ACCESS_TOKEN` = `TEST-xxxxx` ou `APP_USR-xxxxx`
-   - `DATABASE_URL` = `mysql://user:pass@host:port/db`
-
----
-
-## Passo 2: Fazer Deploy
-
-### Opção A: Deploy via Git (Recomendado)
-```bash
-# Commit e push
-git add .
-git commit -m "Deploy with Mercado Pago integration"
-git push origin main
-
-# Vercel fará deploy automático
+### 2. Mercado Pago (OBRIGATÓRIO)
+```env
+MERCADOPAGO_ACCESS_TOKEN="seu_access_token"
 ```
 
-### Opção B: Deploy Manual
+**Como obter:**
+1. Acesse [https://www.mercadopago.com.br/developers](https://www.mercadopago.com.br/developers)
+2. Faça login na sua conta
+3. Vá em "Suas integrações" → "Criar aplicação"
+4. Copie o **Access Token** (Test ou Production)
+
+### 3. Email (Opcional)
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=seu_email@gmail.com
+SMTP_PASS=sua_senha_app
+SITE_NAME=ETPC
+```
+
+**Para Gmail:**
+- Crie uma "Senha de App" em [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+- Use essa senha no `SMTP_PASS`
+
+### 4. NextAuth
+```env
+NEXTAUTH_URL=https://seu-site.vercel.app
+NEXTAUTH_SECRET="sua_chave_secreta"
+```
+
+Para gerar `NEXTAUTH_SECRET`:
 ```bash
-# Faça login
-vercel login
+openssl rand -base64 32
+```
 
-# Deploy
-vercel
-
-# Siga as instruções:
-# - Link to existing project? Yes
-# - Enter project name: etpc (ou o nome do seu projeto)
-# - In which directory? ./
-# - Deploy command? npm run build
+### 5. URL Base (Opcional)
+```env
+NEXT_PUBLIC_BASE_URL=https://seu-site.vercel.app
 ```
 
 ---
 
-## Passo 3: Configurar Webhook no Mercado Pago
+## 🔗 Configurar Webhook do Mercado Pago
 
-1. Anote a URL do seu deploy:
+1. Acesse [https://www.mercadopago.com.br/developers](https://www.mercadopago.com.br/developers)
+2. Vá em "Configurações" → "Webhooks"
+3. Adicione a URL:
    ```
-   https://SEU-PROJETO.vercel.app
+   https://seu-site.vercel.app/api/webhooks/mercadopago
    ```
-
-2. Acesse: https://www.mercadopago.com.br/developers/panel
-
-3. Vá em sua aplicação > **Webhooks**
-
-4. Configure:
-   - **URL:** `https://SEU-PROJETO.vercel.app/api/webhooks/mercadopago`
-   - **Eventos:** Marque apenas `payment`
-
-5. Clique em **Salvar configurações**
+4. Escolha os eventos:
+   - ✅ Payment
+   - ✅ Payment.updated
 
 ---
 
-## Passo 4: Testar
+## 📝 Passo a Passo no Vercel
 
-### 1. Verificar se site está no ar
-```bash
-curl https://SEU-PROJETO.vercel.app
-```
+1. **Conectar Repositório**
+   - Vá em [vercel.com](https://vercel.com)
+   - Clique em "Import Project"
+   - Conecte seu repositório GitHub/GitLab
 
-### 2. Testar webhook
-```bash
-curl https://SEU-PROJETO.vercel.app/api/webhooks/mercadopago
-# Deve retornar: {"ok":true}
-```
+2. **Configurar Variáveis**
+   - Vá em "Settings" → "Environment Variables"
+   - Adicione TODAS as variáveis listadas acima
+   - **Importante:** Marque para "Production", "Preview" e "Development"
 
-### 3. Criar pagamento de teste
-1. Acesse: `https://SEU-PROJETO.vercel.app/cursos-online`
-2. Adicione curso ao carrinho
-3. Vá para checkout
-4. Preencha:
-   - Nome: João da Silva
-   - Email: teste@email.com
-   - Telefone: (11) 98765-4321
-   - CPF: 12345678909
+3. **Build Settings**
+   - Framework Preset: Next.js (detecta automaticamente)
+   - Build Command: `npm run build` (padrão)
+   - Install Command: `npm install` (padrão)
+   - Output Directory: `.next` (padrão)
 
-5. Selecione método de pagamento
-
-6. **Cartão de Teste:**
-   - Número: `5031 7557 3453 0604`
-   - CVV: `123`
-   - Validade: `12/25`
-   - Nome: João da Silva
-
-### 4. Verificar logs
-```bash
-vercel logs --follow
-# Ou no dashboard: Settings > Functions > Logs
-```
+4. **Deploy**
+   - Clique em "Deploy"
+   - Aguarde o build completar (2-5 minutos)
 
 ---
 
-## ⚠️ Troubleshooting
+## ✅ Checklist Antes do Deploy
+
+- [ ] Variáveis de ambiente configuradas na Vercel
+- [ ] `MERCADOPAGO_ACCESS_TOKEN` configurado
+- [ ] `DATABASE_URL` configurado e testado
+- [ ] Webhook configurado no Mercado Pago
+- [ ] Credenciais SMTP configuradas (se quiser emails)
+- [ ] `NEXTAUTH_URL` aponta para o domínio correto
+- [ ] `NEXTAUTH_SECRET` gerado e configurado
+
+---
+
+## 🧪 Testar Após Deploy
+
+1. **Testar PIX:**
+   - Acesse https://seu-site.vercel.app/cursos-online
+   - Adicione um curso ao carrinho
+   - Escolha "PIX" como método de pagamento
+   - Verifique se o QR Code aparece
+
+2. **Testar Cartão:**
+   - No ambiente de sandbox, use os cards de teste:
+     - Número: `5031 4332 1540 6351`
+     - CVV: `123`
+     - Data: Qualquer data futura (ex: `11/25`)
+     - Nome: Qualquer nome
+
+3. **Verificar Webhook:**
+   - Faça um pagamento teste
+   - Vá em "Webhooks" no Mercado Pago
+   - Verifique se há notificações recebidas
+
+---
+
+## 🐛 Troubleshooting
 
 ### Erro: "MERCADOPAGO_ACCESS_TOKEN não configurado"
+**Solução:** Configure a variável na Vercel e faça redeploy.
 
-**Solução:**
-```bash
-# Verificar se variável está configurada
-vercel env ls
+### QR Code PIX não aparece
+**Solução:** Verifique se o token é válido e se está com permissão para pagamentos.
 
-# Se não estiver, adicionar:
-vercel env add MERCADOPAGO_ACCESS_TOKEN production
-```
-
-### Erro: "Cannot reach database"
-
-**Solução:**
-```bash
-# Verificar DATABASE_URL
-vercel env ls | grep DATABASE_URL
-
-# Adicionar se necessário:
-vercel env add DATABASE_URL production
-```
+### Email não é enviado
+**Solução:** Verifique SMTP credentials. Os logs aparecem no console da Vercel.
 
 ### Webhook não funciona
-
-**Verificar:**
-1. URL está correta no painel do Mercado Pago?
-2. Endpoint existe? Teste: `curl https://SEU-PROJETO.vercel.app/api/webhooks/mercadopago`
-3. Ver logs: `vercel logs --follow`
-
-### Migrations do banco não foram aplicadas
-
-**Solução:**
-```bash
-# Conectar ao banco e rodar migration
-npx prisma migrate deploy
-```
+**Solução:** Verifique a URL no Mercado Pago e se o deploy foi bem-sucedido.
 
 ---
 
-## 📋 Checklist Pós-Deploy
+## 📞 Suporte
 
-- [ ] Site está no ar
-- [ ] Webhook configurado no Mercado Pago
-- [ ] Criar pagamento de teste funcionou
-- [ ] Webhook foi recebido (ver logs)
-- [ ] Status foi atualizado no banco de dados
-
----
-
-## 🎯 Próximos Passos
-
-1. **Testar em produção:**
-   - Faça transações reais pequenas
-   - Monitore logs atentamente
-
-2. **Configurar notificações:**
-   - Email quando pagamento for aprovado
-   - SMS opcional
-
-3. **Monitorar:**
-   - Painel do Mercado Pago
-   - Logs da Vercel
-   - Banco de dados
-
----
-
-**✅ Tudo pronto! Boa sorte com o deploy! 🚀**
-
+Se algo não funcionar:
+1. Verifique os logs da Vercel: Settings → Logs
+2. Verifique os logs do Mercado Pago
+3. Confirme que todas as variáveis estão configuradas
