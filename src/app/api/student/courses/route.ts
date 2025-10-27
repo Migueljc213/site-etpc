@@ -38,18 +38,29 @@ export async function GET(request: NextRequest) {
       enrollments.map(async (enrollment) => {
         const courseId = enrollment.courseId;
         
-        // Buscar todas as aulas do curso
-        const modules = await prisma.courseModule.findMany({
-          where: { 
-            courseId: enrollment.course.id 
-          },
-          include: {
-            onlineLessons: true
-          }
+        // Buscar módulos e aulas do curso
+        // Primeiro, buscar o Course correspondente ao OnlineCourse
+        const course = await prisma.course.findFirst({
+          where: { slug: enrollment.course.slug }
         });
+        
+        let modules = [];
+        let allLessons = [];
+        
+        if (course) {
+          modules = await prisma.courseModule.findMany({
+            where: { 
+              courseId: course.id 
+            },
+            include: {
+              onlineLessons: true
+            }
+          });
+          
+          allLessons = modules.flatMap(m => m.onlineLessons);
+        }
 
-        const allLessons = modules.flatMap(m => m.onlineLessons);
-        const totalMinutes = allLessons.reduce((sum, lesson) => sum + lesson.duration, 0);
+        const totalMinutes = allLessons.length > 0 ? allLessons.reduce((sum, lesson) => sum + lesson.duration, 0) : 0;
 
         // Buscar progresso do aluno
         const progressData = await prisma.studentProgress.findMany({

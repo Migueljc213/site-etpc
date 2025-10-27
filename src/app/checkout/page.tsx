@@ -49,6 +49,27 @@ export default function CheckoutPage() {
     setToast({ message, type });
   };
 
+  // Máscaras
+  const maskCPF = (value: string) => {
+    const cpf = value.replace(/\D/g, '');
+    if (cpf.length <= 11) {
+      return cpf.replace(/(\d{3})(\d)/, '$1.$2')
+                 .replace(/(\d{3})(\d)/, '$1.$2')
+                 .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+    return value;
+  };
+
+  const maskPhone = (value: string) => {
+    const phone = value.replace(/\D/g, '');
+    if (phone.length <= 11) {
+      return phone.replace(/(\d{2})(\d)/, '($1) $2')
+                   .replace(/(\d{4})(\d)/, '$1-$2')
+                   .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3');
+    }
+    return value;
+  };
+
   const validateCardDate = (expiry: string): boolean => {
     if (!expiry || expiry.length !== 5) return false;
     
@@ -127,29 +148,21 @@ export default function CheckoutPage() {
       // Limpar carrinho ANTES do redirecionamento para evitar o frame vazio
       clearCart();
       
-      // Preparar URL de redirecionamento
+      // Preparar URL de redirecionamento baseado no método de pagamento
+      // SEMPRE redireciona para página de pagamento pendente, não para "aprovado"
+      // A confirmação real só vem do webhook
       let redirectUrl = '';
       
-      if (payment.status === 'paid' || payment.status === 'approved') {
-        if (paymentMethod === 'pix' && payment.pixQrCode) {
-          redirectUrl = `/payment/pix/${order.id}`;
-        } else if (paymentMethod === 'boleto' && payment.boletoPdf) {
-          redirectUrl = `/payment/boleto/${order.id}`;
-        } else {
-          redirectUrl = `/payment/success/${order.id}`;
-        }
+      if (paymentMethod === 'pix') {
+        redirectUrl = `/payment/pix/${order.id}`;
+      } else if (paymentMethod === 'boleto') {
+        redirectUrl = `/payment/boleto/${order.id}`;
       } else {
-        // Pagamento pendente - redireciona para página apropriada
-        if (paymentMethod === 'pix') {
-          redirectUrl = `/payment/pix/${order.id}`;
-        } else if (paymentMethod === 'boleto') {
-          redirectUrl = `/payment/boleto/${order.id}`;
-        } else {
-          redirectUrl = `/payment/success/${order.id}`;
-        }
+        // Cartão: redireciona para página pendente que vai verificar o status
+        redirectUrl = `/payment/pending/${order.id}`;
       }
 
-      // Redirecionar imediatamente (não mostrar toast para evitar delay)
+      // Redirecionar imediatamente
       window.location.href = redirectUrl;
     } catch (error: any) {
       console.error('Error:', error);
@@ -220,8 +233,9 @@ export default function CheckoutPage() {
                       type="tel"
                       required
                       value={customerData.phone}
-                      onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
+                      onChange={(e) => setCustomerData({...customerData, phone: maskPhone(e.target.value)})}
                       placeholder="(00) 00000-0000"
+                      maxLength={15}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
@@ -231,8 +245,9 @@ export default function CheckoutPage() {
                       type="text"
                       required
                       value={customerData.cpf}
-                      onChange={(e) => setCustomerData({...customerData, cpf: e.target.value})}
+                      onChange={(e) => setCustomerData({...customerData, cpf: maskCPF(e.target.value)})}
                       placeholder="000.000.000-00"
+                      maxLength={14}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                     />
                   </div>
