@@ -60,14 +60,30 @@ export async function POST(request: NextRequest) {
       });
 
       console.log('🔍 Mercado Pago PIX Response:', JSON.stringify(response, null, 2));
-      console.log('🔍 QR Code:', response.point_of_interaction?.transaction_data?.qr_code_base64?.substring(0, 100));
-      console.log('🔍 QR Code Text:', response.point_of_interaction?.transaction_data?.qr_code);
+      
+      // Verificar diferentes caminhos possíveis para o QR Code
+      const qrCodeBase64 = 
+        response.point_of_interaction?.transaction_data?.qr_code_base64 ||
+        response.point_of_interaction?.transaction_data?.qr_code_image ||
+        response.qr_code_base64;
+      
+      const qrCodeText = 
+        response.point_of_interaction?.transaction_data?.qr_code ||
+        response.qr_code;
+      
+      console.log('🔍 QR Code Base64 encontrado:', !!qrCodeBase64);
+      console.log('🔍 QR Code Text encontrado:', !!qrCodeText);
+      
+      if (!qrCodeBase64 || !qrCodeText) {
+        console.error('❌ QR Code não encontrado na resposta do Mercado Pago!');
+        console.error('Resposta completa:', JSON.stringify(response, null, 2));
+      }
       
       paymentData = {
         ...paymentData,
         mercadoPagoPaymentId: String(response.id),
-        pixQrCode: response.point_of_interaction?.transaction_data?.qr_code_base64,
-        pixQrCodeText: response.point_of_interaction?.transaction_data?.qr_code,
+        pixQrCode: qrCodeBase64 ? `data:image/png;base64,${qrCodeBase64}` : undefined,
+        pixQrCodeText: qrCodeText,
         pixExpiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutos
         status: 'pending' // PIX fica pendente até confirmação via webhook
       };
