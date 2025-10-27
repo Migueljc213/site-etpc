@@ -3,9 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { FaPlayCircle, FaClock, FaCheckCircle, FaGraduationCap, FaBookOpen, FaTrophy, FaChartLine, FaUser, FaEye } from 'react-icons/fa';
+import { FaPlayCircle, FaClock, FaCheckCircle, FaGraduationCap, FaBookOpen, FaTrophy, FaChartLine } from 'react-icons/fa';
 
 interface Course {
   id: string;
@@ -28,6 +26,7 @@ interface DashboardStats {
 export default function StudentDashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
@@ -38,15 +37,11 @@ export default function StudentDashboardPage() {
   });
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-
+    setIsClient(true);
     if (status === 'authenticated' && session?.user?.email) {
       fetchMyCourses();
     }
-  }, [status, session, router]);
+  }, [status, session]);
 
   const fetchMyCourses = async () => {
     try {
@@ -84,9 +79,9 @@ export default function StudentDashboardPage() {
     return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
   };
 
-  if (status === 'loading' || loading) {
+  if (!isClient || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-etpc-blue mx-auto mb-4"></div>
           <p className="text-gray-600">Carregando dashboard...</p>
@@ -95,40 +90,15 @@ export default function StudentDashboardPage() {
     );
   }
 
-  if (!session) {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-12 mt-24">
+    <div className="min-h-screen">
+      <div className="mb-6">
         {/* Header com Welcome */}
-        <div className="mb-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Olá, {session?.user?.name?.split(' ')[0] || 'Estudante'}! 👋
-              </h1>
-              <p className="text-gray-600">Bem-vindo ao seu painel de aprendizado</p>
-            </div>
-            <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-3 bg-white rounded-lg shadow-md px-6 py-3">
-                <div className="w-10 h-10 rounded-full bg-etpc-blue flex items-center justify-center text-white font-bold text-sm">
-                  {session?.user?.name?.charAt(0).toUpperCase() || 'U'}
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-gray-900 font-semibold text-sm">
-                    {session?.user?.name || 'Usuário'}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {session?.user?.email}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Olá, {session?.user?.name?.split(' ')[0] || 'Estudante'}! 👋
+          </h1>
+          <p className="text-gray-600">Bem-vindo ao seu painel de aprendizado</p>
         </div>
 
         {/* Cards de Estatísticas */}
@@ -279,9 +249,7 @@ export default function StudentDashboardPage() {
             </div>
           </>
         )}
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }
