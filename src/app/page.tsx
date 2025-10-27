@@ -541,8 +541,8 @@ export default function Home() {
               {
                 icon: 'FaLaptopCode',
                 title: 'Informática',
-                description: 'Especialize-se em desenvolvimento de software e sistemas',
-                features: ['Programação Web', 'Banco de Dados', 'Desenvolvimento Mobile'],
+                description: 'Especialize-se em suporte técnico e manutenção de computadores',
+                features: ['Suporte Técnico', 'Manutenção de Hardware', 'Redes de Computadores'],
                 color: 'bg-green-500',
                 link: '/cursos-tecnicos#cursos'
               },
@@ -684,6 +684,9 @@ export default function Home() {
             Junte-se a milhares de profissionais de sucesso formados pelo ETPC
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/cursos-online" className="bg-white text-etpc-blue px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/90 transition-all transform hover:scale-105 inline-block shadow-lg">
+              Ver Cursos Online
+            </a>
             <a href="/matriculas" className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white hover:bg-white hover:text-etpc-blue transition-all transform hover:scale-105 inline-block">
               Fale conosco
             </a>

@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaShoppingCart, FaSearch } from 'react-icons/fa';
+import { useCart } from '@/contexts/CartContext';
+import CartDrawer from './CartDrawer';
 
 interface HeaderProps {
   currentPage?: string;
@@ -12,6 +14,8 @@ export default function Header({ currentPage }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileExtracurricularOpen, setMobileExtracurricularOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { getCartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,25 +43,25 @@ export default function Header({ currentPage }: HeaderProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
-            <Link href="/quem-somos" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/quem-somos') ? 'text-white' : ''}`}>
+          <div className="hidden lg:flex items-center space-x-6 ml-8">
+            <Link href="/quem-somos" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/quem-somos') ? 'text-white' : ''}`}>
               Quem Somos
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/quem-somos') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
-            <Link href="/fundamental2" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/fundamental2') ? 'text-white' : ''}`}>
+            <Link href="/fundamental2" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/fundamental2') ? 'text-white' : ''}`}>
               Fundamental 2
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/fundamental2') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
-            <Link href="/ensinomedio" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/ensinomedio') ? 'text-white' : ''}`}>
+            <Link href="/ensinomedio" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/ensinomedio') ? 'text-white' : ''}`}>
               Ensino Médio
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/ensinomedio') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
-            <Link href="/cursos-tecnicos" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/cursos-tecnicos') ? 'text-white' : ''}`}>
+            <Link href="/cursos-tecnicos" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/cursos-tecnicos') ? 'text-white' : ''}`}>
               Cursos Técnicos
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/cursos-tecnicos') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
             <div className="relative group">
-              <button className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group-hover:text-white focus:outline-none py-2 ${isActive('/cursos-rapidos') || isActive('/cursos-teen') ? 'text-white' : ''}`}>
+              <button className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group-hover:text-white focus:outline-none py-2 ${isActive('/cursos-rapidos') || isActive('/cursos-teen') ? 'text-white' : ''}`}>
                 Extracurriculares
                 <FaChevronDown className="ml-1 inline-block transition-transform duration-300 group-hover:rotate-180" />
                 <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/cursos-rapidos') || isActive('/cursos-teen') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
@@ -71,29 +75,57 @@ export default function Header({ currentPage }: HeaderProps) {
                 </Link>
               </div>
             </div>
-            <Link href="/in-company" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/in-company') ? 'text-white' : ''}`}>
+            <Link href="/in-company" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/in-company') ? 'text-white' : ''}`}>
               In Company
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/in-company') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
-            <Link href="/matriculas" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/matriculas') ? 'text-white' : ''}`}>
+            <Link href="/cursos-online" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/cursos-online') ? 'text-white' : ''}`}>
+              Cursos Online
+              <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/cursos-online') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
+            </Link>
+            <Link href="/matriculas" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/matriculas') ? 'text-white' : ''}`}>
               Matrículas
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/matriculas') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
-            <Link href="/noticias" className={`text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/noticias') ? 'text-white' : ''}`}>
+            <Link href="/noticias" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/noticias') ? 'text-white' : ''}`}>
               Notícias
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/noticias') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
+            >
+              <FaShoppingCart className="text-xl" />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {getCartCount()}
+                </span>
+              )}
+            </button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          {/* Mobile buttons */}
+          <div className="lg:hidden flex items-center gap-2">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
+            >
+              <FaShoppingCart className="text-xl" />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {getCartCount()}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-white/90 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile menu */}
@@ -133,6 +165,9 @@ export default function Header({ currentPage }: HeaderProps) {
               <Link href="/in-company" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/in-company') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
                 In Company
               </Link>
+              <Link href="/cursos-online" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/cursos-online') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
+                Cursos Online
+              </Link>
               <Link href="/matriculas" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/matriculas') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
                 Matrículas
               </Link>
@@ -142,6 +177,9 @@ export default function Header({ currentPage }: HeaderProps) {
             </div>
           </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   );
 }

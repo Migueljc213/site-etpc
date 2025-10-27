@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog, FaCamera, FaPhone } from 'react-icons/fa';
+import { FaChartBar, FaNewspaper, FaImage, FaGraduationCap, FaUsers, FaCog, FaCamera, FaPhone, FaLaptop } from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -61,6 +61,7 @@ export default function AdminLayout({
     { name: 'Banners', href: '/admin/banners', icon: 'FaImage' },
     { name: 'Galeria', href: '/admin/galeria', icon: 'FaCamera' },
     { name: 'Cursos', href: '/admin/cursos', icon: 'FaGraduationCap' },
+    { name: 'Cursos Online', href: '/admin/cursos-online', icon: 'FaLaptop' },
     { name: 'Contatos', href: '/admin/contatos', icon: 'FaPhone' },
     { name: 'Usuários', href: '/admin/usuarios', icon: 'FaUsers' },
     { name: 'Configurações', href: '/admin/configuracoes', icon: 'FaCog' },
@@ -104,6 +105,7 @@ export default function AdminLayout({
                   {item.icon === 'FaImage' && <FaImage />}
                   {item.icon === 'FaCamera' && <FaCamera />}
                   {item.icon === 'FaGraduationCap' && <FaGraduationCap />}
+                  {item.icon === 'FaLaptop' && <FaLaptop />}
                   {item.icon === 'FaPhone' && <FaPhone />}
                   {item.icon === 'FaUsers' && <FaUsers />}
                   {item.icon === 'FaCog' && <FaCog />}
