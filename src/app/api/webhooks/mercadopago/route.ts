@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
           if (item.course) {
             console.log(`✅ Criando matrícula: email=${order.customerEmail}, courseId=${item.course.id}`);
             
-            await prisma.studentEnrollment.upsert({
+            const enrollment = await prisma.studentEnrollment.upsert({
               where: {
                 studentEmail_courseId: {
                   studentEmail: order.customerEmail,
@@ -123,13 +123,17 @@ export async function POST(request: NextRequest) {
               }
             });
             
-            console.log(`✅ Matrícula criada/atualizada com sucesso para curso ${item.course.title}`);
+            console.log(`✅ Matrícula criada/atualizada com sucesso:`, enrollment);
+            console.log(`✅ Curso: ${item.course.title}, Email: ${order.customerEmail}`);
           }
         }
         console.log(`✅ Student enrollments created for order ${order.orderNumber}`);
       } catch (enrollmentError) {
         console.error('❌ Erro ao criar matrículas:', enrollmentError);
+        console.error('❌ Dados do erro:', { email: order.customerEmail, error: enrollmentError });
       }
+    } else {
+      console.log(`⚠️ Não criando matrículas - Status: ${newStatus}, Itens: ${order.items?.length || 0}`);
     }
 
     // TODO: Enviar email de confirmação para o cliente quando aprovado

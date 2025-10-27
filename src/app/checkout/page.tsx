@@ -38,6 +38,9 @@ export default function CheckoutPage() {
     cvv: ''
   });
 
+  const [installments, setInstallments] = useState<number>(1);
+  const [cardType, setCardType] = useState<'visa' | 'mastercard' | 'amex' | 'elo' | 'unknown'>('unknown');
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -66,6 +69,27 @@ export default function CheckoutPage() {
       return phone.replace(/(\d{2})(\d)/, '($1) $2')
                    .replace(/(\d{4})(\d)/, '$1-$2')
                    .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3');
+    }
+    return value;
+  };
+
+  // Detecta o tipo de cartão
+  const detectCardType = (cardNumber: string) => {
+    const number = cardNumber.replace(/\D/g, '');
+    
+    if (/^4/.test(number)) return 'visa';
+    if (/^5[1-5]/.test(number)) return 'mastercard';
+    if (/^3[47]/.test(number)) return 'amex';
+    if (/^(636297|636368|438935|504175|451416|636297|5067|5090|627780|504175|636297)/.test(number)) return 'elo';
+    
+    return 'unknown';
+  };
+
+  // Máscara para número do cartão
+  const maskCardNumber = (value: string) => {
+    const number = value.replace(/\D/g, '');
+    if (number.length <= 16) {
+      return number.replace(/(\d{4})(?=\d)/g, '$1 ');
     }
     return value;
   };
@@ -115,8 +139,8 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           customerName: customerData.name,
           customerEmail: customerData.email,
-          customerPhone: customerData.phone,
-          customerCPF: customerData.cpf,
+          customerPhone: customerData.phone.replace(/\D/g, ''), // Remove máscara
+          customerCPF: customerData.cpf.replace(/\D/g, ''), // Remove máscara
           paymentMethod,
           items: items.map(item => ({
             courseId: item.id,
@@ -137,7 +161,8 @@ export default function CheckoutPage() {
           orderId: order.id,
           paymentMethod,
           customerData,
-          cardData: paymentMethod.includes('card') ? cardData : undefined
+          cardData: paymentMethod.includes('card') ? cardData : undefined,
+          installments: paymentMethod === 'credit_card' ? installments : undefined
         })
       });
 
@@ -286,14 +311,37 @@ export default function CheckoutPage() {
                   <div className="space-y-4 pt-4 border-t">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Número do Cartão *</label>
-                      <input
-                        type="text"
-                        required
-                        value={cardData.number}
-                        onChange={(e) => setCardData({...cardData, number: e.target.value})}
-                        placeholder="0000 0000 0000 0000"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          value={cardData.number}
+                          onChange={(e) => {
+                            const masked = maskCardNumber(e.target.value);
+                            setCardData({...cardData, number: masked});
+                            setCardType(detectCardType(masked));
+                          }}
+                          placeholder="0000 0000 0000 0000"
+                          maxLength={19}
+                          className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
+                        />
+                        {cardType !== 'unknown' && cardData.number.length > 4 && (
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            {cardType === 'visa' && <span className="text-2xl">💳</span>}
+                            {cardType === 'mastercard' && <span className="text-xl">💳</span>}
+                            {cardType === 'amex' && <span className="text-lg">💳</span>}
+                            {cardType === 'elo' && <span className="text-lg">💳</span>}
+                          </div>
+                        )}
+                      </div>
+                      {cardType !== 'unknown' && cardData.number.length > 4 && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {cardType === 'visa' && 'Visa'}
+                          {cardType === 'mastercard' && 'Mastercard'}
+                          {cardType === 'amex' && 'American Express'}
+                          {cardType === 'elo' && 'Elo'}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Nome no Cartão *</label>
@@ -332,10 +380,29 @@ export default function CheckoutPage() {
                           value={cardData.cvv}
                           onChange={(e) => setCardData({...cardData, cvv: e.target.value})}
                           placeholder="000"
+                          maxLength={4}
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                         />
                       </div>
                     </div>
+
+                    {/* Parcelamento */}
+                    {paymentMethod === 'credit_card' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Parcelamento *</label>
+                        <select
+                          value={installments}
+                          onChange={(e) => setInstallments(Number(e.target.value))}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
+                        >
+                          {Array.from({ length: 12 }, (_, i) => i + 1).map(num => (
+                            <option key={num} value={num}>
+                              {num}x de {formatPrice(getCartTotal() / num)} sem juros
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
