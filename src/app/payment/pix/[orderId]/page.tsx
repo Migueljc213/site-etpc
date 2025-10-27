@@ -21,10 +21,30 @@ interface PaymentData {
   };
 }
 
+interface OrderItem {
+  id: string;
+  course: {
+    title: string;
+    image: string;
+    instructor: string;
+  };
+  price: number;
+  quantity: number;
+  subtotal: number;
+}
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  total: number;
+  items: OrderItem[];
+}
+
 export default function PixPaymentPage() {
   const router = useRouter();
   const [params, setParams] = useState({ orderId: '' });
   const [payment, setPayment] = useState<PaymentData | null>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -43,12 +63,20 @@ export default function PixPaymentPage() {
 
   const fetchPayment = async () => {
     try {
-      // Buscar dados do pagamento via API
-      const response = await fetch(`/api/payments/${params.orderId}`);
-      if (!response.ok) throw new Error('Pagamento não encontrado');
+      // Buscar dados do pagamento e do pedido
+      const [paymentResponse, orderResponse] = await Promise.all([
+        fetch(`/api/payments/${params.orderId}`),
+        fetch(`/api/orders/${params.orderId}`)
+      ]);
       
-      const data = await response.json();
-      setPayment(data);
+      if (!paymentResponse.ok) throw new Error('Pagamento não encontrado');
+      if (!orderResponse.ok) throw new Error('Pedido não encontrado');
+      
+      const paymentData = await paymentResponse.json();
+      const orderData = await orderResponse.json();
+      
+      setPayment(paymentData);
+      setOrder(orderData);
     } catch (error) {
       console.error('Error fetching payment:', error);
     } finally {
@@ -132,7 +160,7 @@ export default function PixPaymentPage() {
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Escaneie o QR Code</h2>
                 <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
                   {payment.pixQrCode ? (
-                    <Image
+                    <img
                       src={payment.pixQrCode}
                       alt="QR Code PIX"
                       width={256}
@@ -153,7 +181,7 @@ export default function PixPaymentPage() {
                   Código para Copiar
                 </label>
                 <div className="flex gap-2">
-                  <div className="flex-1 bg-gray-50 border-2 border-gray-300 rounded-lg p-4 font-mono text-sm break-all">
+                  <div className="flex-1 bg-gray-50 border-2 border-gray-300 rounded-lg p-4 font-mono text-sm break-all text-gray-900">
                     {payment.pixQrCodeText || 'Código não disponível'}
                   </div>
                   <button
@@ -179,12 +207,40 @@ export default function PixPaymentPage() {
                 </div>
               </div>
 
+              {/* Itens da Compra */}
+              {order?.items && order.items.length > 0 && (
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-3">Itens do Pedido:</h3>
+                  <div className="space-y-3">
+                    {order.items.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3">
+                        {item.course?.image && (
+                          <img 
+                            src={item.course.image} 
+                            alt={item.course.title}
+                            className="w-16 h-16 object-cover rounded"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-900">{item.course?.title}</p>
+                          <p className="text-sm text-gray-600">{item.course?.instructor}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-gray-900">{formatPrice(item.subtotal)}</p>
+                          <p className="text-xs text-gray-500">Qtd: {item.quantity}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Valor e Informações */}
               <div className="bg-gray-50 rounded-lg p-6 space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Valor do Pagamento:</span>
                   <span className="text-3xl font-bold text-etpc-blue">
-                    {formatPrice(payment.amount)}
+                    {formatPrice(order?.total || payment.amount)}
                   </span>
                 </div>
                 <div className="border-t pt-3">

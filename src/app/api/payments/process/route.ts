@@ -59,6 +59,10 @@ export async function POST(request: NextRequest) {
         }
       });
 
+      console.log('🔍 Mercado Pago PIX Response:', JSON.stringify(response, null, 2));
+      console.log('🔍 QR Code:', response.point_of_interaction?.transaction_data?.qr_code_base64?.substring(0, 100));
+      console.log('🔍 QR Code Text:', response.point_of_interaction?.transaction_data?.qr_code);
+      
       paymentData = {
         ...paymentData,
         mercadoPagoPaymentId: String(response.id),
@@ -145,6 +149,13 @@ function detectCardBrand(cardNumber: string): string {
 
 // Função para salvar pagamento e atualizar pedido
 async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
+  console.log('💾 Salvando paymentData:', {
+    hasPixQrCode: !!paymentData.pixQrCode,
+    hasPixQrCodeText: !!paymentData.pixQrCodeText,
+    pixQrCodeLength: paymentData.pixQrCode?.length,
+    pixQrCodeTextPreview: paymentData.pixQrCodeText?.substring(0, 50)
+  });
+  
   // Criar registro de pagamento usando campos básicos e extras
   const paymentDataToSave: any = {
     orderId: order.id,
