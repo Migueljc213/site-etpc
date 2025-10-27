@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { FaPlus, FaEdit, FaTrash, FaBookOpen, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import ConfirmDialog from '@/components/ConfirmDialog';
+import { toast } from 'react-toastify';
 
 interface Module {
   id: string;
@@ -34,6 +36,12 @@ export default function ModulosPage() {
   const [showLessonForm, setShowLessonForm] = useState<string | null>(null);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
+  // Confirmation dialogs
+  const [confirmDelete, setConfirmDelete] = useState<{moduleId: string | null, lessonId: string | null}>({
+    moduleId: null,
+    lessonId: null
+  });
 
   // Form states
   const [moduleData, setModuleData] = useState({ title: '', description: '', order: 0 });
@@ -88,9 +96,12 @@ export default function ModulosPage() {
       });
 
       if (response.ok) {
+        toast.success('Módulo criado com sucesso!');
         setShowModuleForm(false);
         setModuleData({ title: '', description: '', order: 0 });
         fetchData();
+      } else {
+        toast.error('Erro ao criar módulo');
       }
     } catch (error) {
       console.error('Error creating module:', error);
@@ -107,9 +118,12 @@ export default function ModulosPage() {
       });
 
       if (response.ok) {
+        toast.success('Aula criada com sucesso!');
         setShowLessonForm(null);
         setLessonData({ title: '', description: '', videoUrl: '', duration: 0, order: 0 });
         fetchData();
+      } else {
+        toast.error('Erro ao criar aula');
       }
     } catch (error) {
       console.error('Error creating lesson:', error);
@@ -117,34 +131,54 @@ export default function ModulosPage() {
   };
 
   const deleteModule = async (moduleId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este módulo e todas as suas aulas?')) return;
+    setConfirmDelete({ moduleId, lessonId: null });
+  };
+
+  const confirmDeleteModule = async () => {
+    if (!confirmDelete.moduleId) return;
 
     try {
-      const response = await fetch(`/api/admin/online-courses/${courseId}/modules/${moduleId}`, {
+      const response = await fetch(`/api/admin/online-courses/${courseId}/modules/${confirmDelete.moduleId}`, {
         method: 'DELETE'
       });
 
       if (response.ok) {
+        toast.success('Módulo excluído com sucesso!');
         fetchData();
+      } else {
+        toast.error('Erro ao excluir módulo');
       }
     } catch (error) {
       console.error('Error deleting module:', error);
+      toast.error('Erro ao excluir módulo');
+    } finally {
+      setConfirmDelete({ moduleId: null, lessonId: null });
     }
   };
 
   const deleteLesson = async (moduleId: string, lessonId: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta aula?')) return;
+    setConfirmDelete({ moduleId, lessonId });
+  };
+
+  const confirmDeleteLesson = async () => {
+    if (!confirmDelete.moduleId || !confirmDelete.lessonId) return;
 
     try {
-      const response = await fetch(`/api/admin/online-courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`, {
+      const response = await fetch(`/api/admin/online-courses/${courseId}/modules/${confirmDelete.moduleId}/lessons/${confirmDelete.lessonId}`, {
         method: 'DELETE'
       });
 
       if (response.ok) {
+        toast.success('Aula excluída com sucesso!');
         fetchData();
+      } else {
+        toast.error('Erro ao excluir aula');
       }
     } catch (error) {
       console.error('Error deleting lesson:', error);
+      toast.error('Erro ao excluir aula');
+    } finally {
+      setConfirmDelete({ moduleId: null, lessonId: null });
     }
   };
 
@@ -163,6 +197,22 @@ export default function ModulosPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
+      <ConfirmDialog
+        isOpen={confirmDelete.moduleId !== null && confirmDelete.lessonId === null}
+        title="Excluir Módulo"
+        message="Tem certeza que deseja excluir este módulo e todas as suas aulas? Esta ação não pode ser desfeita."
+        onConfirm={confirmDeleteModule}
+        onCancel={() => setConfirmDelete({ moduleId: null, lessonId: null })}
+      />
+      
+      <ConfirmDialog
+        isOpen={confirmDelete.moduleId !== null && confirmDelete.lessonId !== null}
+        title="Excluir Aula"
+        message="Tem certeza que deseja excluir esta aula? Esta ação não pode ser desfeita."
+        onConfirm={confirmDeleteLesson}
+        onCancel={() => setConfirmDelete({ moduleId: null, lessonId: null })}
+      />
+
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <button
@@ -260,7 +310,7 @@ export default function ModulosPage() {
                       {module.title}
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {module.lessons.length} {module.lessons.length === 1 ? 'aula' : 'aulas'}
+                      {module.lessons?.length || 0} {module.lessons?.length === 1 ? 'aula' : 'aulas'}
                     </p>
                   </div>
                 </div>
@@ -268,6 +318,10 @@ export default function ModulosPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      // Expandir o módulo se não estiver expandido
+                      if (!expandedModules.has(module.id)) {
+                        setExpandedModules(new Set([...expandedModules, module.id]));
+                      }
                       setShowLessonForm(module.id);
                     }}
                     className="bg-etpc-blue text-white px-4 py-2 rounded-lg hover:bg-etpc-blue-dark transition-colors flex items-center gap-2"

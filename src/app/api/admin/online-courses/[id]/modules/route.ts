@@ -8,8 +8,30 @@ export async function GET(
   try {
     const { id } = await params;
     
+    // Buscar o curso online
+    const onlineCourse = await prisma.onlineCourse.findUnique({
+      where: { id }
+    });
+
+    if (!onlineCourse) {
+      return NextResponse.json(
+        { error: 'Curso online não encontrado' },
+        { status: 404 }
+      );
+    }
+
+    // Encontrar o Course correspondente
+    const course = await prisma.course.findFirst({
+      where: { slug: onlineCourse.slug }
+    });
+
+    if (!course) {
+      return NextResponse.json([]); // Nenhum módulo ainda
+    }
+
+    // Buscar módulos do Course
     const modules = await prisma.courseModule.findMany({
-      where: { courseId: id },
+      where: { courseId: course.id },
       orderBy: { order: 'asc' },
       include: {
         onlineLessons: {
