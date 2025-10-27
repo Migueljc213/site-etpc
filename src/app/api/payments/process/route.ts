@@ -228,6 +228,8 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
     paymentMethod: paymentData.paymentMethod,
     amount: paymentData.amount,
     status: paymentData.status,
+    // Adicionar mercadoPagoPaymentId se existir
+    ...(paymentData.mercadoPagoPaymentId && { mercadoPagoPaymentId: paymentData.mercadoPagoPaymentId }),
     // Adicionar campos extras diretamente (se existirem)
     ...(paymentData.pixQrCode && { pixQrCode: paymentData.pixQrCode }),
     ...(paymentData.pixQrCodeText && { pixQrCodeText: paymentData.pixQrCodeText }),

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { FaPlayCircle, FaClock, FaCheckCircle, FaGraduationCap, FaBookOpen, FaTrophy, FaChartLine } from 'react-icons/fa';
+import { FaPlayCircle, FaClock, FaCheckCircle, FaGraduationCap, FaBookOpen, FaTrophy, FaChartLine, FaFileVideo, FaTasks, FaBookReader, FaAward } from 'react-icons/fa';
 
 interface Course {
   id: string;
@@ -105,24 +105,24 @@ export default function StudentDashboardPage() {
         {courses.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {/* Cursos */}
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-etpc-blue">
+            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-etpc-blue hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <div className="bg-etpc-blue bg-opacity-10 rounded-lg p-3">
-                  <FaBookOpen className="text-etpc-blue text-2xl" />
+                <div className="bg-gradient-to-br from-etpc-blue to-etpc-blue-dark rounded-lg p-3">
+                  <FaBookOpen className="text-white text-2xl" />
                 </div>
-                <FaChartLine className="text-gray-400 text-sm" />
+                <FaChartLine className="text-gray-300 text-sm" />
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">Meus Cursos</h3>
               <p className="text-3xl font-bold text-gray-900">{stats.totalCourses}</p>
             </div>
 
             {/* Horas Assistidas */}
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <div className="bg-green-500 bg-opacity-10 rounded-lg p-3">
-                  <FaClock className="text-green-500 text-2xl" />
+                <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-3">
+                  <FaClock className="text-white text-2xl" />
                 </div>
-                <FaChartLine className="text-gray-400 text-sm" />
+                <FaChartLine className="text-gray-300 text-sm" />
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">Horas Assistidas</h3>
               <p className="text-3xl font-bold text-gray-900">
@@ -131,24 +131,24 @@ export default function StudentDashboardPage() {
             </div>
 
             {/* Concluídos */}
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <div className="bg-purple-500 bg-opacity-10 rounded-lg p-3">
-                  <FaTrophy className="text-purple-500 text-2xl" />
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-3">
+                  <FaTrophy className="text-white text-2xl" />
                 </div>
-                <FaChartLine className="text-gray-400 text-sm" />
+                <FaChartLine className="text-gray-300 text-sm" />
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">Cursos Concluídos</h3>
               <p className="text-3xl font-bold text-gray-900">{stats.completedCourses}</p>
             </div>
 
             {/* Progresso Médio */}
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <div className="bg-orange-500 bg-opacity-10 rounded-lg p-3">
-                  <FaGraduationCap className="text-orange-500 text-2xl" />
+                <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-3">
+                  <FaChartLine className="text-white text-2xl" />
                 </div>
-                <FaChartLine className="text-gray-400 text-sm" />
+                <FaChartLine className="text-gray-300 text-sm" />
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">Progresso Médio</h3>
               <p className="text-3xl font-bold text-gray-900">
