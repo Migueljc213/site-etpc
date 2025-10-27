@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaPlus, FaEdit, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaEye, FaEyeSlash, FaBookOpen } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 
@@ -259,6 +259,13 @@ export default function CursosOnlineAdmin() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/admin/cursos-online/${course.id}/modulos`}
+                          className="text-green-600 hover:text-green-800 p-2"
+                          title="Gerenciar Módulos e Aulas"
+                        >
+                          <FaBookOpen />
+                        </Link>
                         <Link
                           href={`/admin/cursos-online/${course.id}/editar`}
                           className="text-blue-600 hover:text-blue-800 p-2"

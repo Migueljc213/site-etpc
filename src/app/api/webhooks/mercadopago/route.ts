@@ -69,6 +69,23 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Buscar pedido completo com itens
+    const order = await prisma.order.findUnique({
+      where: { id: payment.orderId },
+      include: {
+        items: {
+          include: {
+            course: true
+          }
+        }
+      }
+    });
+
+    if (!order) {
+      console.error('Order not found');
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+
     // Atualizar pedido
     await prisma.order.update({
       where: { id: payment.orderId },
@@ -78,9 +95,46 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Criar matrículas dos alunos quando o pagamento for aprovado
+    if (newStatus === 'paid' && order.items && order.items.length > 0) {
+      try {
+        console.log(`📝 Criando matrículas para pedido ${order.orderNumber}, email: ${order.customerEmail}`);
+        console.log(`📚 Itens do pedido:`, order.items.map(item => ({ courseId: item.courseId, course: item.course?.title })));
+        
+        for (const item of order.items) {
+          if (item.course) {
+            console.log(`✅ Criando matrícula: email=${order.customerEmail}, courseId=${item.course.id}`);
+            
+            await prisma.studentEnrollment.upsert({
+              where: {
+                studentEmail_courseId: {
+                  studentEmail: order.customerEmail,
+                  courseId: item.course.id
+                }
+              },
+              update: {
+                status: 'active'
+              },
+              create: {
+                studentEmail: order.customerEmail,
+                courseId: item.course.id,
+                status: 'active',
+                enrolledAt: new Date()
+              }
+            });
+            
+            console.log(`✅ Matrícula criada/atualizada com sucesso para curso ${item.course.title}`);
+          }
+        }
+        console.log(`✅ Student enrollments created for order ${order.orderNumber}`);
+      } catch (enrollmentError) {
+        console.error('❌ Erro ao criar matrículas:', enrollmentError);
+      }
+    }
+
     // TODO: Enviar email de confirmação para o cliente quando aprovado
     // if (newStatus === 'paid') {
-    //   await sendPaymentConfirmationEmail(payment.order.customerEmail);
+    //   await sendPaymentConfirmationEmail(order.customerEmail);
     // }
 
     console.log(`Payment ${payment.id} updated to status: ${newStatus}`);

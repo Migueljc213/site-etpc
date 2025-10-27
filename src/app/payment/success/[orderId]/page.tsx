@@ -125,19 +125,30 @@ export default function PaymentSuccessPage() {
           )}
 
           {/* Botões de ação */}
-          <div className="flex gap-4">
+          <div className="space-y-3">
             <button
-              onClick={() => router.push('/cursos-online')}
-              className="flex-1 bg-etpc-blue text-white py-3 px-6 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors"
+              onClick={() => router.push('/dashboard')}
+              className="w-full bg-gradient-to-r from-etpc-blue to-etpc-blue-dark text-white py-4 px-6 rounded-lg font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
             >
-              Explorar Mais Cursos
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+              Ver Meus Cursos Agora
             </button>
-            <button
-              onClick={() => router.push('/')}
-              className="flex-1 bg-white border-2 border-etpc-blue text-etpc-blue py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-            >
-              Voltar ao Início
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => router.push('/cursos-online')}
+                className="flex-1 bg-etpc-blue text-white py-3 px-6 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors"
+              >
+                Explorar Mais Cursos
+              </button>
+              <button
+                onClick={() => router.push('/')}
+                className="flex-1 bg-white border-2 border-etpc-blue text-etpc-blue py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Voltar ao Início
+              </button>
+            </div>
           </div>
         </div>
       </main>

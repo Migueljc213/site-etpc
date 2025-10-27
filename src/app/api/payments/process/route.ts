@@ -290,8 +290,7 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
     }
   }
 
-  // Criar matrícula do aluno nos cursos comprados
-  await createStudentEnrollments(orderWithItems);
+  // NOTA: As matrículas serão criadas automaticamente pelo webhook quando o pagamento for aprovado
 
   return NextResponse.json(payment, { status: 201 });
 }

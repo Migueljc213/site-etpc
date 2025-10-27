@@ -124,29 +124,33 @@ export default function CheckoutPage() {
 
       const payment = await paymentResponse.json();
 
-      // 3. Redirecionar conforme método
-      // Só redireciona para sucesso se o pagamento já está aprovado
+      // Limpar carrinho ANTES do redirecionamento para evitar o frame vazio
+      clearCart();
+      
+      // Preparar URL de redirecionamento
+      let redirectUrl = '';
+      
       if (payment.status === 'paid' || payment.status === 'approved') {
         if (paymentMethod === 'pix' && payment.pixQrCode) {
-          router.push(`/payment/pix/${order.id}`);
+          redirectUrl = `/payment/pix/${order.id}`;
         } else if (paymentMethod === 'boleto' && payment.boletoPdf) {
-          router.push(`/payment/boleto/${order.id}`);
+          redirectUrl = `/payment/boleto/${order.id}`;
         } else {
-          router.push(`/payment/success/${order.id}`);
+          redirectUrl = `/payment/success/${order.id}`;
         }
       } else {
         // Pagamento pendente - redireciona para página apropriada
         if (paymentMethod === 'pix') {
-          router.push(`/payment/pix/${order.id}`);
+          redirectUrl = `/payment/pix/${order.id}`;
         } else if (paymentMethod === 'boleto') {
-          router.push(`/payment/boleto/${order.id}`);
+          redirectUrl = `/payment/boleto/${order.id}`;
         } else {
-          router.push(`/payment/success/${order.id}`);
+          redirectUrl = `/payment/success/${order.id}`;
         }
       }
 
-      clearCart();
-      showToast('Pedido criado com sucesso!', 'success');
+      // Redirecionar imediatamente (não mostrar toast para evitar delay)
+      window.location.href = redirectUrl;
     } catch (error: any) {
       console.error('Error:', error);
       const message = error?.message || 'Erro ao processar pagamento. Tente novamente.';
