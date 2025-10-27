@@ -131,7 +131,8 @@ export async function POST(request: NextRequest) {
       paymentData = {
         ...paymentData,
         mercadoPagoPaymentId: String(response.id),
-        pixQrCode: qrCodeBase64 ? `data:image/png;base64,${qrCodeBase64}` : undefined,
+        // Salvar base64 puro, sem prefixo data: (adicionamos no frontend)
+        pixQrCode: qrCodeBase64,
         pixQrCodeText: qrCodeText,
         pixExpiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutos
         status: 'pending' // PIX fica pendente até confirmação via webhook
@@ -289,37 +290,8 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
     }
   }
 
-  // Criar matrícula do aluno nos cursos comprados (importar prisma no topo)
-  if (orderWithItems && orderWithItems.items) {
-    try {
-      // Verificar se prisma já está importado
-      const { prisma: prismaInstance } = await import('@/lib/prisma');
-      
-      for (const item of orderWithItems.items) {
-        if (item.course) {
-          await prismaInstance.studentEnrollment.upsert({
-            where: {
-              studentEmail_courseId: {
-                studentEmail: orderWithItems.customerEmail,
-                courseId: item.course.id
-              }
-            },
-            update: {
-              status: 'active' // Reativar se já existir
-            },
-            create: {
-              studentEmail: orderWithItems.customerEmail,
-              courseId: item.course.id,
-              status: 'active'
-            }
-          });
-        }
-      }
-    } catch (enrollmentError) {
-      console.error('Erro ao criar matrícula:', enrollmentError);
-      // Não falha a operação se a matrícula falhar
-    }
-  }
+  // Criar matrícula do aluno nos cursos comprados
+  await createStudentEnrollments(orderWithItems);
 
   return NextResponse.json(payment, { status: 201 });
 }

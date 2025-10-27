@@ -161,7 +161,7 @@ export default function PixPaymentPage() {
                 <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
                   {payment.pixQrCode ? (
                     <img
-                      src={payment.pixQrCode}
+                      src={payment.pixQrCode.startsWith('data:') ? payment.pixQrCode : `data:image/png;base64,${payment.pixQrCode}`}
                       alt="QR Code PIX"
                       width={256}
                       height={256}

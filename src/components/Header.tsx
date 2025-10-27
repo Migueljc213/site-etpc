@@ -83,6 +83,10 @@ export default function Header({ currentPage }: HeaderProps) {
               Cursos Online
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/cursos-online') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
             </Link>
+            <Link href="/meus-cursos" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/meus-cursos') ? 'text-white' : ''}`}>
+              Meus Cursos
+              <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/meus-cursos') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
+            </Link>
             <Link href="/matriculas" className={`whitespace-nowrap text-white/90 hover:text-white transition-all duration-300 font-poppins text-sm relative group ${isActive('/matriculas') ? 'text-white' : ''}`}>
               Matrículas
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full ${isActive('/matriculas') ? 'w-full bg-white' : 'group-hover:bg-white'}`}></span>
@@ -167,6 +171,9 @@ export default function Header({ currentPage }: HeaderProps) {
               </Link>
               <Link href="/cursos-online" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/cursos-online') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
                 Cursos Online
+              </Link>
+              <Link href="/meus-cursos" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/meus-cursos') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
+                Meus Cursos
               </Link>
               <Link href="/matriculas" className={`block px-3 py-2 rounded-lg transition-all duration-300 ${isActive('/matriculas') ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
                 Matrículas
