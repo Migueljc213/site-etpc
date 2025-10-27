@@ -162,16 +162,18 @@ model Course {
 
 // Módulos dos cursos
 model CourseModule {
-  id        String   @id @default(cuid())
-  title     String   // Ex: "Módulo 1"
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String   @id @default(cuid())
+  title             String   // Ex: "Módulo 1"
+  description       String?  @db.Text
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // Relacionamentos
-  courseId  String
-  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  subjects  CourseSubject[]
+  courseId          String
+  course            Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subjects          CourseSubject[]
+  onlineLessons     Lesson[] // Aulas online (para cursos online)
 
   @@map("course_modules")
 }
@@ -316,6 +318,7 @@ model OnlineCourse {
 
   // Relacionamentos
   orderItems      OrderItem[]
+  enrollments     StudentEnrollment[]
 
   @@map("online_courses")
 }
@@ -398,4 +401,53 @@ model Payment {
   order               Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("payments")
+}
+
+// Aulas dos módulos online
+model Lesson {
+  id                String   @id @default(cuid())
+  title             String
+  description       String?  @db.Text
+  videoUrl          String?  // URL do vídeo
+  duration          Int      @default(0) // Duração em minutos
+  order             Int      @default(0) // Ordem dentro do módulo
+  moduleId          String
+  module            CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  studentProgress   StudentProgress[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("lessons")
+}
+
+model StudentProgress {
+  id                String   @id @default(cuid())
+  lessonId          String
+  lesson            Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  studentEmail      String   // Email do aluno (login)
+  watched           Boolean  @default(false)
+  watchTime         Int      @default(0) // Tempo assistido em segundos
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([lessonId, studentEmail])
+  @@index([studentEmail])
+  @@map("student_progress")
+}
+
+// Matrícula do Aluno em Cursos
+model StudentEnrollment {
+  id                String   @id @default(cuid())
+  studentEmail      String   // Email do aluno
+  courseId          String
+  course            OnlineCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt        DateTime @default(now())
+  status            String   @default("active") // active, completed, expired
+  completedAt       DateTime?
+
+  @@unique([studentEmail, courseId])
+  @@index([studentEmail])
+  @@index([courseId])
+  @@map("student_enrollments")
 }

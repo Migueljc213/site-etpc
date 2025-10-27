@@ -3,6 +3,36 @@ import { prisma } from '@/lib/prisma';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { sendOrderConfirmationEmail } from '@/lib/email';
 
+// Função para criar matrículas dos alunos
+async function createStudentEnrollments(order: any) {
+  if (!order.items || order.items.length === 0) return;
+  
+  try {
+    for (const item of order.items) {
+      if (item.course) {
+        await prisma.studentEnrollment.upsert({
+          where: {
+            studentEmail_courseId: {
+              studentEmail: order.customerEmail,
+              courseId: item.course.id
+            }
+          },
+          update: {
+            status: 'active'
+          },
+          create: {
+            studentEmail: order.customerEmail,
+            courseId: item.course.id,
+            status: 'active'
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao criar matrículas:', error);
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { orderId, paymentMethod, customerData, cardData } = await request.json();
@@ -67,12 +97,31 @@ export async function POST(request: NextRequest) {
         response.point_of_interaction?.transaction_data?.qr_code_image ||
         response.qr_code_base64;
       
-      const qrCodeText = 
+      // O texto do QR Code PIX pode estar em diferentes lugares
+      let qrCodeText = 
         response.point_of_interaction?.transaction_data?.qr_code ||
+        response.point_of_interaction?.transaction_data?.ticket_url ||
         response.qr_code;
+      
+      // Se não encontrou o texto direto, buscar na data do QR Code
+      if (!qrCodeText && qrCodeBase64) {
+        // O base64 pode conter o EMV QR Code, extrair do EMV payload
+        try {
+          // Decodificar base64 para ver se tem o código EMV
+          const decoded = Buffer.from(qrCodeBase64, 'base64').toString('utf-8');
+          console.log('🔍 Tentando extrair texto do base64 decodificado');
+          // Se tem payload EMV, extrair
+          if (decoded.includes('00020126')) {
+            qrCodeText = decoded;
+          }
+        } catch (e) {
+          console.log('🔍 Não conseguiu decodificar base64');
+        }
+      }
       
       console.log('🔍 QR Code Base64 encontrado:', !!qrCodeBase64);
       console.log('🔍 QR Code Text encontrado:', !!qrCodeText);
+      console.log('🔍 QR Code Text preview:', qrCodeText?.substring(0, 100));
       
       if (!qrCodeBase64 || !qrCodeText) {
         console.error('❌ QR Code não encontrado na resposta do Mercado Pago!');
@@ -237,6 +286,38 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
     } catch (emailError) {
       console.error('Erro ao enviar email:', emailError);
       // Não falha a operação se o email falhar
+    }
+  }
+
+  // Criar matrícula do aluno nos cursos comprados (importar prisma no topo)
+  if (orderWithItems && orderWithItems.items) {
+    try {
+      // Verificar se prisma já está importado
+      const { prisma: prismaInstance } = await import('@/lib/prisma');
+      
+      for (const item of orderWithItems.items) {
+        if (item.course) {
+          await prismaInstance.studentEnrollment.upsert({
+            where: {
+              studentEmail_courseId: {
+                studentEmail: orderWithItems.customerEmail,
+                courseId: item.course.id
+              }
+            },
+            update: {
+              status: 'active' // Reativar se já existir
+            },
+            create: {
+              studentEmail: orderWithItems.customerEmail,
+              courseId: item.course.id,
+              status: 'active'
+            }
+          });
+        }
+      }
+    } catch (enrollmentError) {
+      console.error('Erro ao criar matrícula:', enrollmentError);
+      // Não falha a operação se a matrícula falhar
     }
   }
 
