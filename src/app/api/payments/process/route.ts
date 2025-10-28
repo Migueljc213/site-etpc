@@ -292,7 +292,47 @@ async function savePaymentAndUpdateOrder(order: any, paymentData: any) {
     }
   }
 
-  // NOTA: As matrículas serão criadas automaticamente pelo webhook quando o pagamento for aprovado
+  // Se o pagamento foi aprovado imediatamente (ex: modo teste com cartão),
+  // criar as matrículas agora ao invés de esperar pelo webhook
+  if (paymentData.status === 'paid' && orderWithItems) {
+    console.log('💳 Pagamento aprovado imediatamente - criando matrículas...');
+    try {
+      for (const item of orderWithItems.items) {
+        if (item.course) {
+          const enrolledAt = new Date();
+          const expiresAt = new Date(enrolledAt);
+          expiresAt.setDate(expiresAt.getDate() + (item.course.validityDays || 365));
+
+          await prisma.studentEnrollment.upsert({
+            where: {
+              studentEmail_courseId: {
+                studentEmail: orderWithItems.customerEmail,
+                courseId: item.course.id
+              }
+            },
+            update: {
+              status: 'active',
+              expiresAt
+            },
+            create: {
+              studentEmail: orderWithItems.customerEmail,
+              courseId: item.course.id,
+              status: 'active',
+              enrolledAt,
+              expiresAt
+            }
+          });
+
+          console.log(`✅ Matrícula criada: ${orderWithItems.customerEmail} -> ${item.course.title}`);
+        }
+      }
+    } catch (enrollmentError) {
+      console.error('❌ Erro ao criar matrículas:', enrollmentError);
+      // Não falha a operação se a matrícula falhar
+    }
+  } else {
+    console.log('⏳ Pagamento pendente - matrículas serão criadas pelo webhook após aprovação');
+  }
 
   return NextResponse.json(payment, { status: 201 });
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { FaCreditCard, FaBarcode, FaQrcode, FaShoppingCart, FaLock, FaTimes, FaUser, FaUserPlus } from 'react-icons/fa';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -26,6 +26,22 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix');
   const [toast, setToast] = useState<ToastState | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authLoading, setAuthLoading] = useState(false);
+  
+  // Estados para login
+  const [loginData, setLoginData] = useState({
+    email: '',
+    password: ''
+  });
+
+  // Estados para cadastro
+  const [registerData, setRegisterData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   // Form states
   const [customerData, setCustomerData] = useState({
@@ -121,8 +137,87 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       setShowAuthModal(true);
+    } else if (status === 'authenticated') {
+      setShowAuthModal(false);
     }
   }, [status]);
+
+  // Função de login no modal
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email: loginData.email,
+        password: loginData.password,
+        redirect: false
+      });
+
+      if (result?.error) {
+        showToast('Email ou senha inválidos', 'error');
+      } else if (result?.ok) {
+        showToast('Login realizado com sucesso!', 'success');
+        setShowAuthModal(false);
+        // A sessão será atualizada automaticamente e o useEffect fechará o modal
+      }
+    } catch (err) {
+      showToast('Erro ao fazer login. Tente novamente.', 'error');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  // Função de cadastro no modal
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (registerData.password !== registerData.confirmPassword) {
+      showToast('As senhas não coincidem', 'error');
+      return;
+    }
+
+    if (registerData.password.length < 6) {
+      showToast('A senha deve ter no mínimo 6 caracteres', 'error');
+      return;
+    }
+
+    setAuthLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: registerData.name,
+          email: registerData.email,
+          password: registerData.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        showToast(data.error || 'Erro ao criar conta', 'error');
+      } else {
+        // Login automático após cadastro
+        const result = await signIn('credentials', {
+          email: registerData.email,
+          password: registerData.password,
+          redirect: false
+        });
+
+        if (!result?.error) {
+          showToast('Conta criada com sucesso!', 'success');
+          setShowAuthModal(false);
+        }
+      }
+    } catch (err) {
+      showToast('Erro ao cadastrar. Tente novamente.', 'error');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -247,10 +342,10 @@ export default function CheckoutPage() {
         />
       )}
 
-      {/* Modal de Autenticação */}
+      {/* Modal de Autenticação com Formulários */}
       {showAuthModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 relative">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowAuthModal(false);
@@ -266,33 +361,170 @@ export default function CheckoutPage() {
                 <FaLock className="text-3xl text-etpc-blue" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Autenticação Necessária
+                {authMode === 'login' ? 'Fazer Login' : 'Criar Conta'}
               </h2>
               <p className="text-gray-600">
-                Para finalizar sua compra, você precisa estar logado ou criar uma conta.
+                {authMode === 'login' 
+                  ? 'Entre na sua conta para finalizar a compra'
+                  : 'Cadastre-se rapidamente para continuar'}
               </p>
             </div>
 
-            <div className="space-y-3">
-              <Link
-                href="/login?redirect=/checkout"
-                className="w-full bg-etpc-blue text-white py-3 px-6 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors flex items-center justify-center gap-3"
+            {/* Alternador de modo */}
+            <div className="flex gap-2 mb-6">
+              <button
+                type="button"
+                onClick={() => setAuthMode('login')}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                  authMode === 'login'
+                    ? 'bg-etpc-blue text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
               >
-                <FaUser />
-                Fazer Login
-              </Link>
-
-              <Link
-                href="/cadastro?redirect=/checkout"
-                className="w-full bg-white border-2 border-etpc-blue text-etpc-blue py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+                <FaUser className="inline mr-2" />
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={() => setAuthMode('register')}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                  authMode === 'register'
+                    ? 'bg-etpc-blue text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
               >
-                <FaUserPlus />
-                Criar Conta
-              </Link>
+                <FaUserPlus className="inline mr-2" />
+                Cadastro
+              </button>
             </div>
 
+            {/* Formulário de Login */}
+            {authMode === 'login' && (
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="login-email"
+                    required
+                    value={loginData.email}
+                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="seu@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-2">
+                    Senha
+                  </label>
+                  <input
+                    type="password"
+                    id="login-password"
+                    required
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-sm">
+                  <Link
+                    href="/esqueci-senha"
+                    className="text-etpc-blue hover:text-etpc-blue-dark"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={authLoading}
+                  className="w-full bg-etpc-blue text-white py-3 px-4 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {authLoading ? 'Entrando...' : 'Entrar'}
+                </button>
+              </form>
+            )}
+
+            {/* Formulário de Cadastro */}
+            {authMode === 'register' && (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div>
+                  <label htmlFor="register-name" className="block text-sm font-medium text-gray-700 mb-2">
+                    Nome Completo
+                  </label>
+                  <input
+                    type="text"
+                    id="register-name"
+                    required
+                    value={registerData.name}
+                    onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="Seu nome completo"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="register-email"
+                    required
+                    value={registerData.email}
+                    onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="seu@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-password" className="block text-sm font-medium text-gray-700 mb-2">
+                    Senha
+                  </label>
+                  <input
+                    type="password"
+                    id="register-password"
+                    required
+                    value={registerData.password}
+                    onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-confirm" className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirmar Senha
+                  </label>
+                  <input
+                    type="password"
+                    id="register-confirm"
+                    required
+                    value={registerData.confirmPassword}
+                    onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-etpc-blue focus:border-transparent text-gray-900"
+                    placeholder="Digite a senha novamente"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={authLoading}
+                  className="w-full bg-etpc-blue text-white py-3 px-4 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {authLoading ? 'Cadastrando...' : 'Criar Conta'}
+                </button>
+              </form>
+            )}
+
             <p className="text-center text-sm text-gray-600 mt-6">
-              Seus itens no carrinho serão preservados após o login
+              Seus itens no carrinho serão preservados
             </p>
           </div>
         </div>
