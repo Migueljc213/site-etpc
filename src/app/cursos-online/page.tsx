@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaStar, FaShoppingCart, FaClock, FaGraduationCap, FaCheck, FaFilter } from 'react-icons/fa';
+import { FaStar, FaShoppingCart, FaClock, FaGraduationCap, FaCheck, FaFilter, FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
@@ -26,11 +28,15 @@ interface OnlineCourse {
   featured: boolean;
   whatYouWillLearn: string;
   requirements?: string;
+  validityDays: number;
 }
 
 export default function CursosOnlinePage() {
+  const router = useRouter();
+  const { data: session } = useSession();
   const [courses, setCourses] = useState<OnlineCourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<OnlineCourse[]>([]);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
@@ -40,6 +46,12 @@ export default function CursosOnlinePage() {
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetchEnrolledCourses();
+    }
+  }, [session]);
 
   useEffect(() => {
     filterCourses();
@@ -56,6 +68,19 @@ export default function CursosOnlinePage() {
       console.error('Error fetching courses:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchEnrolledCourses = async () => {
+    try {
+      const response = await fetch(`/api/student/courses?email=${session?.user?.email}`);
+      if (response.ok) {
+        const enrolledCourses = await response.json();
+        const courseIds = new Set(enrolledCourses.map((c: any) => c.id));
+        setEnrolledCourseIds(courseIds);
+      }
+    } catch (error) {
+      console.error('Error fetching enrolled courses:', error);
     }
   };
 
@@ -81,6 +106,11 @@ export default function CursosOnlinePage() {
   };
 
   const handleAddToCart = (course: OnlineCourse) => {
+    // Verificar se o usuário já possui o curso
+    if (enrolledCourseIds.has(course.id)) {
+      return; // Não adicionar ao carrinho
+    }
+
     addToCart({
       id: course.id,
       title: course.title,
@@ -89,6 +119,22 @@ export default function CursosOnlinePage() {
       image: course.image,
       instructor: course.instructor
     });
+  };
+
+  const isEnrolled = (courseId: string) => {
+    return enrolledCourseIds.has(courseId);
+  };
+
+  const formatValidityDays = (days: number) => {
+    if (days >= 365) {
+      const years = Math.floor(days / 365);
+      return years === 1 ? '1 ano' : `${years} anos`;
+    } else if (days >= 30) {
+      const months = Math.floor(days / 30);
+      return months === 1 ? '1 mês' : `${months} meses`;
+    } else {
+      return `${days} dias`;
+    }
   };
 
   const categories = [
@@ -247,13 +293,20 @@ export default function CursosOnlinePage() {
                         </div>
                       )}
 
-                      {course.featured && (
+                      {isEnrolled(course.id) && (
+                        <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
+                          <FaCheckCircle />
+                          Já Comprado
+                        </div>
+                      )}
+
+                      {!isEnrolled(course.id) && course.featured && (
                         <div className="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                           Destaque
                         </div>
                       )}
 
-                      {hasDiscount && (
+                      {hasDiscount && !isEnrolled(course.id) && (
                         <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                           -{Math.round((1 - Number(course.discountPrice!) / Number(course.price)) * 100)}%
                         </div>
@@ -288,14 +341,19 @@ export default function CursosOnlinePage() {
                         {course.instructor}
                       </div>
 
-                      {/* Duration and Students */}
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                        <div className="flex items-center">
-                          <FaClock className="mr-1" />
-                          {course.duration}
+                      {/* Duration, Students and Validity */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center justify-between text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <FaClock className="mr-1" />
+                            {course.duration}
+                          </div>
+                          <div>
+                            {course.totalStudents} alunos
+                          </div>
                         </div>
-                        <div>
-                          {course.totalStudents} alunos
+                        <div className="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded">
+                          ⏳ Acesso por {formatValidityDays(course.validityDays)}
                         </div>
                       </div>
 
@@ -331,27 +389,37 @@ export default function CursosOnlinePage() {
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => handleAddToCart(course)}
-                          disabled={isInCart(course.id)}
-                          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
-                            isInCart(course.id)
-                              ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                              : 'bg-etpc-blue text-white hover:bg-etpc-blue-dark'
-                          }`}
-                        >
-                          {isInCart(course.id) ? (
-                            <>
-                              <FaCheck />
-                              Adicionado
-                            </>
-                          ) : (
-                            <>
-                              <FaShoppingCart />
-                              Adicionar
-                            </>
-                          )}
-                        </button>
+                        {isEnrolled(course.id) ? (
+                          <button
+                            onClick={() => router.push('/dashboard')}
+                            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105"
+                          >
+                            <FaCheckCircle />
+                            Acessar Curso
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleAddToCart(course)}
+                            disabled={isInCart(course.id)}
+                            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
+                              isInCart(course.id)
+                                ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                                : 'bg-etpc-blue text-white hover:bg-etpc-blue-dark'
+                            }`}
+                          >
+                            {isInCart(course.id) ? (
+                              <>
+                                <FaCheck />
+                                Adicionado
+                              </>
+                            ) : (
+                              <>
+                                <FaShoppingCart />
+                                Adicionar
+                              </>
+                            )}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

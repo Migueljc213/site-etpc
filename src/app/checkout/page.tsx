@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaCreditCard, FaBarcode, FaQrcode, FaShoppingCart, FaLock } from 'react-icons/fa';
+import { useSession } from 'next-auth/react';
+import { FaCreditCard, FaBarcode, FaQrcode, FaShoppingCart, FaLock, FaTimes, FaUser, FaUserPlus } from 'react-icons/fa';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Toast from '@/components/Toast';
 import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type PaymentMethod = 'credit_card' | 'debit_card' | 'pix' | 'boleto';
 
@@ -18,10 +20,12 @@ interface ToastState {
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const { items, getCartTotal, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix');
   const [toast, setToast] = useState<ToastState | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Form states
   const [customerData, setCustomerData] = useState({
@@ -113,8 +117,22 @@ export default function CheckoutPage() {
     return true;
   };
 
+  // Verificar autenticação ao carregar
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      setShowAuthModal(true);
+    }
+  }, [status]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Verificar se está autenticado
+    if (status === 'unauthenticated') {
+      setShowAuthModal(true);
+      showToast('Você precisa estar logado para finalizar a compra', 'warning');
+      return;
+    }
 
     if (items.length === 0) {
       showToast('Carrinho vazio', 'error');
@@ -220,6 +238,65 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header currentPage="/checkout" />
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
+      {/* Modal de Autenticação */}
+      {showAuthModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 relative">
+            <button
+              onClick={() => {
+                setShowAuthModal(false);
+                router.push('/');
+              }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <FaTimes className="text-xl" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-etpc-blue bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaLock className="text-3xl text-etpc-blue" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Autenticação Necessária
+              </h2>
+              <p className="text-gray-600">
+                Para finalizar sua compra, você precisa estar logado ou criar uma conta.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                href="/login?redirect=/checkout"
+                className="w-full bg-etpc-blue text-white py-3 px-6 rounded-lg font-semibold hover:bg-etpc-blue-dark transition-colors flex items-center justify-center gap-3"
+              >
+                <FaUser />
+                Fazer Login
+              </Link>
+
+              <Link
+                href="/cadastro?redirect=/checkout"
+                className="w-full bg-white border-2 border-etpc-blue text-etpc-blue py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+              >
+                <FaUserPlus />
+                Criar Conta
+              </Link>
+            </div>
+
+            <p className="text-center text-sm text-gray-600 mt-6">
+              Seus itens no carrinho serão preservados após o login
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="pt-24 pb-12">
         <div className="max-w-6xl mx-auto px-4">

@@ -105,6 +105,11 @@ export async function POST(request: NextRequest) {
           if (item.course) {
             console.log(`✅ Criando matrícula: email=${order.customerEmail}, courseId=${item.course.id}`);
             
+            // Calcular data de expiração baseada no validityDays do curso
+            const enrolledAt = new Date();
+            const expiresAt = new Date(enrolledAt);
+            expiresAt.setDate(expiresAt.getDate() + (item.course.validityDays || 365));
+
             const enrollment = await prisma.studentEnrollment.upsert({
               where: {
                 studentEmail_courseId: {
@@ -113,13 +118,15 @@ export async function POST(request: NextRequest) {
                 }
               },
               update: {
-                status: 'active'
+                status: 'active',
+                expiresAt
               },
               create: {
                 studentEmail: order.customerEmail,
                 courseId: item.course.id,
                 status: 'active',
-                enrolledAt: new Date()
+                enrolledAt,
+                expiresAt
               }
             });
             

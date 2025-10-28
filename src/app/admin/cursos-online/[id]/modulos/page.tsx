@@ -355,7 +355,7 @@ export default function ModulosPage() {
                       onSubmit={(e) => handleCreateLesson(e, module.id)}
                       className="bg-gray-50 rounded-lg p-4 mb-4"
                     >
-                      <h4 className="font-semibold mb-3">Nova Aula</h4>
+                      <h4 className="font-semibold text-gray-900 mb-3">Nova Aula</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -437,35 +437,41 @@ export default function ModulosPage() {
 
                   {/* Lista de Aulas */}
                   <div className="space-y-2">
-                    {module.lessons.map((lesson) => (
-                      <div
-                        key={lesson.id}
-                        className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg"
-                      >
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900">{lesson.title}</p>
-                          <p className="text-sm text-gray-600">
-                            {lesson.duration}min • Ordem: {lesson.order}
-                          </p>
+                    {module.lessons && module.lessons.length > 0 ? (
+                      module.lessons.map((lesson) => (
+                        <div
+                          key={lesson.id}
+                          className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg"
+                        >
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900">{lesson.title}</p>
+                            <p className="text-sm text-gray-600">
+                              {lesson.duration}min • Ordem: {lesson.order}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={lesson.videoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-etpc-blue hover:underline text-sm"
+                            >
+                              Ver Vídeo
+                            </a>
+                            <button
+                              onClick={() => deleteLesson(module.id, lesson.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <a
-                            href={lesson.videoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-etpc-blue hover:underline text-sm"
-                          >
-                            Ver Vídeo
-                          </a>
-                          <button
-                            onClick={() => deleteLesson(module.id, lesson.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <p className="text-gray-500 text-sm text-center py-4">
+                        Nenhuma aula cadastrada. Clique em "Adicionar Aula" para começar.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}

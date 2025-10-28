@@ -17,20 +17,21 @@ export async function GET(
       );
     }
 
-    // Buscar curso pelo slug
-    const course = await prisma.onlineCourse.findUnique({
+    // Buscar curso online pelo slug
+    const onlineCourse = await prisma.onlineCourse.findUnique({
       where: { slug },
       select: {
         id: true,
         title: true,
         slug: true,
+        description: true,
         image: true,
         instructor: true,
         duration: true
       }
     });
 
-    if (!course) {
+    if (!onlineCourse) {
       return NextResponse.json(
         { error: 'Curso não encontrado' },
         { status: 404 }
@@ -42,7 +43,7 @@ export async function GET(
       where: {
         studentEmail_courseId: {
           studentEmail: email,
-          courseId: course.id
+          courseId: onlineCourse.id
         }
       }
     });
@@ -54,7 +55,19 @@ export async function GET(
       );
     }
 
-    // Buscar módulos e aulas
+    // Buscar o Course (técnico) correspondente ao OnlineCourse
+    const course = await prisma.course.findUnique({
+      where: { slug }
+    });
+
+    if (!course) {
+      return NextResponse.json(
+        { error: 'Módulos e aulas não encontrados para este curso' },
+        { status: 404 }
+      );
+    }
+
+    // Buscar módulos e aulas do Course (técnico)
     const modules = await prisma.courseModule.findMany({
       where: { courseId: course.id },
       orderBy: { order: 'asc' },
@@ -65,14 +78,20 @@ export async function GET(
       }
     });
 
+    console.log(`📦 Módulos encontrados: ${modules.length}`);
+
     // Buscar progresso do aluno
     const lessonIds = modules.flatMap(m => m.onlineLessons.map(l => l.id));
+    console.log(`📚 Lesson IDs encontrados: ${lessonIds.length}`);
+    
     const progressData = await prisma.studentProgress.findMany({
       where: {
         studentEmail: email,
         lessonId: { in: lessonIds }
       }
     });
+    
+    console.log(`📊 Progresso encontrado: ${progressData.length} registros`);
 
     // Criar mapa de progresso
     const progressMap = new Map(
@@ -98,9 +117,18 @@ export async function GET(
         };
       })
     }));
+    
+    console.log(`✅ Módulos com progresso montados: ${modulesWithProgress.length}`);
+    console.log(`📚 Total de aulas: ${modulesWithProgress.reduce((sum, m) => sum + m.lessons.length, 0)}`);
 
     return NextResponse.json({
-      ...course,
+      id: onlineCourse.id,
+      title: onlineCourse.title,
+      description: onlineCourse.description || '',
+      slug: onlineCourse.slug,
+      image: onlineCourse.image,
+      instructor: onlineCourse.instructor,
+      duration: onlineCourse.duration,
       modules: modulesWithProgress
     });
   } catch (error) {

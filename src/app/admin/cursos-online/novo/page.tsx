@@ -20,6 +20,7 @@ export default function NovoCursoOnline() {
     level: 'iniciante',
     category: 'programacao',
     image: '',
+    validityDays: '365',
     active: true,
     featured: false,
     whatYouWillLearn: [''],
@@ -56,6 +57,7 @@ export default function NovoCursoOnline() {
           ...formData,
           price: parseFloat(formData.price),
           discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : null,
+          validityDays: parseInt(formData.validityDays),
           whatYouWillLearn: formData.whatYouWillLearn.filter(t => t.trim() !== '')
         })
       });
@@ -207,11 +209,11 @@ export default function NovoCursoOnline() {
           </div>
         </div>
 
-        {/* Preços */}
+        {/* Preços e Validade */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Preços</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Preços e Validade</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Preço Normal (R$) *
@@ -241,6 +243,24 @@ export default function NovoCursoOnline() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
                 placeholder="0.00 (opcional)"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Validade (dias) *
+              </label>
+              <input
+                type="number"
+                required
+                min="1"
+                value={formData.validityDays}
+                onChange={(e) => setFormData({ ...formData, validityDays: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+                placeholder="365"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Prazo de acesso em dias (365 = 1 ano)
+              </p>
             </div>
           </div>
         </div>

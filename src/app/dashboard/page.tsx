@@ -14,6 +14,9 @@ interface Course {
   progress: number;
   totalMinutes: number;
   watchedMinutes: number;
+  expiresAt?: string;
+  enrolledAt?: string;
+  status?: string;
 }
 
 interface DashboardStats {
@@ -45,9 +48,13 @@ export default function StudentDashboardPage() {
 
   const fetchMyCourses = async () => {
     try {
+      console.log('📧 Buscando cursos para:', session?.user?.email);
       const response = await fetch(`/api/student/courses?email=${session?.user?.email}`);
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('📚 Cursos recebidos:', data);
         setCourses(data);
         
         // Calcular estatísticas
@@ -56,15 +63,20 @@ export default function StudentDashboardPage() {
         const watchedMinutes = data.reduce((sum: number, course: Course) => sum + course.watchedMinutes, 0);
         const completedCourses = data.filter((course: Course) => course.progress === 100).length;
         
+        console.log('📊 Estatísticas calculadas:', { totalCourses, totalMinutes, watchedMinutes, completedCourses });
+        
         setStats({
           totalCourses,
           totalMinutes,
           watchedMinutes,
           completedCourses
         });
+      } else {
+        const error = await response.json();
+        console.error('❌ Erro na API:', error);
       }
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error('❌ Error fetching courses:', error);
     } finally {
       setLoading(false);
     }
@@ -77,6 +89,25 @@ export default function StudentDashboardPage() {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+  };
+
+  const getDaysUntilExpiration = (expiresAt?: string) => {
+    if (!expiresAt) return null;
+    const now = new Date();
+    const expiration = new Date(expiresAt);
+    const diffTime = expiration.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const isExpiringSoon = (expiresAt?: string) => {
+    const days = getDaysUntilExpiration(expiresAt);
+    return days !== null && days > 0 && days <= 30;
+  };
+
+  const isExpired = (expiresAt?: string) => {
+    const days = getDaysUntilExpiration(expiresAt);
+    return days !== null && days <= 0;
   };
 
   if (!isClient || loading) {
@@ -184,8 +215,7 @@ export default function StudentDashboardPage() {
               {courses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  onClick={() => router.push(`/dashboard/${course.slug}`)}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   {course.image && (
                     <div className="relative h-48 bg-gray-200">
@@ -194,6 +224,24 @@ export default function StudentDashboardPage() {
                         alt={course.title}
                         className="w-full h-full object-cover"
                       />
+                      
+                      {/* Badge de expiração */}
+                      {isExpired(course.expiresAt) && (
+                        <div className="absolute top-2 left-2">
+                          <div className="bg-red-500 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                            Expirado
+                          </div>
+                        </div>
+                      )}
+                      
+                      {!isExpired(course.expiresAt) && isExpiringSoon(course.expiresAt) && (
+                        <div className="absolute top-2 left-2">
+                          <div className="bg-yellow-500 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                            Expira em {getDaysUntilExpiration(course.expiresAt)} dias
+                          </div>
+                        </div>
+                      )}
+
                       <div className="absolute top-2 right-2">
                         <div className="bg-white rounded-full px-3 py-1 text-sm font-semibold text-etpc-blue">
                           {course.progress}%
@@ -239,10 +287,28 @@ export default function StudentDashboardPage() {
                       </div>
                     </div>
 
-                    <button className="mt-4 w-full bg-etpc-blue text-white py-2 px-4 rounded-lg hover:bg-etpc-blue-dark transition-colors flex items-center justify-center gap-2">
-                      <FaPlayCircle />
-                      Continuar Assistindo
-                    </button>
+                    {isExpired(course.expiresAt) ? (
+                      <div className="mt-4 w-full bg-red-100 text-red-700 py-3 px-4 rounded-lg text-center border border-red-300">
+                        <p className="text-sm font-semibold">Acesso Expirado</p>
+                        <p className="text-xs mt-1">Entre em contato para renovar</p>
+                      </div>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => router.push(`/dashboard/${course.slug}`)}
+                          className="mt-4 w-full bg-etpc-blue text-white py-2 px-4 rounded-lg hover:bg-etpc-blue-dark transition-colors flex items-center justify-center gap-2"
+                        >
+                          <FaPlayCircle />
+                          Continuar Assistindo
+                        </button>
+                        
+                        {isExpiringSoon(course.expiresAt) && (
+                          <div className="mt-2 text-center text-xs text-yellow-600">
+                            ⚠️ Seu acesso expira em {getDaysUntilExpiration(course.expiresAt)} dias
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

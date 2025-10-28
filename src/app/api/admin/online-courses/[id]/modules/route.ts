@@ -40,7 +40,13 @@ export async function GET(
       }
     });
 
-    return NextResponse.json(modules);
+    // Garantir que todos os módulos tenham um array de lessons
+    const modulesWithLessons = modules.map(module => ({
+      ...module,
+      lessons: module.onlineLessons || []
+    }));
+
+    return NextResponse.json(modulesWithLessons);
   } catch (error) {
     console.error('Error fetching modules:', error);
     return NextResponse.json(
@@ -109,10 +115,19 @@ export async function POST(
         description,
         order: order || 0,
         courseId: course.id
+      },
+      include: {
+        onlineLessons: true
       }
     });
 
-    return NextResponse.json(module, { status: 201 });
+    // Retornar com array de lessons inicializado
+    const moduleWithLessons = {
+      ...module,
+      lessons: module.onlineLessons || []
+    };
+
+    return NextResponse.json(moduleWithLessons, { status: 201 });
   } catch (error) {
     console.error('Error creating module:', error);
     return NextResponse.json(

@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { FaCheckCircle, FaClock, FaFileVideo } from 'react-icons/fa';
+import { FaCheckCircle, FaClock, FaPlay, FaChevronDown, FaChevronUp, FaArrowLeft, FaExpand } from 'react-icons/fa';
+import Link from 'next/link';
 
 interface Lesson {
   id: string;
@@ -34,11 +35,13 @@ interface Course {
 
 export default function CoursePage() {
   const params = useParams();
+  const router = useRouter();
   const { data: session, status } = useSession();
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [watchProgress, setWatchProgress] = useState<{ [key: string]: number }>({});
+  const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -47,19 +50,50 @@ export default function CoursePage() {
     }
   }, [status, session, params]);
 
+  // Carregar última posição do vídeo
+  useEffect(() => {
+    if (selectedLesson?.watchTime && videoRef.current) {
+      videoRef.current.currentTime = selectedLesson.watchTime;
+    }
+  }, [selectedLesson]);
+
   const fetchCourse = async () => {
     try {
-      const response = await fetch(`/api/student/courses/${params.slug}`);
+      console.log('📧 Buscando curso:', params.slug, 'para email:', session?.user?.email);
+      const response = await fetch(`/api/student/courses/${params.slug}?email=${session?.user?.email}`);
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('📚 Dados do curso recebidos:', data);
         setCourse(data);
         
-        if (data.modules?.[0]?.lessons?.[0]) {
-          setSelectedLesson(data.modules[0].lessons[0]);
+        // Expandir primeiro módulo por padrão
+        if (data.modules && data.modules.length > 0) {
+          setExpandedModules(new Set([data.modules[0].id]));
+          
+          // Selecionar primeira aula não assistida ou primeira aula
+          let firstUnwatched = null;
+          for (const module of data.modules) {
+            for (const lesson of module.lessons || []) {
+              if (!lesson.watched) {
+                firstUnwatched = lesson;
+                break;
+              }
+            }
+            if (firstUnwatched) break;
+          }
+          
+          const selected = firstUnwatched || data.modules[0]?.lessons?.[0];
+          console.log('🎬 Aula selecionada:', selected);
+          setSelectedLesson(selected);
         }
+      } else {
+        const error = await response.json();
+        console.error('❌ Erro na API:', error);
       }
     } catch (error) {
-      console.error('Error fetching course:', error);
+      console.error('❌ Error fetching course:', error);
     } finally {
       setLoading(false);
     }
@@ -79,8 +113,8 @@ export default function CoursePage() {
         })
       });
 
-      if (response.ok && selectedLesson) {
-        setSelectedLesson({ ...selectedLesson, watched: true });
+      if (response.ok) {
+        fetchCourse(); // Recarregar para atualizar progresso
       }
     } catch (error) {
       console.error('Error marking lesson as watched:', error);
@@ -115,6 +149,91 @@ export default function CoursePage() {
     }
   };
 
+  const toggleModule = (moduleId: string) => {
+    const newExpanded = new Set(expandedModules);
+    if (newExpanded.has(moduleId)) {
+      newExpanded.delete(moduleId);
+    } else {
+      newExpanded.add(moduleId);
+    }
+    setExpandedModules(newExpanded);
+  };
+
+  const getNextLesson = () => {
+    if (!selectedLesson || !course) return null;
+
+    const allLessons = course.modules.flatMap(m => m.lessons);
+    const currentIndex = allLessons.findIndex(l => l.id === selectedLesson.id);
+    
+    if (currentIndex !== -1 && currentIndex < allLessons.length - 1) {
+      return allLessons[currentIndex + 1];
+    }
+    
+    return null;
+  };
+
+  const handleToggleWatched = async (lesson: Lesson, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevenir que clique na aula
+    
+    if (!session?.user?.email) return;
+
+    const newWatchedState = !lesson.watched;
+    
+    try {
+      const response = await fetch('/api/student/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lessonId: lesson.id,
+          watched: newWatchedState,
+          watchTime: newWatchedState ? lesson.duration * 60 : 0
+        })
+      });
+
+      if (response.ok) {
+        fetchCourse(); // Recarregar para atualizar progresso
+      }
+    } catch (error) {
+      console.error('Error toggling watched status:', error);
+    }
+  };
+
+  const formatTime = (minutes: number) => {
+    if (minutes < 60) return `${minutes}min`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+  };
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null;
+    
+    // Padrões de URL do YouTube
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+      /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+      }
+    }
+
+    // Se já for uma URL embed, retornar como está
+    if (url.includes('youtube.com/embed/')) {
+      return url;
+    }
+
+    return null;
+  };
+
+  const isYouTubeUrl = (url?: string) => {
+    if (!url) return false;
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  };
+
   if (loading || status === 'loading') {
     return (
       <div className="flex items-center justify-center h-64">
@@ -126,8 +245,26 @@ export default function CoursePage() {
     );
   }
 
-  if (!course || !session) {
-    return null;
+  if (!session) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600">Você precisa estar autenticado para ver este curso</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600">Curso não encontrado ou você não está matriculado</p>
+          <p className="text-gray-600 text-sm mt-2">Slug: {params.slug}</p>
+          <p className="text-gray-600 text-sm">Email: {session?.user?.email}</p>
+        </div>
+      </div>
+    );
   }
 
   const totalLessons = course.modules.reduce((sum, module) => sum + module.lessons.length, 0);
@@ -137,99 +274,225 @@ export default function CoursePage() {
   const progress = totalLessons > 0 ? Math.round((watchedLessons / totalLessons) * 100) : 0;
 
   return (
-    <div className="flex h-[calc(100vh-8rem)]">
-      {/* Sidebar */}
-      <div className="w-80 bg-white border-r border-gray-200 overflow-y-auto">
-        <div className="p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Conteúdo do Curso</h2>
-          
-          <div className="mb-6">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-600">Progresso</span>
-              <span className="font-semibold text-gray-900">{progress}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-etpc-blue h-2 rounded-full transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {course.modules.map((module) => (
-              <div key={module.id}>
-                <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                  {module.title}
-                </h3>
-                <div className="space-y-1">
-                  {module.lessons.map((lesson) => (
-                    <button
-                      key={lesson.id}
-                      onClick={() => setSelectedLesson(lesson)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-all flex items-center gap-3 ${
-                        selectedLesson?.id === lesson.id
-                          ? 'bg-etpc-blue text-white'
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      <FaFileVideo className="flex-shrink-0" />
-                      <span className="flex-1 text-sm truncate">{lesson.title}</span>
-                      {lesson.watched && (
-                        <FaCheckCircle className="text-green-500 flex-shrink-0" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="flex items-center gap-2 text-gray-600 hover:text-etpc-blue transition-colors"
+          >
+            <FaArrowLeft />
+            <span>Voltar aos Meus Cursos</span>
+          </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Video Player */}
-        <div className="bg-black aspect-video">
-          {selectedLesson?.videoUrl ? (
-            <video
-              ref={videoRef}
-              src={selectedLesson.videoUrl}
-              className="w-full h-full"
-              controls
-              onTimeUpdate={handleVideoTimeUpdate}
-              onEnded={() => selectedLesson && markAsWatched(selectedLesson.id)}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-white">
-              <p>Selecione uma aula para assistir</p>
+      <div className="container mx-auto px-6 py-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Coluna Principal - Vídeo e Descrição */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Título do Curso */}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>
+              <p className="text-gray-600">{course.description}</p>
             </div>
-          )}
-        </div>
 
-        {/* Lesson Info */}
-        {selectedLesson && (
-          <div className="p-6 bg-white border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {selectedLesson.title}
-            </h2>
-            {selectedLesson.description && (
-              <p className="text-gray-600">{selectedLesson.description}</p>
-            )}
-            <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <FaClock />
-                <span>{Math.floor(selectedLesson.duration)} min</span>
+            {/* Progresso */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="font-bold text-gray-900 mb-4">Progresso do Curso</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>{watchedLessons} de {totalLessons} aulas concluídas</span>
+                  <span className="font-semibold text-etpc-blue">{progress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div
+                    className="bg-gradient-to-r from-etpc-blue to-etpc-blue-dark h-3 rounded-full transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
               </div>
-              {selectedLesson.watched && (
-                <div className="flex items-center gap-2 text-green-600">
-                  <FaCheckCircle />
-                  <span>Assistida</span>
+            </div>
+
+            {/* Player de Vídeo */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="bg-black aspect-video relative">
+                {selectedLesson?.videoUrl ? (
+                  isYouTubeUrl(selectedLesson.videoUrl) ? (
+                    <iframe
+                      src={getYouTubeEmbedUrl(selectedLesson.videoUrl) || ''}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={selectedLesson.title}
+                    />
+                  ) : (
+                    <video
+                      ref={videoRef}
+                      src={selectedLesson.videoUrl}
+                      className="w-full h-full"
+                      controls
+                      onTimeUpdate={handleVideoTimeUpdate}
+                      onEnded={() => selectedLesson && markAsWatched(selectedLesson.id)}
+                    />
+                  )
+                ) : (
+                  <div className="flex items-center justify-center h-full text-white">
+                    <div className="text-center">
+                      <FaPlay className="text-6xl mb-4 mx-auto opacity-50" />
+                      <p>Selecione uma aula para assistir</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Informações da Aula */}
+              {selectedLesson && (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    {selectedLesson.title}
+                  </h2>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                    <div className="flex items-center gap-2">
+                      <FaClock />
+                      <span>{formatTime(selectedLesson.duration)}</span>
+                    </div>
+                    {selectedLesson.watched && (
+                      <div className="flex items-center gap-2 text-green-600">
+                        <FaCheckCircle />
+                        <span>Concluída</span>
+                      </div>
+                    )}
+                  </div>
+                  {selectedLesson.description && (
+                    <p className="text-gray-600 mb-4">{selectedLesson.description}</p>
+                  )}
+                  <div className="flex gap-3">
+                    {!isYouTubeUrl(selectedLesson.videoUrl) && (
+                      <button
+                        onClick={() => {
+                          if (videoRef.current) {
+                            videoRef.current.requestFullscreen();
+                          }
+                        }}
+                        className="bg-etpc-blue text-white px-6 py-3 rounded-lg hover:bg-etpc-blue-dark transition-colors flex items-center gap-2"
+                      >
+                        <FaExpand />
+                        Assistir em Tela Cheia
+                      </button>
+                    )}
+                    
+                    <button
+                      onClick={() => markAsWatched(selectedLesson.id)}
+                      className={`px-6 py-3 rounded-lg transition-colors flex items-center gap-2 ${
+                        selectedLesson.watched
+                          ? 'bg-gray-200 text-gray-600'
+                          : 'bg-green-500 text-white hover:bg-green-600'
+                      }`}
+                    >
+                      <FaCheckCircle />
+                      {selectedLesson.watched ? 'Marcada como Assistida' : 'Marcar como Assistida'}
+                    </button>
+
+                    {getNextLesson() && (
+                      <button
+                        onClick={() => {
+                          const nextLesson = getNextLesson();
+                          if (nextLesson) setSelectedLesson(nextLesson);
+                        }}
+                        className="bg-etpc-blue text-white px-6 py-3 rounded-lg hover:bg-etpc-blue-dark transition-colors flex items-center gap-2"
+                      >
+                        Próxima Aula
+                        <FaArrowLeft className="rotate-180" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
           </div>
-        )}
+
+          {/* Sidebar - Lista de Aulas */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-6">
+              <div className="bg-gradient-to-r from-etpc-blue to-etpc-blue-dark p-6 text-white">
+                <h3 className="text-xl font-bold mb-2">Conteúdo do Curso</h3>
+                <p className="text-sm opacity-90">
+                  {course.modules.length} módulos • {totalLessons} aulas
+                </p>
+              </div>
+
+              <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
+                {course.modules.map((module) => (
+                  <div key={module.id} className="border-b border-gray-200">
+                    {/* Cabeçalho do Módulo */}
+                    <button
+                      onClick={() => toggleModule(module.id)}
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex-1 text-left">
+                        <h4 className="font-semibold text-gray-900">{module.title}</h4>
+                        <p className="text-sm text-gray-600">
+                          {module.lessons.length} aulas
+                          {module.description && ` • ${module.description}`}
+                        </p>
+                      </div>
+                      {expandedModules.has(module.id) ? (
+                        <FaChevronUp className="text-gray-400" />
+                      ) : (
+                        <FaChevronDown className="text-gray-400" />
+                      )}
+                    </button>
+
+                    {/* Lista de Aulas */}
+                    {expandedModules.has(module.id) && (
+                      <div className="bg-gray-50">
+                        {module.lessons.map((lesson) => (
+                          <div
+                            key={lesson.id}
+                            className={`w-full px-6 py-3 text-left flex items-start gap-3 hover:bg-gray-100 transition-colors border-l-4 ${
+                              selectedLesson?.id === lesson.id
+                                ? 'border-etpc-blue bg-blue-50'
+                                : 'border-transparent'
+                            }`}
+                          >
+                            <button
+                              onClick={(e) => handleToggleWatched(lesson, e)}
+                              className="flex-shrink-0 mt-1 cursor-pointer hover:scale-110 transition-transform"
+                              title={lesson.watched ? 'Desmarcar como assistida' : 'Marcar como assistida'}
+                            >
+                              {lesson.watched ? (
+                                <FaCheckCircle className="text-green-500 text-lg" />
+                              ) : (
+                                <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-green-500 transition-colors" />
+                              )}
+                            </button>
+                            <button
+                              onClick={() => setSelectedLesson(lesson)}
+                              className="flex-1 min-w-0 text-left"
+                            >
+                              <p className={`text-sm font-medium ${
+                                selectedLesson?.id === lesson.id
+                                  ? 'text-etpc-blue'
+                                  : 'text-gray-900'
+                              }`}>
+                                {lesson.title}
+                              </p>
+                              <p className="text-xs text-gray-600 mt-1">
+                                {formatTime(lesson.duration)}
+                              </p>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

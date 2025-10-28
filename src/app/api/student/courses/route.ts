@@ -86,7 +86,10 @@ export async function GET(request: NextRequest) {
           instructor: enrollment.course.instructor,
           progress,
           totalMinutes,
-          watchedMinutes
+          watchedMinutes,
+          expiresAt: enrollment.expiresAt?.toISOString(),
+          enrolledAt: enrollment.enrolledAt.toISOString(),
+          status: enrollment.status
         };
       })
     );

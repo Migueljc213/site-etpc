@@ -68,6 +68,7 @@ export async function PUT(
     if (data.duration) updateData.duration = data.duration;
     if (data.level) updateData.level = data.level;
     if (data.category) updateData.category = data.category;
+    if (data.validityDays !== undefined) updateData.validityDays = data.validityDays;
     if (data.whatYouWillLearn) updateData.whatYouWillLearn = JSON.stringify(data.whatYouWillLearn);
     if (data.requirements !== undefined) updateData.requirements = data.requirements;
     if (data.active !== undefined) updateData.active = data.active;

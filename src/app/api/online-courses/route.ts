@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
         duration: data.duration,
         level: data.level,
         category: data.category,
+        validityDays: data.validityDays || 365,
         whatYouWillLearn: JSON.stringify(data.whatYouWillLearn || []),
         requirements: data.requirements || null,
         active: data.active !== undefined ? data.active : true,

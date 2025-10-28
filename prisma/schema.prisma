@@ -313,6 +313,7 @@ model OnlineCourse {
   featured        Boolean  @default(false) // Curso em destaque
   whatYouWillLearn String  @db.Text // JSON array de tópicos
   requirements    String?  @db.Text // Pré-requisitos
+  validityDays    Int      @default(365) // Prazo de validade em dias (padrão: 365 dias = 1 ano)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -443,6 +444,7 @@ model StudentEnrollment {
   courseId          String
   course            OnlineCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
   enrolledAt        DateTime @default(now())
+  expiresAt         DateTime? // Data de expiração do acesso (opcional para migração)
   status            String   @default("active") // active, completed, expired
   completedAt       DateTime?
 
