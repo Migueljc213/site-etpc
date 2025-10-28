@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { FaGraduationCap, FaBookOpen, FaChartBar, FaSignOutAlt, FaUser, FaHome, FaChevronDown } from 'react-icons/fa';
+import { FaGraduationCap, FaBookOpen, FaChartBar, FaSignOutAlt, FaUser, FaHome, FaChevronDown, FaUserCircle, FaLock, FaHistory } from 'react-icons/fa';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -39,9 +39,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside className={`${
         sidebarOpen ? 'w-64' : 'w-20'
-      } bg-gray-900 text-white transition-all duration-300 flex flex-col`}>
+      } bg-gray-900 text-white transition-all duration-300 flex flex-col fixed left-0 top-0 h-screen z-40`}>
         {/* Logo */}
-        <div className="h-16 flex items-center justify-center border-b border-gray-800">
+        <div className="h-16 flex items-center justify-center border-b border-gray-800 flex-shrink-0">
           {sidebarOpen ? (
             <h1 className="text-xl font-bold text-white">ETPC Dashboard</h1>
           ) : (
@@ -60,6 +60,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {sidebarOpen && <span>Meus Cursos</span>}
             </Link>
             <Link
+              href="/dashboard/historico"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <FaHistory />
+              {sidebarOpen && <span>Histórico</span>}
+            </Link>
+            <Link
               href="/dashboard/stats"
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
             >
@@ -71,9 +78,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${
+        sidebarOpen ? 'ml-64' : 'ml-20'
+      }`}>
         {/* Top Bar */}
-        <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 flex-shrink-0 z-10">
+        <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 flex-shrink-0 z-10 fixed right-0 left-0 transition-all duration-300" style={{
+          marginLeft: sidebarOpen ? '16rem' : '5rem'
+        }}>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-700"
@@ -118,12 +129,43 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     Meus Cursos
                   </Link>
                   <Link
+                    href="/dashboard/historico"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <FaHistory className="text-gray-600" />
+                    Histórico
+                  </Link>
+                  <Link
                     href="/dashboard/stats"
                     onClick={() => setUserMenuOpen(false)}
                     className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <FaChartBar className="text-gray-600" />
                     Estatísticas
+                  </Link>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-gray-200"></div>
+
+                {/* Profile & Settings */}
+                <div className="py-2">
+                  <Link
+                    href="/perfil"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <FaUserCircle className="text-gray-600" />
+                    Perfil
+                  </Link>
+                  <Link
+                    href="/trocar-senha"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <FaLock className="text-gray-600" />
+                    Trocar Senha
                   </Link>
                   <Link
                     href="/"
@@ -154,7 +196,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 mt-16">
           {children}
         </div>
       </main>

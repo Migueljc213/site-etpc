@@ -97,10 +97,20 @@ export default function CheckoutPage() {
   const detectCardType = (cardNumber: string) => {
     const number = cardNumber.replace(/\D/g, '');
     
+    // Visa: começa com 4
     if (/^4/.test(number)) return 'visa';
+    
+    // Mastercard: começa com 51-55 ou 2221-2720
     if (/^5[1-5]/.test(number)) return 'mastercard';
+    if (/^2[2-7]/.test(number)) return 'mastercard';
+    
+    // American Express: começa com 34 ou 37
     if (/^3[47]/.test(number)) return 'amex';
-    if (/^(636297|636368|438935|504175|451416|636297|5067|5090|627780|504175|636297)/.test(number)) return 'elo';
+    
+    // Elo: diversos BINs
+    if (/^(4011|4312|4389|4514|4576|5041|5066|5067|5090|6277|6362|6363|6504|6505|6507|6509|6516|6550)/.test(number)) {
+      return 'elo';
+    }
     
     return 'unknown';
   };
@@ -632,25 +642,37 @@ export default function CheckoutPage() {
                           }}
                           placeholder="0000 0000 0000 0000"
                           maxLength={19}
-                          className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
+                          className="w-full px-4 py-3 pr-32 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-etpc-blue text-gray-900"
                         />
                         {cardType !== 'unknown' && cardData.number.length > 4 && (
                           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                            {cardType === 'visa' && <span className="text-2xl">💳</span>}
-                            {cardType === 'mastercard' && <span className="text-xl">💳</span>}
-                            {cardType === 'amex' && <span className="text-lg">💳</span>}
-                            {cardType === 'elo' && <span className="text-lg">💳</span>}
+                            {cardType === 'visa' && (
+                              <div className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 rounded-md font-bold text-sm">
+                                <FaCreditCard />
+                                <span>VISA</span>
+                              </div>
+                            )}
+                            {cardType === 'mastercard' && (
+                              <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 rounded-md font-bold text-sm">
+                                <FaCreditCard />
+                                <span>MASTER</span>
+                              </div>
+                            )}
+                            {cardType === 'amex' && (
+                              <div className="flex items-center gap-2 bg-blue-400 text-white px-3 py-1.5 rounded-md font-bold text-sm">
+                                <FaCreditCard />
+                                <span>AMEX</span>
+                              </div>
+                            )}
+                            {cardType === 'elo' && (
+                              <div className="flex items-center gap-2 bg-yellow-500 text-white px-3 py-1.5 rounded-md font-bold text-sm">
+                                <FaCreditCard />
+                                <span>ELO</span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
-                      {cardType !== 'unknown' && cardData.number.length > 4 && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          {cardType === 'visa' && 'Visa'}
-                          {cardType === 'mastercard' && 'Mastercard'}
-                          {cardType === 'amex' && 'American Express'}
-                          {cardType === 'elo' && 'Elo'}
-                        </p>
-                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Nome no Cartão *</label>

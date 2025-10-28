@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { FaCheckCircle, FaClock, FaTimes, FaReceipt, FaDownload, FaEye } from 'react-icons/fa';
+import { FaCheckCircle, FaClock, FaTimes, FaReceipt, FaDownload, FaEye, FaCalendarAlt, FaExclamationTriangle } from 'react-icons/fa';
+
+interface Enrollment {
+  expiresAt: string | null;
+  status: string;
+}
 
 interface OrderItem {
   id: string;
@@ -15,6 +20,7 @@ interface OrderItem {
     image: string | null;
     instructor: string;
   };
+  enrollment?: Enrollment;
 }
 
 interface Payment {
@@ -58,8 +64,32 @@ export default function HistoricoPage() {
     try {
       const response = await fetch(`/api/orders?email=${session?.user?.email}`);
       if (response.ok) {
-        const data = await response.json();
-        setOrders(data);
+        const ordersData = await response.json();
+        
+        // Buscar matrículas para cada curso comprado
+        const ordersWithEnrollments = await Promise.all(
+          ordersData.map(async (order: Order) => {
+            const itemsWithEnrollments = await Promise.all(
+              order.items.map(async (item: OrderItem) => {
+                try {
+                  const enrollmentResponse = await fetch(
+                    `/api/student/enrollments?email=${session?.user?.email}&courseId=${item.courseId}`
+                  );
+                  if (enrollmentResponse.ok) {
+                    const enrollment = await enrollmentResponse.json();
+                    return { ...item, enrollment };
+                  }
+                } catch (err) {
+                  console.error('Error fetching enrollment:', err);
+                }
+                return item;
+              })
+            );
+            return { ...order, items: itemsWithEnrollments };
+          })
+        );
+        
+        setOrders(ordersWithEnrollments);
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -121,6 +151,53 @@ export default function HistoricoPage() {
       style: 'currency',
       currency: 'BRL',
     }).format(parseFloat(price));
+  };
+
+  const getDaysUntilExpiration = (expiresAt?: string | null) => {
+    if (!expiresAt) return null;
+    const now = new Date();
+    const expiration = new Date(expiresAt);
+    const diffTime = expiration.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getExpirationBadge = (expiresAt?: string | null) => {
+    const days = getDaysUntilExpiration(expiresAt);
+    
+    if (days === null) {
+      return (
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+          <FaClock />
+          Sem prazo definido
+        </span>
+      );
+    }
+    
+    if (days <= 0) {
+      return (
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+          <FaTimes />
+          Expirado
+        </span>
+      );
+    }
+    
+    if (days <= 30) {
+      return (
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+          <FaExclamationTriangle />
+          Expira em {days} dias
+        </span>
+      );
+    }
+    
+    return (
+      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+        <FaCalendarAlt />
+        Expira em {days} dias
+      </span>
+    );
   };
 
   if (loading) {
@@ -210,7 +287,12 @@ export default function HistoricoPage() {
                       )}
                       <div className="flex-1">
                         <p className="font-medium text-gray-900">{item.course.title}</p>
-                        <p className="text-sm text-gray-600">{item.course.instructor}</p>
+                        <p className="text-sm text-gray-600 mb-1">{item.course.instructor}</p>
+                        {order.paymentStatus === 'paid' && item.enrollment && (
+                          <div className="mt-1">
+                            {getExpirationBadge(item.enrollment.expiresAt)}
+                          </div>
+                        )}
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-gray-900">
@@ -315,7 +397,17 @@ export default function HistoricoPage() {
                       )}
                       <div className="flex-1">
                         <p className="font-medium text-gray-900">{item.course.title}</p>
-                        <p className="text-sm text-gray-600">{item.course.instructor}</p>
+                        <p className="text-sm text-gray-600 mb-2">{item.course.instructor}</p>
+                        {selectedOrder.paymentStatus === 'paid' && item.enrollment && (
+                          <div>
+                            {getExpirationBadge(item.enrollment.expiresAt)}
+                            {item.enrollment.expiresAt && (
+                              <p className="text-xs text-gray-500 mt-1">
+                                Expira em: {new Date(item.enrollment.expiresAt).toLocaleDateString('pt-BR')}
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold text-etpc-blue">
