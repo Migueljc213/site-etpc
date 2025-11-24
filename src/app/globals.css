@@ -5,20 +5,20 @@
   --foreground: #171717;
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-poppins: var(--font-poppins);
+  
+  --font-family-sans: var(--font-poppins), 'Poppins', sans-serif;
+  --font-family-mono: var(--font-geist-mono), monospace;
   
   /* ETPC Brand Colors */
-  --color-etpc-blue: #1e3a8a; /* slate-800 */
-  --color-etpc-blue-light: #334155; /* slate-700 */
-  --color-etpc-blue-dark: #0f172a; /* slate-900 */
-  --color-etpc-gold: #f59e0b; /* amber-500 */
-  --color-etpc-gold-light: #fbbf24; /* amber-400 */
-  --color-etpc-gold-dark: #d97706; /* amber-600 */
+  --color-etpc-blue: #1e3a8a;
+  --color-etpc-blue-light: #334155;
+  --color-etpc-blue-dark: #0f172a;
+  --color-etpc-gold: #f59e0b;
+  --color-etpc-gold-light: #fbbf24;
+  --color-etpc-gold-dark: #d97706;
 }
 
 @media (prefers-color-scheme: dark) {

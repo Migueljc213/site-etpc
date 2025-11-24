@@ -95,62 +95,27 @@ export default function Home() {
     const fetchGalleryPhotos = async () => {
       try {
         const response = await fetch('/api/gallery?active=true');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        // A API retorna um objeto com 'value' contendo o array de fotos
-        setGalleryPhotos(Array.isArray(data) ? data : data.value || []);
+        
+        // Verificar se a resposta é um array ou se há um erro
+        if (Array.isArray(data)) {
+          setGalleryPhotos(data);
+        } else if (data.error) {
+          console.error('Erro da API:', data.error);
+          setGalleryPhotos([]);
+        } else {
+          // Caso a resposta venha em formato diferente
+          setGalleryPhotos(data.value || data.photos || []);
+        }
       } catch (error) {
         console.error('Error fetching gallery photos:', error);
-        // Fallback para fotos estáticas se a API falhar
-        setGalleryPhotos([
-          {
-            id: '1',
-            title: 'Laboratório de Automação',
-            image: '/images/gallery/1758570763408-0-etpc9.jpg',
-            category: 'laboratorio'
-          },
-          {
-            id: '2',
-            title: 'Aulas Práticas',
-            image: '/images/gallery/1758570765218-1-etpc8.jpg',
-            category: 'aulas'
-          },
-          {
-            id: '3',
-            title: 'Laboratório de Informática',
-            image: '/images/gallery/1758570765838-2-etpc7.jpg',
-            category: 'laboratorio'
-          },
-          {
-            id: '4',
-            title: 'Aulas de Robótica',
-            image: '/images/gallery/1758570766452-3-etpc6.jpg',
-            category: 'robotica'
-          },
-          {
-            id: '5',
-            title: 'Projetos Práticos',
-            image: '/images/gallery/1758570767071-4-etpc5.jpg',
-            category: 'projetos'
-          },
-          {
-            id: '6',
-            title: 'Eventos Escolares',
-            image: '/images/gallery/1758570767687-5-etpc4.jpg',
-            category: 'eventos'
-          },
-          {
-            id: '7',
-            title: 'Workshops',
-            image: '/images/gallery/1758570768301-6-etpc3.jpg',
-            category: 'workshops'
-          },
-          {
-            id: '8',
-            title: 'Formaturas',
-            image: '/images/gallery/1758570768917-7-etpc2.jpg',
-            category: 'formatura'
-          }
-        ]);
+        // Não definir fallback - deixar vazio para mostrar placeholders
+        setGalleryPhotos([]);
       }
     };
 

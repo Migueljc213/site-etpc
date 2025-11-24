@@ -36,7 +36,15 @@ export async function GET(request: NextRequest) {
       ]
     });
 
-    return NextResponse.json(courses);
+    // Convert Decimal fields to numbers for JSON serialization
+    const coursesWithNumbers = courses.map(course => ({
+      ...course,
+      price: course.price.toNumber(),
+      discountPrice: course.discountPrice?.toNumber() || null,
+      rating: course.rating?.toNumber() || null,
+    }));
+
+    return NextResponse.json(coursesWithNumbers);
   } catch (error) {
     console.error('Error fetching online courses:', error);
     return NextResponse.json(

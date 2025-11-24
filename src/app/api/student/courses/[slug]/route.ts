@@ -74,6 +74,13 @@ export async function GET(
       include: {
         onlineLessons: {
           orderBy: { order: 'asc' }
+        },
+        exam: {
+          include: {
+            questions: {
+              select: { id: true, order: true }
+            }
+          }
         }
       }
     });
@@ -98,6 +105,16 @@ export async function GET(
       progressData.map(p => [p.lessonId, { watched: p.watched, watchTime: p.watchTime }])
     );
 
+    // Buscar tentativas de prova do aluno
+    const examAttempts = await prisma.examAttempt.findMany({
+      where: { studentEmail: email },
+      select: { examId: true, passed: true, score: true }
+    });
+    
+    const attemptsMap = new Map(
+      examAttempts.map(a => [a.examId, { passed: a.passed, score: a.score }])
+    );
+
     // Montar resposta com módulos e aulas
     const modulesWithProgress = modules.map(module => ({
       id: module.id,
@@ -115,7 +132,19 @@ export async function GET(
           watched: progress.watched,
           watchTime: progress.watchTime
         };
-      })
+      }),
+      exam: module.exam ? {
+        id: module.exam.id,
+        title: module.exam.title,
+        description: module.exam.description,
+        passingScore: module.exam.passingScore,
+        timeLimit: module.exam.timeLimit,
+        isRequired: module.exam.isRequired,
+        totalQuestions: module.exam.questions.length,
+        hasAttempt: attemptsMap.has(module.exam.id),
+        passed: attemptsMap.get(module.exam.id)?.passed || false,
+        lastScore: attemptsMap.get(module.exam.id)?.score
+      } : null
     }));
     
     console.log(`✅ Módulos com progresso montados: ${modulesWithProgress.length}`);

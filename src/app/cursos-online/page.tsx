@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaStar, FaShoppingCart, FaClock, FaGraduationCap, FaCheck, FaFilter, FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
@@ -377,49 +378,66 @@ export default function CursosOnlinePage() {
                       )}
 
                       {/* Price and CTA */}
-                      <div className="flex items-center justify-between pt-4 border-t">
-                        <div>
-                          {hasDiscount && (
-                            <div className="text-sm text-gray-400 line-through">
-                              {formatPrice(Number(course.price))}
+                      <div className="pt-4 border-t space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            {hasDiscount && (
+                              <div className="text-sm text-gray-400 line-through">
+                                {formatPrice(Number(course.price))}
+                              </div>
+                            )}
+                            <div className="text-2xl font-bold text-etpc-blue">
+                              {formatPrice(Number(price))}
                             </div>
-                          )}
-                          <div className="text-2xl font-bold text-etpc-blue">
-                            {formatPrice(Number(price))}
                           </div>
+
+                          {isEnrolled(course.id) ? (
+                            <button
+                              onClick={() => router.push('/dashboard')}
+                              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105"
+                            >
+                              <FaCheckCircle />
+                              Acessar Curso
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleAddToCart(course)}
+                              disabled={isInCart(course.id)}
+                              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
+                                isInCart(course.id)
+                                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                                  : 'bg-etpc-blue text-white hover:bg-etpc-blue-dark'
+                              }`}
+                            >
+                              {isInCart(course.id) ? (
+                                <>
+                                  <FaCheck />
+                                  Adicionado
+                                </>
+                              ) : (
+                                <>
+                                  <FaShoppingCart />
+                                  Adicionar
+                                </>
+                              )}
+                            </button>
+                          )}
                         </div>
 
-                        {isEnrolled(course.id) ? (
-                          <button
-                            onClick={() => router.push('/dashboard')}
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105"
-                          >
-                            <FaCheckCircle />
-                            Acessar Curso
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleAddToCart(course)}
-                            disabled={isInCart(course.id)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
-                              isInCart(course.id)
-                                ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                                : 'bg-etpc-blue text-white hover:bg-etpc-blue-dark'
-                            }`}
-                          >
-                            {isInCart(course.id) ? (
-                              <>
-                                <FaCheck />
-                                Adicionado
-                              </>
-                            ) : (
-                              <>
-                                <FaShoppingCart />
-                                Adicionar
-                              </>
-                            )}
-                          </button>
-                        )}
+                        <button
+                          onClick={() => router.push(`/cursos-online/${course.slug}`)}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Ver mais detalhes
+                        </button>
+
+                        <Link
+                          href={`/cursos-online/${course.slug}`}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                          aria-label={`Ver detalhes do curso ${course.title}`}
+                        >
+                          Ver mais detalhes
+                        </Link>
                       </div>
                     </div>
                   </div>

@@ -174,6 +174,7 @@ model CourseModule {
   course            Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   subjects          CourseSubject[]
   onlineLessons     Lesson[] // Aulas online (para cursos online)
+  exam              ModuleExam? // Prova do módulo
 
   @@map("course_modules")
 }
@@ -448,8 +449,93 @@ model StudentEnrollment {
   status            String   @default("active") // active, completed, expired
   completedAt       DateTime?
 
+  // Relacionamentos
+  examAttempts      ExamAttempt[]
+  certificate       Certificate?
+
   @@unique([studentEmail, courseId])
   @@index([studentEmail])
   @@index([courseId])
   @@map("student_enrollments")
+}
+
+// Prova do Módulo
+model ModuleExam {
+  id                String   @id @default(cuid())
+  title             String   // Ex: "Avaliação Módulo 1"
+  description       String?  @db.Text
+  passingScore      Int      @default(70) // Nota mínima para aprovação (0-100)
+  timeLimit         Int?     // Tempo limite em minutos (null = sem limite)
+  moduleId          String   @unique // Um módulo tem apenas uma prova
+  module            CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  isRequired        Boolean  @default(true) // Se a prova é obrigatória
+  questions         ExamQuestion[]
+  examAttempts      ExamAttempt[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("module_exams")
+}
+
+// Questões da Prova
+model ExamQuestion {
+  id                String   @id @default(cuid())
+  question          String   @db.Text
+  type              String   @default("multiple_choice") // multiple_choice, true_false
+  order             Int      @default(0)
+  examId            String
+  exam              ModuleExam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  options           ExamOption[]
+  correctAnswer     String   // ID da opção correta
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("exam_questions")
+}
+
+// Opções de Resposta (Múltipla Escolha)
+model ExamOption {
+  id                String   @id @default(cuid())
+  text              String   @db.Text
+  order             Int      @default(0)
+  questionId        String
+  question          ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("exam_options")
+}
+
+// Tentativas de Prova do Aluno
+model ExamAttempt {
+  id                String   @id @default(cuid())
+  examId            String
+  exam              ModuleExam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  enrollmentId      String
+  enrollment        StudentEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  studentEmail      String
+  score             Int      // Pontuação final (0-100)
+  passed            Boolean  // Se foi aprovado
+  answers           String   @db.Text // JSON com as respostas
+  startedAt         DateTime @default(now())
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([studentEmail])
+  @@index([examId])
+  @@map("exam_attempts")
+}
+
+// Certificado de Conclusão
+model Certificate {
+  id                String   @id @default(cuid())
+  enrollmentId      String   @unique
+  enrollment        StudentEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  certificateNumber String   @unique // Número único do certificado
+  issuedAt          DateTime @default(now())
+  pdfUrl            String?  // URL do PDF gerado
+  
+  @@index([certificateNumber])
+  @@map("certificates")
 }

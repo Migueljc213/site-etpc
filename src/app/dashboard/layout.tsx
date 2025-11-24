@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { FaGraduationCap, FaBookOpen, FaChartBar, FaSignOutAlt, FaUser, FaHome, FaChevronDown, FaUserCircle, FaLock, FaHistory } from 'react-icons/fa';
+import { FaGraduationCap, FaBookOpen, FaChartBar, FaSignOutAlt, FaUser, FaHome, FaChevronDown, FaUserCircle, FaLock, FaHistory, FaAward } from 'react-icons/fa';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -65,6 +65,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <FaHistory />
               {sidebarOpen && <span>Histórico</span>}
+            </Link>
+            <Link
+              href="/dashboard/certificados"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <FaAward />
+              {sidebarOpen && <span>Certificados</span>}
             </Link>
             <Link
               href="/dashboard/stats"

@@ -38,10 +38,19 @@ export default function CursosOnlineAdmin() {
       setLoading(true);
       const response = await fetch('/api/online-courses');
       const data = await response.json();
-      setCourses(data);
+
+      // Validate that data is an array
+      if (Array.isArray(data)) {
+        setCourses(data);
+      } else {
+        console.error('Invalid data format:', data);
+        toast.error('Erro ao carregar cursos');
+        setCourses([]);
+      }
     } catch (error) {
       console.error('Error fetching courses:', error);
       toast.error('Erro ao carregar cursos');
+      setCourses([]);
     } finally {
       setLoading(false);
     }

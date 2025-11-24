@@ -23,15 +23,13 @@ export default function AdminLayout({
     if (status === 'loading') {
       setIsLoading(true);
     } else if (status === 'unauthenticated') {
-      // Se não estiver autenticado e não estiver na página de login, redirecionar
-      if (pathname !== '/admin/login') {
-        router.push('/admin/login');
-      }
+      // O middleware vai lidar com o redirecionamento
+      // Não fazer redirecionamento aqui para evitar loops
       setIsLoading(false);
     } else if (status === 'authenticated') {
       setIsLoading(false);
     }
-  }, [status, pathname, router]);
+  }, [status, pathname]);
 
   // Se estiver na página de login, não aplicar o layout
   if (pathname === '/admin/login') {

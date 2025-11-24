@@ -25,7 +25,15 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(course);
+    // Convert Decimal fields to numbers for JSON serialization
+    const courseWithNumbers = {
+      ...course,
+      price: course.price.toNumber(),
+      discountPrice: course.discountPrice?.toNumber() || null,
+      rating: course.rating?.toNumber() || null,
+    };
+
+    return NextResponse.json(courseWithNumbers);
   } catch (error) {
     console.error('Error fetching online course:', error);
     return NextResponse.json(
@@ -81,7 +89,15 @@ export async function PUT(
       data: updateData
     });
 
-    return NextResponse.json(course);
+    // Convert Decimal fields to numbers for JSON serialization
+    const courseWithNumbers = {
+      ...course,
+      price: course.price.toNumber(),
+      discountPrice: course.discountPrice?.toNumber() || null,
+      rating: course.rating?.toNumber() || null,
+    };
+
+    return NextResponse.json(courseWithNumbers);
   } catch (error) {
     console.error('Error updating online course:', error);
     return NextResponse.json(

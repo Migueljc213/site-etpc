@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
     const enrollments = await prisma.studentEnrollment.findMany({
       where: {
         studentEmail: email,
-        status: 'active'
+        status: {
+          in: ['active', 'completed']
+        }
       },
       include: {
         course: {

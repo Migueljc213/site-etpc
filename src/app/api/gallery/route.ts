@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       where.category = category;
     }
     
-    if (active !== null) {
+    if (active !== null && active !== undefined) {
       where.active = active === 'true';
     }
 
@@ -28,7 +28,8 @@ export async function GET(request: NextRequest) {
       ]
     });
 
-    return NextResponse.json(photos);
+    // Sempre retornar um array, mesmo que vazio
+    return NextResponse.json(photos || []);
   } catch (error) {
     console.error('Error fetching gallery photos:', error);
     return NextResponse.json({ error: 'Failed to fetch gallery photos' }, { status: 500 });

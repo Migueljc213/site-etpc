@@ -5,19 +5,43 @@ export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
     const url = req.nextUrl.clone();
+    const pathname = url.pathname;
 
-    // Se o usuário está tentando acessar /admin
-    if (url.pathname.startsWith('/admin') && url.pathname !== '/admin/login') {
-      if (!token || token.role !== 'admin') {
-        // Redirecionar alunos para /dashboard
+    // Permitir acesso público a /admin/login - evitar loops
+    if (pathname === '/admin/login') {
+      // Se já está autenticado como admin, redirecionar para /admin
+      if (token && token.role === 'admin') {
+        return NextResponse.redirect(new URL('/admin', req.url));
+      }
+      // Se está autenticado mas não é admin, redirecionar para dashboard
+      if (token && token.role !== 'admin') {
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+      }
+      // Se não está autenticado, permitir acesso
+      return NextResponse.next();
+    }
+
+    // Se o usuário está tentando acessar /admin (mas não /admin/login)
+    if (pathname.startsWith('/admin')) {
+      if (!token) {
+        // Não autenticado - redirecionar para login SEM callbackUrl para evitar loops
+        const loginUrl = new URL('/admin/login', req.url);
+        return NextResponse.redirect(loginUrl);
+      }
+      if (token.role !== 'admin') {
+        // Não é admin - redirecionar para dashboard
         return NextResponse.redirect(new URL('/dashboard', req.url));
       }
     }
 
     // Se o usuário está tentando acessar /dashboard
-    if (url.pathname.startsWith('/dashboard')) {
-      if (!token || token.role === 'admin') {
-        // Redirecionar admins para /admin
+    if (pathname.startsWith('/dashboard')) {
+      if (!token) {
+        // Não autenticado - redirecionar para login público
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+      if (token.role === 'admin') {
+        // É admin - redirecionar para /admin
         return NextResponse.redirect(new URL('/admin', req.url));
       }
     }
@@ -27,12 +51,14 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        // Permitir acesso público a /login
-        if (req.nextUrl.pathname === '/login') {
+        const pathname = req.nextUrl.pathname;
+
+        // Permitir acesso público a páginas de login
+        if (pathname === '/admin/login' || pathname === '/login') {
           return true;
         }
 
-        // Se não tem token, redirecionar para login
+        // Se não tem token, o middleware vai redirecionar
         if (!token) {
           return false;
         }

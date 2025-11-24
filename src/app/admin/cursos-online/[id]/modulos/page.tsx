@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { FaPlus, FaEdit, FaTrash, FaBookOpen, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaBookOpen, FaChevronDown, FaChevronUp, FaFileAlt, FaCheckCircle } from 'react-icons/fa';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { toast } from 'react-toastify';
 
@@ -13,6 +13,7 @@ interface Module {
   description: string;
   order: number;
   lessons: Lesson[];
+  exam?: Exam | null;
 }
 
 interface Lesson {
@@ -22,6 +23,16 @@ interface Lesson {
   videoUrl: string;
   duration: number;
   order: number;
+}
+
+interface Exam {
+  id: string;
+  title: string;
+  description?: string;
+  passingScore: number;
+  timeLimit?: number;
+  isRequired: boolean;
+  questionCount?: number;
 }
 
 export default function ModulosPage() {
@@ -315,6 +326,20 @@ export default function ModulosPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/admin/cursos-online/${courseId}/modulos/${module.id}/prova`);
+                    }}
+                    className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                      module.exam
+                        ? 'bg-green-600 text-white hover:bg-green-700'
+                        : 'bg-gray-600 text-white hover:bg-gray-700'
+                    }`}
+                  >
+                    {module.exam ? <FaCheckCircle /> : <FaFileAlt />}
+                    {module.exam ? 'Editar Prova' : 'Configurar Prova'}
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

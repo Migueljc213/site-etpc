@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { FaCheckCircle, FaClock, FaPlay, FaChevronDown, FaChevronUp, FaArrowLeft, FaExpand } from 'react-icons/fa';
+import { FaCheckCircle, FaClock, FaPlay, FaChevronDown, FaChevronUp, FaArrowLeft, FaExpand, FaFileAlt } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface Lesson {
@@ -17,11 +17,25 @@ interface Lesson {
   watchTime?: number;
 }
 
+interface Exam {
+  id: string;
+  title: string;
+  description?: string;
+  passingScore: number;
+  timeLimit?: number;
+  isRequired: boolean;
+  totalQuestions: number;
+  hasAttempt?: boolean;
+  passed?: boolean;
+  lastScore?: number;
+}
+
 interface Module {
   id: string;
   title: string;
   description?: string;
   lessons: Lesson[];
+  exam?: Exam | null;
 }
 
 interface Course {
@@ -427,23 +441,55 @@ export default function CoursePage() {
                 {course.modules.map((module) => (
                   <div key={module.id} className="border-b border-gray-200">
                     {/* Cabeçalho do Módulo */}
-                    <button
-                      onClick={() => toggleModule(module.id)}
-                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex-1 text-left">
-                        <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                        <p className="text-sm text-gray-600">
-                          {module.lessons.length} aulas
-                          {module.description && ` • ${module.description}`}
-                        </p>
+                    <div className="px-6 py-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900">{module.title}</h4>
+                          <p className="text-sm text-gray-600">
+                            {module.lessons.length} aulas
+                            {module.description && ` • ${module.description}`}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => toggleModule(module.id)}
+                          className="ml-4"
+                        >
+                          {expandedModules.has(module.id) ? (
+                            <FaChevronUp className="text-gray-400" />
+                          ) : (
+                            <FaChevronDown className="text-gray-400" />
+                          )}
+                        </button>
                       </div>
-                      {expandedModules.has(module.id) ? (
-                        <FaChevronUp className="text-gray-400" />
-                      ) : (
-                        <FaChevronDown className="text-gray-400" />
+                      
+                      {/* Botão de Prova */}
+                      {module.exam && (
+                        <div className="mt-3">
+                          <Link
+                            href={`/dashboard/${courseSlug}/prova/${module.id}`}
+                            className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                              module.exam.passed
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : module.exam.hasAttempt
+                                ? 'bg-yellow-600 text-white hover:bg-yellow-700'
+                                : 'bg-etpc-blue text-white hover:bg-etpc-blue-dark'
+                            }`}
+                          >
+                            <FaFileAlt />
+                            {module.exam.passed
+                              ? 'Prova Aprovada'
+                              : module.exam.hasAttempt
+                              ? 'Refazer Prova'
+                              : 'Fazer Prova'}
+                          </Link>
+                          {module.exam.hasAttempt && !module.exam.passed && (
+                            <p className="text-xs text-gray-600 text-center mt-1">
+                              Última nota: {module.exam.lastScore}%
+                            </p>
+                          )}
+                        </div>
                       )}
-                    </button>
+                    </div>
 
                     {/* Lista de Aulas */}
                     {expandedModules.has(module.id) && (

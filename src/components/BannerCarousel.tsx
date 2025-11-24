@@ -77,10 +77,12 @@ export default function BannerCarousel({
     goToSlide(currentIndex === activeBanners.length - 1 ? 0 : currentIndex + 1);
   };
 
+  const heroHeightClass = 'min-h-[calc(100vh-4rem)]';
+
   // Tela de loading
   if (isLoading) {
     return (
-      <div className="relative w-full h-[60vh] md:h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden flex items-center justify-center">
+      <div className={`relative w-full ${heroHeightClass} bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 overflow-hidden flex items-center justify-center`}>
         {/* Elementos decorativos */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
@@ -96,7 +98,7 @@ export default function BannerCarousel({
 
   if (activeBanners.length === 0) {
     return (
-      <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
+      <div className={`relative w-full ${heroHeightClass} overflow-hidden`}>
         {/* Imagem de fundo completa */}
         <div className="absolute inset-0">
           <Image
@@ -146,7 +148,7 @@ export default function BannerCarousel({
   if (activeBanners.length === 1) {
     const banner = activeBanners[0];
     return (
-      <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
+      <div className={`relative w-full ${heroHeightClass} overflow-hidden`}>
         {/* Imagem de fundo completa */}
         <div className="absolute inset-0">
           <Image
@@ -196,7 +198,7 @@ export default function BannerCarousel({
   }
 
   return (
-    <div className="relative w-full h-[60vh] md:h-screen overflow-hidden group">
+    <div className={`relative w-full ${heroHeightClass} overflow-hidden group`}>
       {/* Imagem de fundo completa */}
       <div className="absolute inset-0">
         <Image

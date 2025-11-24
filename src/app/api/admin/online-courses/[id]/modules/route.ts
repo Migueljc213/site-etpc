@@ -36,6 +36,11 @@ export async function GET(
       include: {
         onlineLessons: {
           orderBy: { order: 'asc' }
+        },
+        exam: {
+          include: {
+            questions: true
+          }
         }
       }
     });
@@ -43,7 +48,11 @@ export async function GET(
     // Garantir que todos os módulos tenham um array de lessons
     const modulesWithLessons = modules.map(module => ({
       ...module,
-      lessons: module.onlineLessons || []
+      lessons: module.onlineLessons || [],
+      exam: module.exam ? {
+        ...module.exam,
+        questionCount: module.exam.questions.length
+      } : null
     }));
 
     return NextResponse.json(modulesWithLessons);
@@ -108,12 +117,46 @@ export async function POST(
       });
     }
 
+    // Evitar criação duplicada caso usuário clique mais de uma vez
+    const existingModule = await prisma.courseModule.findFirst({
+      where: {
+        courseId: course.id,
+        title: {
+          equals: title,
+          mode: 'insensitive'
+        }
+      },
+      include: {
+        onlineLessons: true
+      }
+    });
+
+    if (existingModule) {
+      console.log('⚠️ Module already exists, returning existing module to avoid duplicates');
+      return NextResponse.json(
+        {
+          ...existingModule,
+          lessons: existingModule.onlineLessons || []
+        },
+        { status: 200 }
+      );
+    }
+
+    // Definir ordem automaticamente caso não seja informada
+    const highestOrderModule = await prisma.courseModule.findFirst({
+      where: { courseId: course.id },
+      orderBy: { order: 'desc' }
+    });
+
+    const nextOrder =
+      order !== undefined && order !== null ? order : (highestOrderModule?.order ?? -1) + 1;
+
     // Criar o módulo referenciando o Course
     const module = await prisma.courseModule.create({
       data: {
         title,
         description,
-        order: order || 0,
+        order: nextOrder,
         courseId: course.id
       },
       include: {
