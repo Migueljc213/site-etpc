@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaStar, FaShoppingCart, FaClock, FaGraduationCap, FaCheck, FaFilter, FaCheckCircle } from 'react-icons/fa';
+import { FaStar, FaShoppingCart, FaClock, FaGraduationCap, FaCheck, FaFilter, FaCheckCircle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,6 +42,7 @@ export default function CursosOnlinePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [expandedCourseId, setExpandedCourseId] = useState<string | null>(null);
   const { addToCart, isInCart } = useCart();
 
   useEffect(() => {
@@ -425,20 +426,91 @@ export default function CursosOnlinePage() {
                         </div>
 
                         <button
-                          onClick={() => router.push(`/cursos-online/${course.slug}`)}
-                          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          Ver mais detalhes
-                        </button>
-
-                        <Link
-                          href={`/cursos-online/${course.slug}`}
+                          onClick={() => setExpandedCourseId(expandedCourseId === course.id ? null : course.id)}
                           className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
                           aria-label={`Ver detalhes do curso ${course.title}`}
                         >
-                          Ver mais detalhes
-                        </Link>
+                          {expandedCourseId === course.id ? (
+                            <>
+                              Ocultar detalhes
+                              <FaChevronUp />
+                            </>
+                          ) : (
+                            <>
+                              Ver detalhes
+                              <FaChevronDown />
+                            </>
+                          )}
+                        </button>
                       </div>
+
+                      {/* Área de Detalhes Expandida */}
+                      {expandedCourseId === course.id && (
+                        <div className="mt-6 pt-6 border-t border-gray-200 space-y-6 animate-fadeIn">
+                          {/* O que você vai aprender */}
+                          <div>
+                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                              <FaCheckCircle className="text-green-500" />
+                              O que você vai aprender
+                            </h4>
+                            <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
+                              {(() => {
+                                try {
+                                  const items = typeof course.whatYouWillLearn === 'string'
+                                    ? JSON.parse(course.whatYouWillLearn)
+                                    : course.whatYouWillLearn;
+
+                                  return Array.isArray(items) ? items.map((item: string, idx: number) => (
+                                    <div key={idx} className="flex items-start gap-2">
+                                      <FaCheck className="text-green-500 mt-1 flex-shrink-0" />
+                                      <span>{item}</span>
+                                    </div>
+                                  )) : null;
+                                } catch (e) {
+                                  return <p className="text-gray-500">Informações não disponíveis</p>;
+                                }
+                              })()}
+                            </div>
+                          </div>
+
+                          {/* Descrição Completa */}
+                          <div>
+                            <h4 className="font-bold text-gray-900 mb-3">Descrição do Curso</h4>
+                            <div
+                              className="text-sm text-gray-700 prose max-w-none"
+                              dangerouslySetInnerHTML={{ __html: course.description }}
+                            />
+                          </div>
+
+                          {/* Requisitos */}
+                          {course.requirements && (
+                            <div>
+                              <h4 className="font-bold text-gray-900 mb-3">Requisitos</h4>
+                              <p className="text-sm text-gray-700">{course.requirements}</p>
+                            </div>
+                          )}
+
+                          {/* Informações Adicionais */}
+                          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">Nível</p>
+                              <p className="text-sm font-semibold text-gray-900 capitalize">{course.level}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">Categoria</p>
+                              <p className="text-sm font-semibold text-gray-900 capitalize">{course.category}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">Validade</p>
+                              <p className="text-sm font-semibold text-gray-900">{course.validityDays} dias</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">Alunos</p>
+                              <p className="text-sm font-semibold text-gray-900">{course.totalStudents} matriculados</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

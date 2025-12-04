@@ -516,14 +516,12 @@ export default function CursosTecnicos() {
                       </div>
                     </div>
                     
-                    <button
-                      onClick={() => {
-                        document.getElementById('cursos')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105`}
+                    <Link
+                      href="/matriculas"
+                      className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105 flex items-center justify-center`}
                     >
-                      Ver Detalhes
-                    </button>
+                      Fazer Matrícula
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -13,7 +13,8 @@
       "Bash(node:*)",
       "Bash(yarn install)",
       "Bash(curl:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
